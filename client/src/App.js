@@ -10,6 +10,10 @@ import ProfilePage from "./pages/ProfilePage";
 import { ProductPage } from "./pages/ProductPage";
 import RegistrationPage from "./pages/RegistrationPage";
 import LoginPage from "./pages/LoginPage";
+import PolicyPage from "./pages/PolicyPage";
+import DelieveryPage from "./pages/DelieveryPage";
+import ContactsPage from "./pages/ContactsPage";
+import ReturnProductsPage from "./pages/ReturnProductsPage";
 
 class App extends React.Component {
 
@@ -127,7 +131,10 @@ class App extends React.Component {
 
             <Route path="/product/:product_id" element={<ProductPage user_id={this.state.loggeduser_id}/>} />
 
-
+            <Route path="/policy" element={<PolicyPage/>} />
+            <Route path="/delievery" element={<DelieveryPage/>} />
+            <Route path="/contacts" element={<ContactsPage/>} />
+            <Route path="/return" element={<ReturnProductsPage/>} />
 
             <Route path="/registration" element={<RegistrationPage/>} />
             <Route path="/login" element={<LoginPage/>} />

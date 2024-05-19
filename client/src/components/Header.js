@@ -8,9 +8,9 @@ export default function Header(){
         <a href = "/home"><div class = "Logo"><img style = {{maxWidth: "90px"}} src="\img\Logo.png"></img></div></a>
         <div class = "Menu">
             <div class = "MenuItems" id = "SecondMenu">
-                <div class = "SecondItem"><i class="fi fi-rr-handshake"></i>Партнеры</div>
-                <div class = "SecondItem"><i class="fi fi-rr-users"></i>Контакты</div>
-                <div class = "SecondItem"><i class="fi fi-rr-truck-side"></i>Доставка</div>
+                <a href="/contacts"><div class = "SecondItem"><i class="fi fi-rr-users"></i>Контакты</div></a>
+                <a href="/delievery"><div class = "SecondItem"><i class="fi fi-rr-truck-side"></i>Доставка</div></a>
+                <a href="/return"><div class = "SecondItem"><i class="fi fi-rr-box"></i>Возврат</div></a>
             </div>
             <div class = "MenuItems" id = "FirstMenu">
             <a href = "/catalogue"><div id = "MainMenuCategory" class = "FirstItem"><i class="fi fi-rr-apps"></i><h>Каталог</h></div></a>

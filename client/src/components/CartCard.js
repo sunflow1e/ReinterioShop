@@ -4,7 +4,7 @@ export class CartCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      IsAddedToFav: true
+      IsAddedToFav: true,
     };
   }
 
@@ -84,7 +84,7 @@ export class CartCard extends Component {
           <div class="CartSmallButtonDelete"
             onClick={() => this.props.onDeleteProduct(this.props.cartproduct.productd_id)} id="SmallButtonDelete" ><i class="fi fi-rr-trash" /></div>
         </div>
-
+        
       </div>
     )
   }
