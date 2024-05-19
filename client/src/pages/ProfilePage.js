@@ -1,10 +1,7 @@
 import React, { Component, userState } from 'react'
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import CartProductContainer from '../components/CartProductContainer';
 import { CSSTransition } from 'react-transition-group';
-import { useRef } from 'react';
-import { IMaskInput } from 'react-imask';
 import 'react-phone-input-2/lib/style.css'
 
 export class ProfilePage extends Component {
@@ -148,10 +145,10 @@ export class ProfilePage extends Component {
                   <p className='PageCardTitle'>Безопасность</p>
                   <div style={{ display: "Flex", flexDirection: "row", gap: "10px" }}>
                     {this.state.PasswordChanged &&
-                      <div className='CardSmallButtonSecondary' onClick={() => (this.setState({ PasswordChanged: !this.state.PasswordChanged }), this.setState({ PasswordShowed: false }), this.setState({ PasswordShowError: false }), this.setState({ PasswordSaved: false }))}><i style={{fontSize: "12px"}}class="fi fi-rr-cross"></i></div>
+                      <div className='CardSmallButtonSecondary' onClick={() => (this.setState({ PasswordChanged: !this.state.PasswordChanged }), this.setState({ PasswordShowed: false }), this.setState({ PasswordShowError: false }), this.setState({ PasswordSaved: false }))}><i style={{ fontSize: "12px" }} class="fi fi-rr-cross"></i></div>
                     }
-                    <div className={this.state.PasswordChanged ? 'CardSmallButton' : 'CardSmallButtonSecondary'} onClick={() => !this.state.PasswordChanged 
-                      ? (this.setState({ PasswordChanged: !this.state.PasswordChanged }), this.setState({ PasswordShowed: false }), this.setState({ PasswordShowError: false }), this.setState({ PasswordSaved: false })) 
+                    <div className={this.state.PasswordChanged ? 'CardSmallButton' : 'CardSmallButtonSecondary'} onClick={() => !this.state.PasswordChanged
+                      ? (this.setState({ PasswordChanged: !this.state.PasswordChanged }), this.setState({ PasswordShowed: false }), this.setState({ PasswordShowError: false }), this.setState({ PasswordSaved: false }))
                       : (this.UpdateProfilePassword())}>
                       {this.state.PasswordChanged ? 'Сохранить' : 'Сменить пароль'}</div>
                   </div>
@@ -192,7 +189,7 @@ export class ProfilePage extends Component {
   }
 
   UpdateProfilePassword() {
-    if (!this.PasswordEqual()){
+    if (!this.PasswordEqual()) {
       this.ShowPasswordError("Пароли не совпадают");
     }
     else if (this.PasswordCheckValidate() && this.PasswordEqual()) {
@@ -240,7 +237,7 @@ export class ProfilePage extends Component {
     }
   }
 
-  PasswordEqual(){
+  PasswordEqual() {
     var inputpassword = document.getElementById("profile_password");
     var inputpasswordcheck = document.getElementById("profile_password_check");
 
@@ -330,9 +327,8 @@ export class ProfilePage extends Component {
   checkProfileInfoValidate() {
     var inputname = document.getElementById("profile_name");
     var inputsutname = document.getElementById("profile_surname");
-    var inputpatronymic = document.getElementById("profile_patronymic");
 
-    if (inputname.checkValidity() && inputsutname.checkValidity() && inputpatronymic.checkValidity()) {
+    if (inputname.checkValidity() && inputsutname.checkValidity()) {
       return true;
     }
     else {
