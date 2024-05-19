@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "start:front": "cd ./client && npm run start",
+    "start:back": "cd ./server && npm run dev",
+    "dev": "concurrently \"npm run start:front\" \"npm run start:back\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "@react-input/mask": "^1.2.3",
+    "react-imask": "^7.6.0",
+    "react-phone-input-2": "^2.15.1",
+    "react-transition-group": "^4.4.5"
+  }
+}
