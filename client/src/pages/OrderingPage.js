@@ -4,14 +4,12 @@ import Footer from "../components/Footer";
 import axios from "axios";
 import CartProductContainer from '../components/CartProductContainer';
 
-export class CartPage extends Component {
+export class OrderingPage extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       cart_products: [],
-      favproducts: [],
-      IsModalShown: false
     };
     this.changeCountCart = this.changeCountCart.bind(this);
     this.changeSelectedCart = this.changeSelectedCart.bind(this);
@@ -20,14 +18,9 @@ export class CartPage extends Component {
 
   componentDidMount() {
     this.getCartProductCards();
-    this.getFavouriteProductCards();
   }
 
-  componentDidUpdate() {
-    this.setFavouiteCartCards();
-  }
-
-  getCartProductCards() {
+  getOrderCards() {
     const qs = require('qs');
     let data = qs.stringify({
     });
@@ -53,44 +46,6 @@ export class CartPage extends Component {
     this.forceUpdate();
   }
 
-  getFavouriteProductCards() {
-    const qs = require('qs');
-    let data = qs.stringify({
-    });
-
-    let user_id = this.props.user_id;
-
-    let config = {
-      method: 'get',
-      maxBodyLength: Infinity,
-      url: 'http://localhost:5000/product/favourite/' + Number.parseInt(user_id),
-      headers: {},
-      data: data
-    };
-
-    axios.request(config)
-      .then((response) => {
-        this.setState({ favproducts: response.data, });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
-  setFavouiteCartCards() {
-    let allproducts = this.state.cart_products;
-    let favouriteproducts = this.state.favproducts;
-
-    for (let i = 0; i < allproducts.length; i++) {
-      for (let j = 0; j < favouriteproducts.length; j++) {
-        if (favouriteproducts[j].productd_id === allproducts[i].productd_id) {
-          allproducts[i].product_addedtofavourite = true;
-        }
-      }
-    }
-
-    console.log(allproducts);
-  }
 
   render() {
     let CurrentDate = new Date();
@@ -100,9 +55,6 @@ export class CartPage extends Component {
       month: 'long',
       day: 'numeric'
     });
-
-
-    let DelieveryPrice = 0;
 
     let ProductsCost = 0;
     this.state.cart_products.filter(CurrentProduct => CurrentProduct.product_isselected === true).forEach(CurrentProduct => ProductsCost += Number.parseFloat(CurrentProduct.product_price) * Number.parseFloat(CurrentProduct.cart_count));
@@ -134,7 +86,7 @@ export class CartPage extends Component {
               {Object.keys(this.state.cart_products).length > 0 &&
                 <div class="PageTitleButtonsContainer">
                   {this.state.cart_products.find(CurrentProd => CurrentProd.product_isselected === true) &&
-                    <div onClick={() => this.openModalWindow()} id="DeleteSelected" class="PageTitleButton"><i class="fi fi-sr-trash"></i>Удалить выбранное</div>
+                    <div onClick={() => this.deleteAllSelected()} id="DeleteSelected" class="PageTitleButton"><i class="fi fi-sr-trash"></i>Удалить выбранное</div>
                   }
                   <div onClick={() => this.SelectAllProducts()} id="SelectAll" class="PageTitleButton"><i class="fi fi-sr-checkbox"></i>
                     {this.state.cart_products.find(CurrentProd => CurrentProd.product_isselected === true)
@@ -152,23 +104,6 @@ export class CartPage extends Component {
 
           <div class="PageSideContainer" />
         </div>
-
-        {this.state.IsModalShown &&
-          <div className='ModalBackground'>
-            <div className='ModalWindow'>
-              <div onClick={() => this.closeModalWindow()} className='CloseModal'><i style={{ color: "#636363" }} class="fi fi-rr-cross-small"></i></div>
-              <div className='ModalContainer'>
-                <p className='ModalTitle'>Удаление выбранного</p>
-                <p style={{ lineHeight: "150%", fontSize: "18px" }}>Вы уверены, что хотите удалить выбранные товары из корзины? Отменить это действие будет невозможно</p>
-                <div className='ModalButtonsContainer'>
-                  <div onClick={() => this.closeModalWindow()} className='ModalSecondaryButton'>Отмена</div>
-                  <div onClick={() => this.deleteAllSelected()} className='ModalMainButton'>Удалить выбранное</div>
-                </div>
-              </div>
-            </div>
-          </div >
-        }
-
 
         {Object.keys(this.state.cart_products).length > 0 ?
           <div class="PageContent">
@@ -222,14 +157,6 @@ export class CartPage extends Component {
         <Footer />
       </div>
     )
-  }
-
-  openModalWindow() {
-    this.setState({ IsModalShown: true });
-  }
-
-  closeModalWindow() {
-    this.setState({ IsModalShown: false });
   }
 
   SelectAllProducts() {
@@ -293,13 +220,12 @@ export class CartPage extends Component {
       .catch((error) => console.error(error));
   }
 
-  deleteAllSelected() {
+  deleteAllSelected(){
     let originproducts = this.state.cart_products.filter(a => a.product_isselected === true);
     originproducts?.map(CurrentCartProduct => this.deleteProductFromBD(CurrentCartProduct.productd_id));
     originproducts = this.state.cart_products.filter(a => a.product_isselected === false);
     this.setState({ cart_products: originproducts });
-    this.closeModalWindow();
   }
 }
 
-export default CartPage
+export default OrderingPage

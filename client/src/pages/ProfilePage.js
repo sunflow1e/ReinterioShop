@@ -121,7 +121,7 @@ export class ProfilePage extends Component {
                 <input onChange={() => (this.UpdateProfileInfo())} id='profile_email' type='email' maxlength="30" className='MainTextArea' defaultValue={this.props.user.user_email}></input>
 
                 <p className='PageCardText'>Телефон</p>
-                <input id='profile_phone' type='tel' maxlength="30" className='MainTextArea' defaultValue={this.props.user.user_phone}></input>
+                <input onChange={() => (this.UpdateProfileInfo())} id='profile_phone' pattern="\+?[0-9\s\-\(\)]+" type='tel' maxlength="12" className='MainTextArea' defaultValue={this.props.user.user_phone}></input>
 
                 <CSSTransition in={this.state.ProfileSaved} timeout={1000} classNames='smallalert' unmountOnExit><p style={{ color: "#0A5954" }} className='PageCardText'>Успешно сохранено!</p></CSSTransition>
                 <CSSTransition in={this.state.ProfileShowError} timeout={1000} classNames='smallalert' unmountOnExit><p style={{ color: "#E04E20" }} className='PageCardText'>{this.state.ProfileErrorText}</p></CSSTransition>
@@ -324,6 +324,19 @@ export class ProfilePage extends Component {
     }
   }
 
+  CheckPhone() {
+    var inputphone = document.getElementById("profile_phone");
+
+    if (inputphone.checkValidity()) {
+      var digits = inputphone.value.replace(/^8/, '7').replace(/[^\d]+/, '');
+      document.getElementById("profile_phone").value = digits.replace(/^(\d)(\d+)(\d\d\d)(\d\d)(\d\d)$/, '+$1 $2 $3‒$4‒$5');
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
   checkProfileInfoValidate() {
     var inputname = document.getElementById("profile_name");
     var inputsutname = document.getElementById("profile_surname");
@@ -338,7 +351,7 @@ export class ProfilePage extends Component {
 
   updateProfileInfo() {
     this.CheckEmail();
-    if (this.CheckEmail() && this.checkProfileInfoValidate()) {
+    if (this.CheckEmail() && this.checkProfileInfoValidate() && this.CheckPhone()) {
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
@@ -347,9 +360,7 @@ export class ProfilePage extends Component {
       urlencoded.append("surname", document.getElementById('profile_surname').value);
       urlencoded.append("patronymic", document.getElementById('profile_patronymic').value);
       urlencoded.append("email", document.getElementById('profile_email').value);
-      urlencoded.append("phone", "");
-      console.log(this.state.UserPhone);
-
+      urlencoded.append("phone", document.getElementById('profile_phone').value);
 
       const requestOptions = {
         method: "PUT",
@@ -371,6 +382,9 @@ export class ProfilePage extends Component {
     }
     else if (!this.checkProfileInfoValidate()) {
       this.ShowProfileError("Поля ФИО должны быть заполненым русскими буквами, без использования символов и цифр");
+    }
+    else if(!this.CheckPhone()){
+      this.ShowProfileError("Недействительный номер телефона!");
     }
     else {
       this.ShowProfileError("Поля заполнены неверно!")

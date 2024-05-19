@@ -145,7 +145,8 @@ body a {
 .ModalBackground{
     inset: 0;
     margin: 0;
-    position: absolute;
+    z-index: 999999;
+    position: fixed;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -182,6 +183,55 @@ body a {
     font-family: Raleway Semibold;
     margin: 0;
     width: 100%;
+}
+
+.ModalButtonsContainer{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: 400px;
+}
+
+.ModalSecondaryButton{
+    width: 100%;
+    display: flex;
+    background-color: #E1E4E4;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 0px;
+    margin-top: 10px;
+    border-radius: 10px;
+    font-size: 20px;
+    color: black;
+    font-family: Raleway;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+    user-select: none;
+}
+
+.ModalSecondaryButton:hover{
+    background-color: #cbd3d8;
+}
+
+.ModalMainButton{
+    width: 140%;
+    display: flex;
+    background-color: #E04E20;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 0px;
+    margin-top: 10px;
+    border-radius: 10px;
+    font-size: 20px;
+    color: white;
+    font-family: Raleway;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+    user-select: none;
+}
+
+.ModalMainButton:hover{
+    background-color: #d13b0e;
 }
 
 @media (width < 900px) {
