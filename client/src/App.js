@@ -9,6 +9,7 @@ import axios from "axios";
 import ProfilePage from "./pages/ProfilePage";
 import { ProductPage } from "./pages/ProductPage";
 import RegistrationPage from "./pages/RegistrationPage";
+import LoginPage from "./pages/LoginPage";
 
 class App extends React.Component {
 
@@ -129,6 +130,7 @@ class App extends React.Component {
 
 
             <Route path="/registration" element={<RegistrationPage/>} />
+            <Route path="/login" element={<LoginPage/>} />
 
 
             <Route path="*" element={<NoPage />} />
