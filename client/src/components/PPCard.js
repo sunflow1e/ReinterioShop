@@ -104,7 +104,7 @@ export class PPCard extends Component {
                             >
 
                                 {this.state.IsAddedToCart
-                                    ? "В корзине"
+                                    ? "В корзине!"
                                     : "Добавить в корзину"}
                             </div>
                         </div>
