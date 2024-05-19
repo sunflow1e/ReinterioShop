@@ -25,11 +25,27 @@ body a {
 /* REGISTRATION ######################################################################## */
 /* ############################################################################### */
 
+.AutorizationPage{
+    background-color: #F9F9FA;
+    inset: 0;
+    margin: 0;
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+}
+
 .AutorizationImage{
-    width: 60%;
+    width: 50%;
     background-image: url(../public/img/Registration.png);
-    width: 1000px;
-    height: 500px;
+    height: 100svh;
+    background-size: cover;
+}
+
+.AutorizationContainer{
+    width: 30%;
+    height: 100svh;
+    inset: 50%;
+    padding: 70px 140px;
 }
 
 
