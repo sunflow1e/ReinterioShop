@@ -87,8 +87,6 @@ export class CartPage extends Component {
 				}
 			}
 		}
-
-		console.log(allproducts)
 	}
 
 	render() {
