@@ -70,7 +70,7 @@ export class PPCard extends Component {
 							<div
 								onMouseEnter={() =>
 									this.setState({
-										CurrentImage: this.props.images[4].image_path,
+										CurrentImage: this.props.images[3].image_path,
 									})
 								}
 								className='ProductPageSmallImage'
@@ -98,12 +98,15 @@ export class PPCard extends Component {
 
 					<div
 						onClick={() => (
-							!this.state.IsAddedToFav
-								? this.addToFavourite(this.props.product)
-								: this.deleteFromFavourite(this.props.product),
-							this.props.DeleteFromFav
-								? this.props.DeleteFromFav(this.props.product.productd_id)
-								: null
+							localStorage.getItem("userId") ?
+								(!this.state.IsAddedToFav
+									? this.addToFavourite(this.props.product)
+									: this.deleteFromFavourite(this.props.product),
+									this.props.DeleteFromFav
+										? this.props.DeleteFromFav(this.props.product.productd_id)
+										: null)
+								:
+								(window.location.href = '/login')
 						)}
 						class='ProductPageToFavourite'
 					>
@@ -210,23 +213,32 @@ export class PPCard extends Component {
 									</p>
 								)}
 							</div>
+							{
+								this.props.product.productd_onstock > 1 && <div
+									onClick={() =>
+										localStorage.getItem('userId')
+											? !this.state.IsAddedToCart
+												? this.addToCart(this.props.product)
+												: this.deleteFromCart(this.props.product)
+											: (window.location.href = '/login')
+									}
+									class={
+										this.state.IsAddedToCart
+											? 'ProductPageAddedToCart'
+											: 'ProductPageAddToCart'
+									}
+								>
+									{this.state.IsAddedToCart ? 'В корзине!' : 'Добавить в корзину'}
+								</div>
 
-							<div
-								onClick={() =>
-									localStorage.getItem('userId')
-										? !this.state.IsAddedToCart
-											? this.addToCart(this.props.product)
-											: this.deleteFromCart(this.props.product)
-										: (window.location.href = '/login')
-								}
-								class={
-									this.state.IsAddedToCart
-										? 'ProductPageAddedToCart'
-										: 'ProductPageAddToCart'
-								}
-							>
-								{this.state.IsAddedToCart ? 'В корзине!' : 'Добавить в корзину'}
-							</div>
+							}
+							{
+								this.props.product.productd_onstock < 1 && <div
+									class={'ProductPageNoProduct'}>
+									Товар закончился
+								</div>
+
+							}
 						</div>
 					</div>
 					<ColorsContainter
@@ -323,7 +335,7 @@ export class PPCard extends Component {
 			redirect: 'follow',
 		}
 
-		fetch('http://localhost:5000/favourite', requestOptions)
+		fetch(`${process.env.REACT_APP_API_URL}/favourite`, requestOptions)
 			.then(response => response.text())
 			.then(result => {
 				this.setState({ IsAddedToFav: true })
@@ -346,7 +358,7 @@ export class PPCard extends Component {
 			redirect: 'follow',
 		}
 
-		fetch('http://localhost:5000/favourite', requestOptions)
+		fetch(`${process.env.REACT_APP_API_URL}/favourite`, requestOptions)
 			.then(response => response.text())
 			.then(result => {
 				this.setState({ IsAddedToFav: false })
@@ -367,7 +379,7 @@ export class PPCard extends Component {
 		let config = {
 			method: 'post',
 			maxBodyLength: Infinity,
-			url: 'http://localhost:5000/cart',
+			url: `${process.env.REACT_APP_API_URL}/cart`,
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
 			},
@@ -401,7 +413,7 @@ export class PPCard extends Component {
 			redirect: 'follow',
 		}
 
-		fetch('http://localhost:5000/cart', requestOptions)
+		fetch(`${process.env.REACT_APP_API_URL}/cart`, requestOptions)
 			.then(response => response.text())
 			.then(result => {
 				this.setState({ IsAddedToCart: false })

@@ -6,7 +6,7 @@ export class BannerFirstType extends Component {
       <a href='/catalogue'>
         <div class="Banner" id="Banner1">
           <div class="BannerContainer">
-            <em class="BannerText">Скидка 15% на первый заказ</em>
+            <em class="BannerText"><b>Бесплатная доставка</b> при заказе от 7 000 ₽</em>
             <div class="MainButton">Каталог</div>
           </div>
         </div>

@@ -16,7 +16,7 @@ export class Modal extends Component {
                     <div onClick={() => this.props.closeModalWindow()} className='CloseModal'><i style={{ color: "#636363" }} class="fi fi-rr-cross-small"></i></div>
                     <div className='ModalContainer'>
                         <p className='ModalTitle'>{this.props.ModalTitle}</p>
-                        <p style={{ lineHeight: "150%" }}>{this.props.ModalText}</p>
+                        <p style={{ lineHeight: "150%", fontSize: "20px" }}>{this.props.ModalText}</p>
                     </div>
                 </div>
             </div >

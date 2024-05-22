@@ -5,7 +5,9 @@
     "dev": "concurrently \"npm run start:front\" \"npm run start:back\""
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "dotenv-webpack": "^8.1.0"
   },
   "dependencies": {
     "@react-input/mask": "^1.2.3",

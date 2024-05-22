@@ -5,6 +5,7 @@
 
 html {
     scroll-behavior: smooth;
+    font-family: Raleway;
 }
 
 body {
@@ -180,7 +181,8 @@ body a {
 
 .ModalTitle{
     font-size: 28px;
-    font-family: Raleway Semibold;
+    font-family: Raleway;
+    font-weight: 600;
     margin: 0;
     width: 100%;
 }
@@ -293,6 +295,14 @@ p {
     border: 1px rgba(0, 0, 0, 0.1) solid;
     border-radius: 5px;
     padding: 5px 10px;
+
+    font-variant-numeric: lining-nums;
+    -moz-font-feature-settings: "lnum" 1;
+    -moz-font-feature-settings: "lnum=1";
+    -ms-font-feature-settings: "lnum" 1;
+    -o-font-feature-settings: "lnum" 1;
+    -webkit-font-feature-settings: "lnum" 1;
+    font-feature-settings: "lnum" 1;
 }
 
 .MainTextArea:focus {
@@ -360,7 +370,8 @@ p {
 .MainButton {
     padding: 20px 25px;
     font-size: 24px;
-    font-family: Raleway SemiBold;
+    font-family: Raleway;
+    font-weight: 600;
     background-color: #E07C20;
     border-radius: 15px;
     width: fit-content;
@@ -1030,13 +1041,14 @@ body::-webkit-scrollbar-thumb {
 }
 
 .BannerText {
-    Font-family: Raleway Extrabold;
-    font-size: 64px;
+    Font-family: Raleway;
+    font-size: 47px;
     color: white;
 }
 
 .Banner4ProductsDiscountText {
-    Font-family: Raleway Light;
+    font-family: Raleway;
+    font-weight: 200;
     font-style: italic;
     font-size: 64px;
     color: white;
@@ -1046,7 +1058,7 @@ body::-webkit-scrollbar-thumb {
 
 @media (width < 1320px) {
     .BannerText {
-        font-size: 44px;
+        font-size: 34px;
     }
 
     .Banner4ProductsDiscountText {
@@ -1064,6 +1076,7 @@ body::-webkit-scrollbar-thumb {
 
     .BannerContainer {
         padding-right: 5%;
+        ;
     }
 }
 
@@ -1090,6 +1103,7 @@ body::-webkit-scrollbar-thumb {
         margin-left: auto;
         margin-right: auto;
         padding-right: 0%;
+        gap: 10px;
     }
 
     #Banner4ProdDiscount {
@@ -1207,7 +1221,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 .PCardImg {
-    height: 100%;
+    min-height: 100%;
     width: 100%;
     object-fit: cover;
     transition: all 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
@@ -1228,7 +1242,8 @@ body::-webkit-scrollbar-thumb {
 
 .ProductName {
     font-size: 20px;
-    font-family: Raleway Semibold;
+    font-family: Raleway;
+    font-weight: 600;
     margin: 0px;
 }
 
@@ -1323,9 +1338,10 @@ body::-webkit-scrollbar-thumb {
     background-color: #E07C20;
     color: white;
     font-size: 24px;
-    right: -20px;
-    top: -20px;
-    font-family: raleway light;
+    right: -15px;
+    top: -10px;
+    font-family: Raleway;
+    font-size: 16px;
 }
 
 .PAddToCart:hover {
@@ -1366,6 +1382,7 @@ body::-webkit-scrollbar-thumb {
 
     .PCardImgContainer {
         width: 100%;
+        height: 320px;
     }
 
     .ProductsContainer {
@@ -1454,8 +1471,7 @@ body::-webkit-scrollbar-thumb {
     flex-direction: row;
     width: 100%;
     gap: 15px;
-    height: 60svh;
-    padding-bottom: 300px;
+    min-height: 60svh;
 }
 
 .PageTitleButtonsContainer {
@@ -1597,7 +1613,8 @@ body::-webkit-scrollbar-thumb {
 
 .PageCardTitle {
     font-size: 24px;
-    font-family: Raleway Semibold;
+    font-family: Raleway;
+    font-weight: 600;
 }
 
 .PageCardTitleContainer {
@@ -1788,7 +1805,8 @@ body::-webkit-scrollbar-thumb {
 
 .CartCardName {
     font-size: 24px;
-    font-family: Raleway Semibold;
+    font-family: Raleway;
+    font-weight: 600;
     width: 100%;
 }
 
@@ -1838,7 +1856,8 @@ body::-webkit-scrollbar-thumb {
     text-decoration: line-through;
     color: #B4A39A;
     font-size: 20px;
-    font-family: Raleway Light;
+    font-family: Raleway;
+    font-weight: 400;
 }
 
 .CartCardDiscount {
@@ -2234,6 +2253,18 @@ body::-webkit-scrollbar-thumb {
     background-color: #ecf3f2;
 }
 
+.ProductPageNoProduct{
+    border-radius: 5px;
+    border: 1px #cbd3d8 solid;
+    color: #494949;
+    padding: 15px 25px;
+    width: 100%;
+    font-size: 20px;
+    text-align: center;
+    user-select: none;
+    box-sizing: border-box;
+}
+
 .RatingText {
     color: #E07C20;
     font-size: 24px;
@@ -2498,6 +2529,79 @@ body::-webkit-scrollbar-thumb {
     }
 }
 
+.DeliveryContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.DeliveryButton{
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 15px;
+    background-color: #F9F9FA;
+    border-radius: 5px;
+    font-size: 20px;
+    transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+    cursor: pointer;
+    user-select: none;
+    font-variant-numeric: lining-nums;
+    -moz-font-feature-settings: "lnum" 1;
+    -moz-font-feature-settings: "lnum=1";
+    -ms-font-feature-settings: "lnum" 1;
+    -o-font-feature-settings: "lnum" 1;
+    -webkit-font-feature-settings: "lnum" 1;
+    font-feature-settings: "lnum" 1;
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.DeliveryButton:hover{
+    background-color: #F0F5F5;
+}
+
+.CurrentDeliveryButton{
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 15px;
+    border-radius: 5px;
+    background-color: #E9F0F0;
+    font-size: 20px;
+    user-select: none;
+    pointer-events: none;
+    color: black;
+    font-variant-numeric: lining-nums;
+    -moz-font-feature-settings: "lnum" 1;
+    -moz-font-feature-settings: "lnum=1";
+    -ms-font-feature-settings: "lnum" 1;
+    -o-font-feature-settings: "lnum" 1;
+    -webkit-font-feature-settings: "lnum" 1;
+    font-feature-settings: "lnum" 1;
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.DeliveryPriceContainer{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+
+.DeliveryPrice{
+    background-color: white;
+    padding: 5px 15px;
+    border-radius: 50px;
+    border:rgba(0, 0, 0, .1) 1px solid;
+    font-size: 18px;
+}
+
+
 /* CART SIDE ######################################################################## */
 
 .CartSummaryContainer {
@@ -2524,14 +2628,16 @@ body::-webkit-scrollbar-thumb {
 
 .BlockContainerTitle {
     font-size: 20px;
-    font-family: Raleway Semibold;
+    font-family: Raleway;
     margin-bottom: 25px;
+    font-weight: 600;
 }
 
 .AlertContainerTitle {
     font-size: 20px;
-    font-family: Raleway Semibold;
+    font-family: Raleway;
     margin-bottom: 25px;
+    font-weight: 600;
 }
 
 .CartProductsSummary {

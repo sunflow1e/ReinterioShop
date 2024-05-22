@@ -44,7 +44,7 @@ export class ProductPage extends Component {
 			method: 'get',
 			maxBodyLength: Infinity,
 			url:
-				'http://localhost:5000/product/' + Number.parseInt(this.state.ProdId),
+				`${process.env.REACT_APP_API_URL}/product/` + Number.parseInt(this.state.ProdId),
 			headers: {},
 			data: data,
 		}
@@ -67,7 +67,7 @@ export class ProductPage extends Component {
 			method: 'get',
 			maxBodyLength: Infinity,
 			url:
-				'http://localhost:5000/product/images/' +
+				`${process.env.REACT_APP_API_URL}/product/images/` +
 				Number.parseInt(this.state.ProdId),
 			headers: {},
 			data: data,
@@ -91,7 +91,7 @@ export class ProductPage extends Component {
 			method: 'get',
 			maxBodyLength: Infinity,
 			url:
-				'http://localhost:5000/product/favourite/' +
+				`${process.env.REACT_APP_API_URL}/product/favourite/` +
 				this.state.ProdId +
 				'/' +
 				localStorage.getItem('userId'),
@@ -117,7 +117,7 @@ export class ProductPage extends Component {
 			method: 'get',
 			maxBodyLength: Infinity,
 			url:
-				'http://localhost:5000/product/cart/' +
+				`${process.env.REACT_APP_API_URL}/product/cart/` +
 				this.state.ProdId +
 				'/' +
 				localStorage.getItem('userId'),
@@ -139,7 +139,7 @@ export class ProductPage extends Component {
 		let config = {
 			method: 'get',
 			maxBodyLength: Infinity,
-			url: 'http://localhost:5000/colors',
+			url: `${process.env.REACT_APP_API_URL}/colors`,
 			headers: {},
 		}
 
@@ -158,7 +158,7 @@ export class ProductPage extends Component {
 			method: 'get',
 			maxBodyLength: Infinity,
 			url:
-				'http://localhost:5000/pp/styles/' + Number.parseInt(this.state.ProdId),
+				`${process.env.REACT_APP_API_URL}/pp/styles/` + Number.parseInt(this.state.ProdId),
 			headers: {},
 		}
 
@@ -177,7 +177,7 @@ export class ProductPage extends Component {
 			method: 'get',
 			maxBodyLength: Infinity,
 			url:
-				'http://localhost:5000/pp/materials/' +
+				`${process.env.REACT_APP_API_URL}/pp/materials/` +
 				Number.parseInt(this.state.ProdId),
 			headers: {},
 		}
@@ -197,7 +197,7 @@ export class ProductPage extends Component {
 			method: 'get',
 			maxBodyLength: Infinity,
 			url:
-				'http://localhost:5000/pp/files/' + Number.parseInt(this.state.ProdId),
+				`${process.env.REACT_APP_API_URL}/pp/files/` + Number.parseInt(this.state.ProdId),
 			headers: {},
 		}
 

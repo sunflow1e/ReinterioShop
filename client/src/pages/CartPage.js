@@ -34,7 +34,7 @@ export class CartPage extends Component {
 			method: 'get',
 			maxBodyLength: Infinity,
 			url:
-				'http://localhost:5000/product/cart/' +
+				`${process.env.REACT_APP_API_URL}/product/cart/` +
 				Number.parseInt(localStorage.getItem('userId')),
 			headers: {},
 			data: data,
@@ -60,7 +60,7 @@ export class CartPage extends Component {
 			method: 'get',
 			maxBodyLength: Infinity,
 			url:
-				'http://localhost:5000/product/favourite/' +
+				`${process.env.REACT_APP_API_URL}/product/favourite/` +
 				Number.parseInt(localStorage.getItem('userId')),
 			headers: {},
 			data: data,
@@ -105,9 +105,9 @@ export class CartPage extends Component {
 			.filter(CurrentProduct => CurrentProduct.product_isselected === true)
 			.forEach(
 				CurrentProduct =>
-					(ProductsCost +=
-						Number.parseFloat(CurrentProduct.product_price) *
-						Number.parseFloat(CurrentProduct.cart_count))
+				(ProductsCost +=
+					Number.parseFloat(CurrentProduct.product_price) *
+					Number.parseFloat(CurrentProduct.cart_count))
 			)
 
 		let TotalDiscount = 0
@@ -123,7 +123,7 @@ export class CartPage extends Component {
 			}
 		})
 
-		let TotalCost = ProductsCost + DelieveryPrice
+		let TotalCost = ProductsCost - TotalDiscount
 
 		let TotalProducts = 0
 		this.state.cart_products.forEach(CurrentProduct => {
@@ -143,14 +143,14 @@ export class CartPage extends Component {
 									{this.state.cart_products.find(
 										CurrentProd => CurrentProd.product_isselected === true
 									) && (
-										<div
-											onClick={() => this.openModalWindow()}
-											id='DeleteSelected'
-											class='PageTitleButton'
-										>
-											<i class='fi fi-sr-trash'></i>Удалить выбранное
-										</div>
-									)}
+											<div
+												onClick={() => this.openModalWindow()}
+												id='DeleteSelected'
+												class='PageTitleButton'
+											>
+												<i class='fi fi-sr-trash'></i>Удалить выбранное
+											</div>
+										)}
 									<div
 										onClick={() => this.SelectAllProducts()}
 										id='SelectAll'
@@ -213,6 +213,7 @@ export class CartPage extends Component {
 				{Object.keys(this.state.cart_products).length > 0 ? (
 					<div class='PageContent'>
 						<CartProductContainer
+							ShowSmallButtons={true}
 							cartproducts={this.state.cart_products}
 							onDeleteProduct={this.deleteProductFromCart}
 							onSelectedChange={this.changeSelectedCart}
@@ -254,7 +255,7 @@ export class CartPage extends Component {
 										</h>
 									</div>
 
-									<div class='SideContainerBuyButton'>
+									<div class='SideContainerBuyButton' onClick={() => this.ordering()}>
 										<h>К оформлению</h>
 										<h class='SideContainerBuyButtonPrice'>
 											{new Intl.NumberFormat().format(TotalCost) + ' ₽'}
@@ -295,6 +296,13 @@ export class CartPage extends Component {
 		)
 	}
 
+	ordering() {
+		const products = this.state.cart_products.filter(prd => prd.product_isselected === true)
+		console.log(products)
+		localStorage.setItem('OrdertingProducts', JSON.stringify(products))
+		window.location.href = '/ordering'
+	}
+
 	openModalWindow() {
 		this.setState({ IsModalShown: true })
 	}
@@ -332,7 +340,37 @@ export class CartPage extends Component {
 		const originproducts = this.state.cart_products
 		originproducts[productindex].cart_count = newcount
 		this.setState({ cart_products: originproducts })
+
+		this.changeCountCartBD(productid, newcount)
 	}
+
+	changeCountCartBD(productid, newcount) {
+		const qs = require('qs');
+		let data = qs.stringify({
+			'count': newcount,
+			'user': localStorage.getItem('userId'),
+			'product': productid,
+		});
+
+		let config = {
+			method: 'put',
+			maxBodyLength: Infinity,
+			url: `${process.env.REACT_APP_API_URL}/cart/count`,
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},
+			data: data
+		};
+
+		axios.request(config)
+			.then((response) => {
+				//console.log(JSON.stringify(response.data));
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}
+
 
 	changeSelectedCart(productid, selection) {
 		const productindex = this.state.cart_products
@@ -367,7 +405,7 @@ export class CartPage extends Component {
 			redirect: 'follow',
 		}
 
-		fetch('http://localhost:5000/cart/', requestOptions)
+		fetch(`${process.env.REACT_APP_API_URL}/cart/`, requestOptions)
 			.then(response => response.text())
 			.then(result => console.log(result))
 			.catch(error => console.error(error))

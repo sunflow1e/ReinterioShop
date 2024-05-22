@@ -15,8 +15,6 @@ export class LoginPage extends Component {
 			email: '',
 			password: '',
 		}
-		this.closeModalWindow = this.closeModalWindow.bind(this)
-		this.openModalWindow = this.openModalWindow.bind(this)
 	}
 
 	login() {
@@ -35,6 +33,10 @@ export class LoginPage extends Component {
 				if (!result.error) {
 					localStorage.setItem('userId', result)
 					window.location.href = '/'
+				}
+				else{
+					this.setState({ ErrorText: result.error })
+					this.setState({ RegistrationShowError: true })
 				}
 			})
 			.catch(error => {
@@ -84,16 +86,6 @@ export class LoginPage extends Component {
 					</div>
 
 					<CSSTransition
-						in={this.state.RegistrationCompleted}
-						timeout={1000}
-						classNames='smallalert'
-						unmountOnExit
-					>
-						<p style={{ color: '#0A5954' }} className='PageCardText'>
-							Регистрация прошла успешно
-						</p>
-					</CSSTransition>
-					<CSSTransition
 						in={this.state.RegistrationShowError}
 						timeout={1000}
 						classNames='smallalert'
@@ -121,20 +113,12 @@ export class LoginPage extends Component {
 						closeModalWindow={this.closeModalWindow}
 						ModalTitle={'Подтвердите регистрацию'}
 						ModalText={
-							'Код для подтверждения был отправлен на указанный адрес электронной почты'
+							'Инструкции по подтверждению аккаунта были отправлены на указанный адрес электронной почты'
 						}
 					/>
 				)}
 			</div>
 		)
-	}
-
-	openModalWindow() {
-		this.setState({ IsModalShown: true })
-	}
-
-	closeModalWindow() {
-		this.setState({ IsModalShown: false })
 	}
 }
 

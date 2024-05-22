@@ -17,6 +17,8 @@ import ReturnProductsPage from './pages/ReturnProductsPage'
 
 //Авторизованные роутинги
 import ProtectedRoute from './components/ProtectedRoute'
+import OrderingPage from './pages/OrderingPage'
+import GratitudePage from './pages/GratitudePage'
 
 class App extends React.Component {
 	constructor(props) {
@@ -43,7 +45,7 @@ class App extends React.Component {
 			method: 'GET',
 		}
 
-		fetch('http://127.0.0.1:5000/category', requestOptions)
+		fetch(`${process.env.REACT_APP_API_URL}/category`, requestOptions)
 			.then(response => response.json())
 			.then(result => this.setState({ categories: result }))
 			.catch(error => console.error(error))
@@ -51,7 +53,7 @@ class App extends React.Component {
 		let config = {
 			method: 'get',
 			maxBodyLength: Infinity,
-			url: 'http://localhost:5000/category/',
+			url: `${process.env.REACT_APP_API_URL}/category/`,
 			headers: {},
 		}
 
@@ -75,6 +77,7 @@ class App extends React.Component {
 			})
 		}
 	}
+
 	getCurrentUser(user_id) {
 		const qs = require('qs')
 		let data = qs.stringify({})
@@ -82,7 +85,7 @@ class App extends React.Component {
 		let config = {
 			method: 'get',
 			maxBodyLength: Infinity,
-			url: 'http://localhost:5000/user/:id',
+			url: `${process.env.REACT_APP_API_URL}/user/:id`,
 			headers: {
 				id: user_id,
 			},
@@ -100,22 +103,7 @@ class App extends React.Component {
 				console.log(error)
 			})
 	}
-	// getCurrentUser() {
-	// 	const user_id = this.state.loggeduser_id
-	// 	axios
-	// 		.get(`http://localhost:5000/user/${user_id}`)
-	// 		.then(response => {
-	// 			this.setState({ current_user: response.data, isLoading: false }, () => {
-	// 				// Check authentication status here after current_user state is updated
-	// 				const isAuthenticated = this.state.current_user.length > 0
-	// 				console.log('Is authenticated:', isAuthenticated)
-	// 			})
-	// 		})
-	// 		.catch(error => {
-	// 			console.log(error)
-	// 			this.setState({ isLoading: false })
-	// 		})
-	// }
+
 	getProductCards() {
 		const qs = require('qs')
 		let data = qs.stringify({})
@@ -123,7 +111,7 @@ class App extends React.Component {
 		let config = {
 			method: 'get',
 			maxBodyLength: Infinity,
-			url: 'http://localhost:5000/product/cards/',
+			url: `${process.env.REACT_APP_API_URL}/product/cards/`,
 			headers: {},
 			data: data,
 		}
@@ -139,7 +127,6 @@ class App extends React.Component {
 	}
 
 	render() {
-		console.log(this.state.current_user)
 		return (
 			<div>
 				<BrowserRouter>
@@ -182,6 +169,29 @@ class App extends React.Component {
 								/>
 							}
 						/>
+
+						<Route
+							path='/ordering'
+							element={
+								<ProtectedRoute
+									isAuthenticated={!!localStorage.getItem('userId')}
+									component={OrderingPage}
+									user_id={localStorage.getItem('userId')}
+									user={this.state.current_user}
+								/>
+							}
+						/>
+
+						<Route
+							path='/gratitude'
+							element={
+								<ProtectedRoute
+									isAuthenticated={!!localStorage.getItem('userId')}
+									component={GratitudePage}
+								/>
+							}
+						/>
+
 						<Route
 							path='/favourite'
 							element={

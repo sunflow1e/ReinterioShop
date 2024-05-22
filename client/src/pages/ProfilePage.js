@@ -185,7 +185,7 @@ export class ProfilePage extends Component {
 								<input
 									onChange={() => this.UpdateProfileInfo()}
 									id='profile_phone'
-									pattern='\+?[0-9\s\-\(\)]+'
+									pattern='^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$'
 									type='tel'
 									maxLength='12'
 									className='MainTextArea'
@@ -239,7 +239,7 @@ export class ProfilePage extends Component {
 									maxLength='70'
 									className='MainTextArea'
 									defaultValue={this.props.user.user_address}
-									placeholder='Например: Москва, ул. Сенная 28, кв 15'
+									placeholder='Например: Москва, ул. Реинтерная 28, кв 15'
 								></input>
 								<CSSTransition
 									in={this.state.AddressSaved}
@@ -454,7 +454,7 @@ export class ProfilePage extends Component {
 			}
 
 			fetch(
-				'http://localhost:5000/user/updatepassword/' + this.props.user.user_id,
+				`${process.env.REACT_APP_API_URL}/user/updatepassword/` + this.props.user.user_id,
 				requestOptions
 			)
 				.then(response => response.text())
@@ -518,7 +518,7 @@ export class ProfilePage extends Component {
 			}
 
 			fetch(
-				'http://localhost:5000/user/updateaddress/' + this.props.user.user_id,
+				`${process.env.REACT_APP_API_URL}/user/updateaddress/` + this.props.user.user_id,
 				requestOptions
 			)
 				.then(response => response.text())
@@ -577,9 +577,9 @@ export class ProfilePage extends Component {
 
 		if (inputphone.checkValidity()) {
 			var digits = inputphone.value.replace(/^8/, '7').replace(/[^\d]+/, '')
-			document.getElementById('profile_phone').value = digits.replace(
+			document.getElementById('profile_phone').value = "+" + digits.replace(
 				/^(\d)(\d+)(\d\d\d)(\d\d)(\d\d)$/,
-				'+$1 $2 $3‒$4‒$5'
+				'$1 $2 $3 $4 $5'
 			)
 			return true
 		} else {
@@ -629,7 +629,7 @@ export class ProfilePage extends Component {
 			}
 
 			fetch(
-				'http://localhost:5000/user/updateprofile/' + this.props.user.user_id,
+				`${process.env.REACT_APP_API_URL}/user/updateprofile/` + this.props.user.user_id,
 				requestOptions
 			)
 				.then(response => response.text())

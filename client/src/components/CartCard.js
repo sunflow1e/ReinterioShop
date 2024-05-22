@@ -61,30 +61,30 @@ export class CartCard extends Component {
           </div>
         </div>
 
+        {this.props.ShowSmallButtons &&
+          <div class="CartCardFavouriteSelectedDelete">
+            <div class="CartSmallButton"
 
-        <div class="CartCardFavouriteSelectedDelete">
-          <div class="CartSmallButton"
+              onClick={() => (!this.state.IsAddedToFav
+                ? this.addToFavourite(this.props.cartproduct)
+                : this.deleteFromFavourite(this.props.cartproduct))}>
 
-            onClick={() => (!this.state.IsAddedToFav
-              ? this.addToFavourite(this.props.cartproduct)
-              : this.deleteFromFavourite(this.props.cartproduct))}>
-
-            {!this.state.IsAddedToFav
-              ? <i class="fi fi-rr-heart"></i>
-              : <i style={{ color: "#E04E20" }} class="fi fi-sr-heart"></i>}</div>
-
-
-          <div class="CartSmallButton"
-            onClick={() => { this.props.onSelectedChange(this.props.cartproduct.productd_id, !this.props.cartproduct.product_isselected) }}>
-            {this.props.cartproduct.product_isselected
-              ? <i style={{ color: "#0A5954" }} class="fi fi-sr-checkbox"></i>
-              : <i class="fi fi-rr-square"></i>} </div>
+              {!this.state.IsAddedToFav
+                ? <i class="fi fi-rr-heart"></i>
+                : <i style={{ color: "#E04E20" }} class="fi fi-sr-heart"></i>}</div>
 
 
-          <div class="CartSmallButtonDelete"
-            onClick={() => this.props.onDeleteProduct(this.props.cartproduct.productd_id)} id="SmallButtonDelete" ><i class="fi fi-rr-trash" /></div>
-        </div>
-        
+            <div class="CartSmallButton"
+              onClick={() => { this.props.onSelectedChange(this.props.cartproduct.productd_id, !this.props.cartproduct.product_isselected) }}>
+              {this.props.cartproduct.product_isselected
+                ? <i style={{ color: "#0A5954" }} class="fi fi-sr-checkbox"></i>
+                : <i class="fi fi-rr-square"></i>} </div>
+
+
+            <div class="CartSmallButtonDelete"
+              onClick={() => this.props.onDeleteProduct(this.props.cartproduct.productd_id)} id="SmallButtonDelete" ><i class="fi fi-rr-trash" /></div>
+          </div>
+        }
       </div>
     )
   }
@@ -104,7 +104,7 @@ export class CartCard extends Component {
       redirect: "follow"
     };
 
-    fetch("http://localhost:5000/favourite", requestOptions)
+    fetch(`${process.env.REACT_APP_API_URL}/favourite`, requestOptions)
       .then((response) => response.text())
       .then((result) => { this.setState({ IsAddedToFav: true }) })
       .catch((error) => console.error(error));
@@ -115,7 +115,7 @@ export class CartCard extends Component {
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
     const urlencoded = new URLSearchParams();
-    urlencoded.append("user", 1);
+    urlencoded.append("user", localStorage.getItem("userId"));
     urlencoded.append("product", prod.productd_id);
 
     const requestOptions = {
@@ -125,7 +125,7 @@ export class CartCard extends Component {
       redirect: "follow"
     };
 
-    fetch("http://localhost:5000/favourite", requestOptions)
+    fetch(`${process.env.REACT_APP_API_URL}/favourite`, requestOptions)
       .then((response) => response.text())
       .then((result) => { this.setState({ IsAddedToFav: false }) })
       .catch((error) => console.error(error));

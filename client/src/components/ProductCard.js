@@ -119,7 +119,7 @@ export class ProductCard extends Component {
 			redirect: 'follow',
 		}
 
-		fetch('http://localhost:5000/favourite', requestOptions)
+		fetch(`${process.env.REACT_APP_API_URL}/favourite`, requestOptions)
 			.then(response => response.text())
 			.then(result => {
 				this.setState({ IsAddedToFav: true })
@@ -142,7 +142,7 @@ export class ProductCard extends Component {
 			redirect: 'follow',
 		}
 
-		fetch('http://localhost:5000/favourite', requestOptions)
+		fetch(`${process.env.REACT_APP_API_URL}/favourite`, requestOptions)
 			.then(response => response.text())
 			.then(result => {
 				this.setState({ IsAddedToFav: false })
@@ -163,7 +163,7 @@ export class ProductCard extends Component {
 		let config = {
 			method: 'post',
 			maxBodyLength: Infinity,
-			url: 'http://localhost:5000/cart',
+			url: `${process.env.REACT_APP_API_URL}/cart`,
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
 			},
@@ -197,7 +197,7 @@ export class ProductCard extends Component {
 			redirect: 'follow',
 		}
 
-		fetch('http://localhost:5000/cart', requestOptions)
+		fetch(`${process.env.REACT_APP_API_URL}/cart`, requestOptions)
 			.then(response => response.text())
 			.then(result => {
 				this.setState({ IsAddedToCart: false })

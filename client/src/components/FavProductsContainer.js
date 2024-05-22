@@ -30,7 +30,7 @@ export class ProductsContainer extends Component {
 			method: 'get',
 			maxBodyLength: Infinity,
 			url:
-				'http://localhost:5000/product/favourite/' +
+			`${process.env.REACT_APP_API_URL}/product/favourite/` +
 				Number.parseInt(localStorage.getItem('userId')),
 			headers: {},
 			data: data,
@@ -56,7 +56,7 @@ export class ProductsContainer extends Component {
 			method: 'get',
 			maxBodyLength: Infinity,
 			url:
-				'http://localhost:5000/product/cart/' +
+				`${process.env.REACT_APP_API_URL}/product/cart/` +
 				Number.parseInt(localStorage.getItem('userId')),
 			headers: {},
 			data: data,

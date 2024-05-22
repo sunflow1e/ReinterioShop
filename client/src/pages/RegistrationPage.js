@@ -194,18 +194,21 @@ export class RegistrationPage extends Component {
 					password: this.state.password,
 				}),
 			}
-			fetch('http://127.0.0.1:5000/user-auth/registration', requestOptions)
+			fetch(`${process.env.REACT_APP_API_URL}/user-auth/registration`, requestOptions)
 				.then(response => response.json())
 				.then(result => {
 					console.log(!result.error)
 					if (!result.error) {
-						// window.location.href = '/login'
+						this.setState({ ErrorText: result.error })
+						this.setState({ RegistrationShowError: true })
+					}
+					else{
+						this.openModalWindow();
 					}
 				})
 				.catch(error => {
 					console.log(error)
 				})
-			this.openModalWindow()
 		} else if (!this.CheckEmail()) {
 			this.setState({ ErrorText: 'Недействительный адрес электронной почты!' })
 			this.setState({ RegistrationShowError: true })
