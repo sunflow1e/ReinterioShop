@@ -674,6 +674,28 @@ p {
 }
 
 @media (width < 800px) {
+
+    .ModalWindow{
+        max-width: 80%;
+    }
+
+    .ModalBackground{
+        min-width: 100;
+    }
+
+    .ModalContainer{
+        width: 100%;
+    }
+
+    .ModalButtonsContainer{
+        flex-direction: column-reverse;
+        width: 100%;
+    }
+
+    .ModalMainButton{
+        width: 100%;
+    }
+
     .MobileMenu {
         display: flex;
         flex-direction: row;
@@ -683,10 +705,8 @@ p {
         right: 0;
         width: 100%;
         height: fit-content;
-        background-color: rgba(255, 255, 255, 0.5);
-        backdrop-filter: blur(10px);
+        background-color: white;
         height: 85px;
-        border: 1px rgba(255, 255, 255, 0.8) solid;
         z-index: 999;
     }
 
@@ -726,7 +746,7 @@ p {
         font-size: 20px;
         margin-top: 4px;
         text-align: center;
-        color: white;
+        color: #0A5954;
     }
 
     .MobileMenuActiveItem i {
@@ -2499,12 +2519,14 @@ body::-webkit-scrollbar-thumb {
     }
 
     .ProductPageMobileImage {
-        min-width: 90%;
         height: 50svh;
         background-size: cover;
         background-color: #e6deda;
         border-radius: 5px;
+        flex: 0 0 90%;
         background-position: center;
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
     }
 
     .ProductPageInfoContainer {

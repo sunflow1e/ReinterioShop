@@ -77,18 +77,13 @@ export class ProfilePage extends Component {
 									</div>
 								</a>
 							</div>
+												
+							<a target="_blank" href='/files/Справка Reinterio.pdf'>
+							<div className='PageCardButtonSecondType'>
+								<i class='fi fi-rr-search-alt'></i>
+								<p>Помощь</p>
+							</div></a>
 
-							<div className='PageCardButtonsWrapper'>
-								<div className='PageCardButtonSecondType'>
-									<i class='fi fi-rr-document-signed'></i>
-									<p>Справка</p>
-								</div>
-
-								<div className='PageCardButtonSecondType'>
-									<i class='fi fi-rr-search-alt'></i>
-									<p>Помощь</p>
-								</div>
-							</div>
 
 							<div className='PageCardButtonsWrapper'>
 								<div
@@ -300,11 +295,11 @@ export class ProfilePage extends Component {
 											onClick={() =>
 												!this.state.PasswordChanged
 													? (this.setState({
-															PasswordChanged: !this.state.PasswordChanged,
-													  }),
-													  this.setState({ PasswordShowed: false }),
-													  this.setState({ PasswordShowError: false }),
-													  this.setState({ PasswordSaved: false }))
+														PasswordChanged: !this.state.PasswordChanged,
+													}),
+														this.setState({ PasswordShowed: false }),
+														this.setState({ PasswordShowError: false }),
+														this.setState({ PasswordSaved: false }))
 													: this.UpdateProfilePassword()
 											}
 										>
