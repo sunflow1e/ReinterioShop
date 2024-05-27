@@ -3,12 +3,15 @@ import 'react-phone-input-2/lib/style.css'
 import { CSSTransition } from 'react-transition-group'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
+import axios from "axios";
 
 export class ProfilePage extends Component {
 	constructor(props) {
 		super(props)
 
 		this.state = {
+			lastOrder: [],
+
 			SettingsShow: false,
 
 			AddressChanged: false,
@@ -26,6 +29,30 @@ export class ProfilePage extends Component {
 			PasswordErrorText: 'Пароль слишком корткий',
 			PasswordShowError: false,
 		}
+	}
+
+	getLastOrder() {
+		const qs = require('qs')
+		let data = qs.stringify({})
+
+		let config = {
+			method: 'get',
+			maxBodyLength: Infinity,
+			url:
+				`${process.env.REACT_APP_API_URL}/order/info/` +
+				Number.parseInt(localStorage.getItem('userId')),
+			headers: {},
+			data: data,
+		}
+
+		axios
+			.request(config)
+			.then(response => {
+				console.log(response.data)
+			})
+			.catch(error => {
+				console.log(error)
+			})
 	}
 
 	logOut() {
@@ -51,6 +78,16 @@ export class ProfilePage extends Component {
 				</div>
 				<div className='PageCardsContainer'>
 					<div style={{ zIndex: '9' }} className='PageCards'>
+
+						<div className='PageCard'>
+							<p className='PageCardTitle'>Последний заказ</p>
+							<p>{'Здравствуйте, ' + this.state.lastOrder.order_id + '!'}</p>
+						</div>
+
+						<div className='SidePageCard'>
+							<p className='PageCardTitle'>Ожидают отзыва</p>
+						</div>
+
 						<div className='SidePageCard'>
 							<div className='PageCardButtonsWrapper'>
 								<div className='PageCardButtonSecondType'>
@@ -77,12 +114,12 @@ export class ProfilePage extends Component {
 									</div>
 								</a>
 							</div>
-												
+
 							<a target="_blank" href='/files/Справка Reinterio.pdf'>
-							<div className='PageCardButtonSecondType'>
-								<i class='fi fi-rr-search-alt'></i>
-								<p>Помощь</p>
-							</div></a>
+								<div className='PageCardButtonSecondType'>
+									<i class='fi fi-rr-search-alt'></i>
+									<p>Помощь</p>
+								</div></a>
 
 
 							<div className='PageCardButtonsWrapper'>
@@ -97,14 +134,6 @@ export class ProfilePage extends Component {
 									<p style={{ color: '#E04E20' }}>Выйти из аккаунта</p>
 								</div>
 							</div>
-						</div>
-
-						<div className='PageCard'>
-							<p className='PageCardTitle'>Доставки</p>
-						</div>
-
-						<div className='SidePageCard'>
-							<p className='PageCardTitle'>Ожидают отзыва</p>
 						</div>
 					</div>
 

@@ -725,9 +725,95 @@ app.post('/order/details', (req, res) => {
 })
 
 
+// // // // // // // // // // // // // // // // // // // // // // // // // //
+
+//     O R D E R Ы      // // // // // // // // // // // // // // // // // //
+
+// // // // // // // // // // // // // // // // // // // // // // // // // //
+
+app.get('/orders/:id', (req, res) => {
+  const { id } = req.params
+
+  client
+    .query(
+      `SELECT order_id, order_user, order_price, order_delivery_date,
+      order_delivery_price, delivery_name, status_name
+    FROM
+      orders
+    JOIN status ON status_id = order_status
+    JOIN delivery ON delivery_id = order_delivery
+    
+    WHERE order_user = $1`,
+      [Number.parseInt(id)]
+    )
+
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
 
 
+app.get('/order/info/:id', (req, res) => {
+  const { id } = req.params
 
+  client
+    .query(
+      `SELECT order_id, order_user, order_price, order_delivery_date,
+      order_delivery_price, delivery_name, status_name
+    FROM
+      orders
+    JOIN status ON status_id = order_status
+    JOIN delivery ON delivery_id = order_delivery
+    
+    WHERE order_id = (SELECT order_id FROM orders WHERE order_user = $1 ORDER BY order_id  DESC LIMIT 1)`,
+      [Number.parseInt(id)]
+    )
+
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
+app.get('/order/products/:id', (req, res) => {
+  const { id } = req.params
+
+  client
+    .query(
+      `SELECT
+
+      image_path, product_details.productd_id, color_name, product_name, product_article, orderprod_price, orderprod_count,
+      product_length, product_width, product_height, product_weight, orderprod_order
+        
+      FROM images, products 
+      INNER JOIN product_details ON productd_product = product_id 
+      INNER JOIN colors ON productd_color = color_id
+      INNER JOIN order_products ON orderprod_product = productd_id  
+      WHERE
+        productd_image = image_id 
+      AND productd_id = orderprod_product 
+      AND orderprod_order = (SELECT order_id FROM orders WHERE order_user = $1 ORDER BY order_id  DESC LIMIT 1)
+      
+      ORDER BY orderprod_order`,
+      [Number.parseInt(id)]
+    )
+
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
 
 
 
