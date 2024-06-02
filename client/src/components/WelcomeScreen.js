@@ -9,7 +9,7 @@ export default function WelcomeScreen(){
                 
                 <div style = {{display: "flex", flexDirection: "row", gap: "15px"}}>
                 <a href='/catalogue'><div class = "MainButton"><p class = "Text">Каталог</p></div></a>
-                    <div style = {{backgroundColor: "#0A5954"}} class = "MainButton"><p class = "Text">Категории</p></div>
+                <a href="#Categories"><div style = {{backgroundColor: "#0A5954"}} class = "MainButton"><p class = "Text">Категории</p></div></a>
                 </div>
             </div>
 

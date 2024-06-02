@@ -80,14 +80,14 @@ export class ProductCard extends Component {
 							<a class='ProductPrice'>
 								<h class='CardText'>
 									{new Intl.NumberFormat().format(
-										this.props.product.product_price
+										this.props.product.product_disc_price
 									) + ' ₽'}
 								</h>
 							</a>
 							{this.props.product.product_discount > 0 && (
 								<a class='ProductsPriceBefore'>
 									{new Intl.NumberFormat().format(
-										this.props.product.product_disc_price
+										this.props.product.product_price
 									) + ' ₽'}
 								</a>
 							)}

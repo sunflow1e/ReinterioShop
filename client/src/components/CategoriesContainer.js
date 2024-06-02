@@ -4,9 +4,9 @@ import { CategoryCard } from './CategoryCard'
 export class CategoriesContainer extends Component {
   render() {
     return (
-        <div class = "CategoriesContainer">
+        <div className = {this.props.small ? "SmallCategoriesContainer" : "CategoriesContainer"}>
             {this.props.categories?.map(CurrentCategory => (
-            <CategoryCard key = {CurrentCategory.category_id} category = {CurrentCategory} />
+            <CategoryCard changeCurrentCategory = {this.props.changeCurrentCategory} small = {this.props.small} key = {CurrentCategory.category_id} category = {CurrentCategory} />
         ))}
         </div>
     )

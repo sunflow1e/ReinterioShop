@@ -223,47 +223,47 @@ export class CartPage extends Component {
 							{TotalProducts > 0 && (
 								<div class='CartSummaryContainer'>
 									<div class='CartSummaryInfoContainer'>
-										<h class='BlockContainerTitle'>Ваша корзина</h>
+										<p class='BlockContainerTitle'>Ваша корзина</p>
 									</div>
 
 									<div class='CartSummaryInfoContainer'>
-										<h class='SideContainerText'>
+										<p class='SideContainerText'>
 											{'Товары (' + TotalProducts + ')'}
-										</h>
-										<h class='SideContainerText'>
+										</p>
+										<p class='SideContainerText'>
 											{new Intl.NumberFormat().format(ProductsCost) + ' ₽'}
-										</h>
+										</p>
 									</div>
 
 									{TotalDiscount > 0 && (
 										<div class='CartSummaryInfoContainer'>
-											<h class='SideContainerText'>Скидка</h>
-											<h class='SideContainerText'>
+											<p class='SideContainerText'>Скидка</p>
+											<p class='SideContainerText'>
 												{'-' +
 													new Intl.NumberFormat().format(TotalDiscount) +
 													' ₽'}
-											</h>
+											</p>
 										</div>
 									)}
 
 									<div class='CartSummaryInfoContainer'>
-										<h class='SideContainerText'>
+										<p class='SideContainerText'>
 											<b>Итого</b>
-										</h>
-										<h class='SideContainerText'>
+										</p>
+										<p class='SideContainerText'>
 											<b>{new Intl.NumberFormat().format(TotalCost) + ' ₽'}</b>
-										</h>
+										</p>
 									</div>
 
 									<div class='SideContainerBuyButton' onClick={() => this.ordering()}>
-										<h>К оформлению</h>
-										<h class='SideContainerBuyButtonPrice'>
+										<p>К оформлению</p>
+										<p class='SideContainerBuyButtonPrice'>
 											{new Intl.NumberFormat().format(TotalCost) + ' ₽'}
-										</h>
+										</p>
 									</div>
-									<h class='SideContainertDelieveryDate'>
+									<p class='SideContainertDelieveryDate'>
 										Выбрать способ доставки можно при оформлении заказа
-									</h>
+									</p>
 								</div>
 							)}
 						</div>
@@ -275,13 +275,13 @@ export class CartPage extends Component {
 								style={{ flexDirection: 'column', gap: '5px' }}
 								class='CartCard'
 							>
-								<h style={{ fontSize: '32px' }} class='AlertContainerTitle'>
+								<p style={{ fontSize: '32px' }} class='AlertContainerTitle'>
 									Пока тут ничего нет
-								</h>
-								<h style={{ marginBottom: '20px' }} class='AlertContainerText'>
+								</p>
+								<p style={{ marginBottom: '20px' }} class='AlertContainerText'>
 									Подберите лучшую мебель для вашего дома с нашим каталогом
 									товаров{' '}
-								</h>
+								</p>
 								<a href='../catalogue'>
 									<div class='MainButton'>Каталог товаров</div>
 								</a>

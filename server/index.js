@@ -301,10 +301,13 @@ app.get('/product/cards', (req, res) => {
   false as product_addedtocart,  
   false as product_addedtofavourite, 
   image_path, product_details.productd_id, color_name, color_hex, product_name, product_article, product_price,
-  product_disc_price, product_discount, productd_dailyoffer, category_name, subcategory_name, productd_onstock 
+  product_disc_price, product_discount, productd_dailyoffer, category_name, subcategory_name, productd_onstock,
+  style_id, style_name 
    
-  FROM subcategories, categories, images, products INNER JOIN product_details ON productd_product = product_id 
-  INNER JOIN colors ON productd_color = color_id 
+  FROM subcategories, categories, images, products
+  INNER JOIN product_details ON productd_product = product_id 
+  INNER JOIN colors ON productd_color = color_id
+  INNER JOIN styles ON style_id = product_id  
   
   WHERE subcategory_id = product_subcategory 
   AND subcategory_category = category_id 
@@ -423,7 +426,7 @@ app.get('/colors', (req, res) => {
 
   client
     .query(
-      `SELECT color_name, color_hex, color_id, product_id, productd_id  
+      `SELECT false as color_ischecked, color_name, color_hex, color_id, product_id, productd_id  
   FROM products 
   INNER JOIN product_details ON productd_product = product_id 
   INNER JOIN colors ON productd_color = color_id`
@@ -437,6 +440,25 @@ app.get('/colors', (req, res) => {
       res.status(500).send()
     })
 })
+
+app.get('/colors/all', (req, res) => {
+  //   C O L O R S
+
+  client
+    .query(
+      `SELECT false as color_ischecked, color_name, color_hex, color_id FROM Colors WHERE color_id != 0 ORDER BY color_id`
+    )
+
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
 
 // // // // // // // // // // // // // // // // // // // // // // // // // //
 
@@ -697,7 +719,7 @@ app.post('/order', (req, res) => {
 
   client
     .query('INSERT INTO orders (order_user, order_date, order_delivery_date, order_price, order_status, order_delivery, order_address, order_delivery_price) values ($1, $2, $3, $4, $5, $6, $7, $8)',
-     [Number.parseInt(userid), date, delivdate, Number.parseInt(price), 0, Number.parseInt(deliid), address, Number.parseInt(deliprice)])
+      [Number.parseInt(userid), date, delivdate, Number.parseInt(price), 0, Number.parseInt(deliid), address, Number.parseInt(deliprice)])
     .then(result => {
       res.status(200).send(result.rows)
     })
@@ -714,7 +736,7 @@ app.post('/order/details', (req, res) => {
 
   client
     .query('INSERT INTO order_products (orderprod_order, orderprod_product, orderprod_count, orderprod_price) values ((SELECT order_id FROM orders ORDER BY order_id DESC LIMIT 1), $1, $2, $3)',
-     [Number.parseInt(product), Number.parseInt(count), Number.parseInt(price)])
+      [Number.parseInt(product), Number.parseInt(count), Number.parseInt(price)])
     .then(result => {
       res.status(200).send(result.rows)
     })
@@ -782,6 +804,32 @@ app.get('/order/info/:id', (req, res) => {
     })
 })
 
+app.get('/order/all/info/:id', (req, res) => {
+  const { id } = req.params
+
+  client
+    .query(
+      `SELECT order_id, order_user, order_price, order_delivery_date,
+      order_delivery_price, delivery_name, status_name, order_address
+    FROM
+      orders
+    JOIN status ON status_id = order_status
+    JOIN delivery ON delivery_id = order_delivery
+    
+    WHERE order_user = $1`,
+      [Number.parseInt(id)]
+    )
+
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
 
 app.get('/order/products/:id', (req, res) => {
   const { id } = req.params
@@ -815,11 +863,170 @@ app.get('/order/products/:id', (req, res) => {
     })
 })
 
+app.get('/order/all/products/:id', (req, res) => {
+  const { id } = req.params
 
+  client
+    .query(
+      `SELECT
+      orderprod_count as cart_count, true as product_isselected,
+      image_path, product_details.productd_id, color_name, product_name, product_article, orderprod_price, orderprod_count,
+      product_length, product_width, product_height, product_weight, orderprod_order, productd_onstock, product_price, product_disc_price, product_discount
+        
+      FROM images, products 
+      INNER JOIN product_details ON productd_product = product_id 
+      INNER JOIN colors ON productd_color = color_id
+      INNER JOIN order_products ON orderprod_product = productd_id  
+      WHERE
+      productd_image = image_id 
+      AND productd_id = orderprod_product 
+      AND orderprod_order = $1
+      
+      ORDER BY orderprod_order`,
+      [Number.parseInt(id)]
+    )
 
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
 
+// // // // // // // // // // // // // // // // // // // // // // // // // //
 
+//     R A T I N G      // // // // // // // // // // // // // // // // // //
 
+// // // // // // // // // // // // // // // // // // // // // // // // // //
+
+app.post('/rating/add', (req, res) => {
+  const { userid } = req.body
+  const { productid } = req.body
+
+  const { rating } = req.body
+  const { text } = req.body
+  const { image1 } = req.body
+  const { image2 } = req.body
+  const { image3 } = req.body
+  const { image4 } = req.body
+  const { image5 } = req.body
+  const { date } = req.body
+
+  client
+    .query(`INSERT INTO reviews 
+    (review_user, review_product, review_rating, review_text, review_image1, review_image2, 
+    review_image3, review_image4, review_image5, review_date)
+
+    SELECT $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
+
+    WHERE NOT EXISTS (
+      SELECT * FROM reviews WHERE review_user = $1 AND review_product = $2
+    )`,
+      [Number.parseInt(userid), Number.parseInt(productid), Number.parseInt(rating), text, image1, image2, image3, image4, image5, date])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.get('/review/noreview/:id', (req, res) => {
+  const { id } = req.params
+
+  client
+    .query(
+      `SELECT
+      image_path, product_details.productd_id, color_name, product_name, product_article,
+      product_length, product_width, product_height, product_weight, productd_onstock, product_price, product_disc_price, product_discount
+        
+      FROM images, products 
+      INNER JOIN product_details ON productd_product = product_id 
+      INNER JOIN colors ON productd_color = color_id
+      INNER JOIN reviews ON review_product = productd_id  
+      WHERE
+      productd_image = image_id 
+      AND productd_id = review_product 
+      AND review_user = $1
+      AND review_rating = 0
+      
+      ORDER BY review_id`,
+      [Number.parseInt(id)]
+    )
+
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.get('/review/all/:id', (req, res) => {
+  const { id } = req.params
+
+  client
+    .query(
+      `SELECT
+      image_path, product_details.productd_id, color_name, product_name, product_article,
+      product_length, product_width, product_height, product_weight, productd_onstock, product_price, product_disc_price, product_discount,
+      review_rating, review_text
+        
+      FROM images, products 
+      INNER JOIN product_details ON productd_product = product_id 
+      INNER JOIN colors ON productd_color = color_id
+      INNER JOIN reviews ON review_product = productd_id  
+      WHERE
+      productd_image = image_id 
+      AND productd_id = review_product 
+      AND review_user = $1
+      
+      ORDER BY review_id`,
+      [Number.parseInt(id)]
+    )
+
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+// // // // // // // // // // // // // // // // // // // // // // // // // //
+
+//     F I L T E R      // // // // // // // // // // // // // // // // // //
+
+// // // // // // // // // // // // // // // // // // // // // // // // // //
+
+app.get('/style', (req, res) => {
+  client
+    .query('SELECT false as style_ischecked, style_id, style_name FROM styles WHERE style_id != 0')
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.get('/subcategory', (req, res) => {
+  client
+    .query('SELECT false as subcategory_ischecked, subcategory_category, subcategory_id, subcategory_name FROM subcategories WHERE subcategory_id != 0')
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
 
 
 const PORT = process.env.PORT || 5000

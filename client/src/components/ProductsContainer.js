@@ -7,6 +7,7 @@ export class ProductsContainer extends Component {
 		super(props)
 		this.state = {
 			products: [],
+			filterproducts: [],
 			favproducts: [],
 			cartproducts: [],
 		}
@@ -42,7 +43,7 @@ export class ProductsContainer extends Component {
 		axios
 			.request(config)
 			.then(response => {
-				this.setState({ products: response.data })
+				this.setState({ products: response.data }); this.setState({ filterproducts: response.data })
 			})
 			.catch(error => {
 				console.log(error)
@@ -120,11 +121,41 @@ export class ProductsContainer extends Component {
 	}
 
 	render() {
+		const prods = this.state.filterproducts;
+
+
+		let all_products = this.state.products
+		let filter_products = this.state.filterproducts
+
+		const styles = JSON.parse(localStorage.getItem('styles'));
+
+		//search
+		const search = localStorage.getItem('search');
+		filter_products = filter_products.filter(a => (a.product_name.toLowerCase().includes(search.toLowerCase()) || String(a.product_article).toLowerCase().includes(search.toLowerCase())))
+
+		//price
+		const price = localStorage.getItem('price');
+
+		if (Number.parseInt(price) === 1){
+			filter_products = filter_products.filter(a => Number.parseInt(a.product_disc_price) < 10000)
+		}
+		if (Number.parseInt(price) === 2){
+			filter_products = filter_products.filter(a => Number.parseInt(a.product_disc_price) < 50000 && Number.parseInt(a.product_disc_price) > 10000)
+		}
+		if (Number.parseInt(price) === 3){
+			filter_products = filter_products.filter(a => Number.parseInt(a.product_disc_price) < 100000 && Number.parseInt(a.product_disc_price) > 50000)
+		}
+		if (Number.parseInt(price) === 4){
+			filter_products = filter_products.filter(a => Number.parseInt(a.product_disc_price) > 100000)
+		}
+		
+		console.log(price)
+
 		return (
 			<div>
-				{Object.keys(this.state.products).length > 0 ? (
+				{Object.keys(filter_products).length > 0 ? (
 					<div class='ProductsContainer'>
-						{this.state.products?.map(CurrentProduct => (
+						{filter_products?.map(CurrentProduct => (
 							<ProductCard
 								key={CurrentProduct.productd_id}
 								user_id={localStorage.getItem('userId')}
@@ -140,16 +171,12 @@ export class ProductsContainer extends Component {
 								style={{ flexDirection: 'column', gap: '5px' }}
 								class='CartCard'
 							>
-								<h style={{ fontSize: '32px' }} class='AlertContainerTitle'>
-									Пока тут ничего нет
-								</h>
-								<h style={{ marginBottom: '20px' }} class='AlertContainerText'>
-									Подберите лучшую мебель для вашего дома с нашим каталогом
-									товаров{' '}
-								</h>
-								<a href='../catalogue'>
-									<div class='MainButton'>Каталог товаров</div>
-								</a>
+								<p style={{ fontSize: '32px' }} class='AlertContainerTitle'>
+									Ничего не найдено
+								</p>
+								<p style={{ marginBottom: '20px' }} className='PageCardText'>
+									Измените запрос и попробуйте еще раз{' '}
+								</p>
 							</div>
 						</div>
 					</div>

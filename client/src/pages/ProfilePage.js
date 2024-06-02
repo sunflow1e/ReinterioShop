@@ -4,6 +4,7 @@ import { CSSTransition } from 'react-transition-group'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import axios from "axios";
+import LastOrdersPicture from '../components/LastOrdersPicture'
 
 export class ProfilePage extends Component {
 	constructor(props) {
@@ -11,6 +12,8 @@ export class ProfilePage extends Component {
 
 		this.state = {
 			lastOrder: [],
+			lastOrderProducts: [],
+			noReviewProducts: [],
 
 			SettingsShow: false,
 
@@ -31,6 +34,12 @@ export class ProfilePage extends Component {
 		}
 	}
 
+	componentDidMount() {
+		this.getLastOrder();
+		this.getLastOrderProducts();
+		this.getNoReview();
+	}
+
 	getLastOrder() {
 		const qs = require('qs')
 		let data = qs.stringify({})
@@ -48,7 +57,55 @@ export class ProfilePage extends Component {
 		axios
 			.request(config)
 			.then(response => {
-				console.log(response.data)
+				this.setState({ lastOrder: response.data })
+			})
+			.catch(error => {
+				console.log(error)
+			})
+	}
+
+	getLastOrderProducts() {
+		const qs = require('qs')
+		let data = qs.stringify({})
+
+		let config = {
+			method: 'get',
+			maxBodyLength: Infinity,
+			url:
+				`${process.env.REACT_APP_API_URL}/order/products/` +
+				Number.parseInt(localStorage.getItem('userId')),
+			headers: {},
+			data: data,
+		}
+
+		axios
+			.request(config)
+			.then(response => {
+				this.setState({ lastOrderProducts: response.data })
+			})
+			.catch(error => {
+				console.log(error)
+			})
+	}
+
+	getNoReview() {
+		const qs = require('qs')
+		let data = qs.stringify({})
+
+		let config = {
+			method: 'get',
+			maxBodyLength: Infinity,
+			url:
+				`${process.env.REACT_APP_API_URL}/review/noreview/` +
+				Number.parseInt(localStorage.getItem('userId')),
+			headers: {},
+			data: data,
+		}
+
+		axios
+			.request(config)
+			.then(response => {
+				this.setState({ noReviewProducts: response.data })
 			})
 			.catch(error => {
 				console.log(error)
@@ -61,10 +118,16 @@ export class ProfilePage extends Component {
 	}
 
 	render() {
+
+		let PCount = 213;
+		PCount = Math.abs(PCount) % 100;
+		let Num = PCount % 10;
+
 		if (!this.props.user) {
 			return <div>Loading...</div> // or some other loading indicator
 		}
 		return (
+
 			<div className='Content'>
 				<div className='PageTitleContainer'>
 					<div className='PageTitle'>
@@ -81,31 +144,61 @@ export class ProfilePage extends Component {
 
 						<div className='PageCard'>
 							<p className='PageCardTitle'>Последний заказ</p>
-							<p>{'Здравствуйте, ' + this.state.lastOrder.order_id + '!'}</p>
+							{this.state.lastOrder.length > 0 &&
+								<div style={{ gap: "10px", display: "flex", flexDirection: "column" }}>
+									{this.state.lastOrder[0] &&
+										<a href='/myorders'>
+											<div className='GrayBackground'>
+												<div className='DeliveryContainer'>
+													<b className='PageCardText'>{'Заказ ' + this.state.lastOrder[0].status_name.toLowerCase()}</b>
+													<p className='PageCardText'>{'Ожидаемая дата доставки -  ' + new Date(this.state.lastOrder[0].order_delivery_date).toLocaleDateString()}</p>
+												</div>
+											</div>
+										</a>
+									}
+
+									{this.state.lastOrder[0] &&
+										<p className='PageCardText'>{this.state.lastOrderProducts.length + ' товаров на сумму ' + new Intl.NumberFormat().format(this.state.lastOrder[0].order_price) + ' ₽'}</p>
+									}
+									<LastOrdersPicture review={false} products={this.state.lastOrderProducts}></LastOrdersPicture>
+								</div>
+							}
+							{this.state.lastOrder.length <= 0 &&
+								<div style={{ gap: "10px", display: "flex", flexDirection: "column" }}>
+									<div className='GrayBackground'>
+										<b className='PageCardText'>Заказов пока нет</b>
+										<p className='PageCardText'>Подберите лучшую мебель для вашего дома с нашим каталогом товаров </p>
+										<a href="../catalogue"><div class="SideContainerBuyButton"><p className='PageCardText'>Каталог товаров</p></div></a>
+									</div>
+								</div>
+							}
 						</div>
 
 						<div className='SidePageCard'>
 							<p className='PageCardTitle'>Ожидают отзыва</p>
+							<p style={{ marginBottom: "auto" }} className='PageCardText'>Ваш отзыв помогает другим клиентам с выбором</p>
+							<LastOrdersPicture review={true} products={this.state.noReviewProducts}></LastOrdersPicture>
 						</div>
 
 						<div className='SidePageCard'>
 							<div className='PageCardButtonsWrapper'>
-								<div className='PageCardButtonSecondType'>
-									<i class='fi fi-rr-shopping-bag'></i>
-									<p>Мои заказы</p>
-								</div>
-
-								<div className='PageCardButtonSecondType'>
-									<i class='fi fi-rr-star'></i>
-									<p>Мои отзывы</p>
-								</div>
+								<a href='/myorders'>
+									<div className='PageCardButtonSecondType'>
+										<i className='fi fi-rr-shopping-bag'></i>
+										<p>Мои заказы</p>
+									</div></a>
+								<a href='/reviews'>
+									<div className='PageCardButtonSecondType'>
+										<i class='fi fi-rr-star'></i>
+										<p>Мои отзывы</p>
+									</div></a>
 
 								<a href='#Settings'>
 									<div
 										onClick={() => this.ShowSettings()}
 										className='PageCardButtonSecondType'
 									>
-										<i class='fi fi-rr-settings'></i>
+										<i className='fi fi-rr-settings'></i>
 										<p>
 											{this.state.SettingsShow
 												? 'Закрыть настройки'
@@ -117,7 +210,7 @@ export class ProfilePage extends Component {
 
 							<a target="_blank" href='/files/Справка Reinterio.pdf'>
 								<div className='PageCardButtonSecondType'>
-									<i class='fi fi-rr-search-alt'></i>
+									<i className='fi fi-rr-search-alt'></i>
 									<p>Помощь</p>
 								</div></a>
 
@@ -145,6 +238,55 @@ export class ProfilePage extends Component {
 						unmountOnExit
 					>
 						<div className='PageCards'>
+							<div className='PageCard'>
+								<div className='PageCardTitleContainer'>
+									<p className='PageCardTitle'>Адрес доставки</p>
+									{this.state.AddressChanged && (
+										<div
+											className='CardSmallButton'
+											onClick={() => this.updateProfileAddress()}
+										>
+											Сохранить
+										</div>
+									)}
+								</div>
+								<p style={{ color: '#B4A39A' }} className='PageCardText'>
+									{this.props.user.user_address !== null
+										? 'Последний указанный адрес доставки'
+										: 'Вы еще не указали адрес доставки'}
+								</p>
+								<input
+									pattern='[А-Яа-я]+'
+									onChange={() => this.UpdateProfileAddress()}
+									id='profile_address'
+									type='text'
+									maxLength='70'
+									className='MainTextArea'
+									defaultValue={this.props.user.user_address}
+									placeholder='Например: Москва, ул. Реинтерная 28, кв 15'
+								></input>
+								<CSSTransition
+									in={this.state.AddressSaved}
+									timeout={1000}
+									classNames='smallalert'
+									unmountOnExit
+								>
+									<p style={{ color: '#0A5954' }} className='PageCardText'>
+										Успешно сохранено!
+									</p>
+								</CSSTransition>
+								<CSSTransition
+									in={this.state.AddressShowError}
+									timeout={1000}
+									classNames='smallalert'
+									unmountOnExit
+								>
+									<p style={{ color: '#E04E20' }} className='PageCardText'>
+										Заполните поле адреса!
+									</p>
+								</CSSTransition>
+							</div>
+
 							<div
 								style={{ zIndex: '1' }}
 								id='SettingsPanel'
@@ -234,55 +376,6 @@ export class ProfilePage extends Component {
 								>
 									<p style={{ color: '#E04E20' }} className='PageCardText'>
 										{this.state.ProfileErrorText}
-									</p>
-								</CSSTransition>
-							</div>
-
-							<div className='PageCard'>
-								<div className='PageCardTitleContainer'>
-									<p className='PageCardTitle'>Адрес доставки</p>
-									{this.state.AddressChanged && (
-										<div
-											className='CardSmallButton'
-											onClick={() => this.updateProfileAddress()}
-										>
-											Сохранить
-										</div>
-									)}
-								</div>
-								<p style={{ color: '#B4A39A' }} className='PageCardText'>
-									{this.props.user.user_address !== null
-										? 'Последний указанный адрес доставки'
-										: 'Вы еще не указали адрес доставки'}
-								</p>
-								<input
-									pattern='[А-Яа-я]+'
-									onChange={() => this.UpdateProfileAddress()}
-									id='profile_address'
-									type='text'
-									maxLength='70'
-									className='MainTextArea'
-									defaultValue={this.props.user.user_address}
-									placeholder='Например: Москва, ул. Реинтерная 28, кв 15'
-								></input>
-								<CSSTransition
-									in={this.state.AddressSaved}
-									timeout={1000}
-									classNames='smallalert'
-									unmountOnExit
-								>
-									<p style={{ color: '#0A5954' }} className='PageCardText'>
-										Успешно сохранено!
-									</p>
-								</CSSTransition>
-								<CSSTransition
-									in={this.state.AddressShowError}
-									timeout={1000}
-									classNames='smallalert'
-									unmountOnExit
-								>
-									<p style={{ color: '#E04E20' }} className='PageCardText'>
-										Заполните поле адреса!
 									</p>
 								</CSSTransition>
 							</div>

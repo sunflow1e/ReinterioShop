@@ -16,6 +16,7 @@ export class HomePage extends Component {
         <div className = 'Content'>
         <WelcomeScreen />
         <BannerFirstType />
+        <div id = 'Categories' ></div>
         <ContentTitle ContentText = "Популярные категории"/>
         <CategoriesContainer categories={this.props.categories}/>
         <BannerSecondType />

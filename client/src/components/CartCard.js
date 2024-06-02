@@ -22,19 +22,19 @@ export class CartCard extends Component {
         <div class="CartCardMobileContainer">
           <div class="CartCardInfo">
             <a href={"/product/" + this.props.cartproduct.productd_id}>
-              <h class="CartCardName">{this.props.cartproduct.product_name}</h>
+              <p class="CartCardName">{this.props.cartproduct.product_name}</p>
             </a>
-            <h class="CartCardArticul">{this.props.cartproduct.product_article}</h>
-            <h class="CartCardInfoText">{"Цвет: " + this.props.cartproduct.color_name}</h>
-            <h class="CartCardInfoText">{"Размер: " + this.props.cartproduct.product_length + " x " + this.props.cartproduct.product_width + " x " + this.props.cartproduct.product_height}</h>
+            <p class="CartCardArticul">{this.props.cartproduct.product_article}</p>
+            <p class="CartCardInfoText">{"Цвет: " + this.props.cartproduct.color_name}</p>
+            <p class="CartCardInfoText">{"Размер: " + this.props.cartproduct.product_length + " x " + this.props.cartproduct.product_width + " x " + this.props.cartproduct.product_height}</p>
           </div>
 
 
           <div class="CartCardPriceCountContainer">
             <div class="CartCardPriceContainer">
-              <h class="CartCardPrice">{new Intl.NumberFormat().format(this.props.cartproduct.product_disc_price) + " ₽"}</h>
+              <p class="CartCardPrice">{new Intl.NumberFormat().format(this.props.cartproduct.product_disc_price) + " ₽"}</p>
               {this.props.cartproduct.product_discount !== 0 &&
-                <h class="CartCardsPriceBefore">{new Intl.NumberFormat().format(this.props.cartproduct.product_price) + " ₽"}</h>
+                <p class="CartCardsPriceBefore">{new Intl.NumberFormat().format(this.props.cartproduct.product_price) + " ₽"}</p>
               }
               {this.props.cartproduct.product_discount !== 0 &&
                 <div class="CartCardDiscount"> {"-" + this.props.cartproduct.product_discount + "%"} </div>

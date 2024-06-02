@@ -19,6 +19,9 @@ import ReturnProductsPage from './pages/ReturnProductsPage'
 import ProtectedRoute from './components/ProtectedRoute'
 import OrderingPage from './pages/OrderingPage'
 import GratitudePage from './pages/GratitudePage'
+import MyOrdersPage from './pages/MyOrdersPage'
+import ReviewsPage from './pages/ReviewsPage'
+import SearchPage from './pages/SearchPage'
 
 class App extends React.Component {
 	constructor(props) {
@@ -66,6 +69,7 @@ class App extends React.Component {
 				console.log(error)
 			})
 	}
+
 	checkAuth() {
 		const userId = localStorage.getItem('userId')
 		if (userId) {
@@ -183,6 +187,30 @@ class App extends React.Component {
 						/>
 
 						<Route
+							path='/reviews'
+							element={
+								<ProtectedRoute
+									isAuthenticated={!!localStorage.getItem('userId')}
+									component={ReviewsPage}
+									user_id={localStorage.getItem('userId')}
+									user={this.state.current_user}
+								/>
+							}
+						/>
+
+						<Route
+							path='/myorders'
+							element={
+								<ProtectedRoute
+									isAuthenticated={!!localStorage.getItem('userId')}
+									component={MyOrdersPage}
+									user_id={localStorage.getItem('userId')}
+									user={this.state.current_user}
+								/>
+							}
+						/>
+
+						<Route
 							path='/gratitude'
 							element={
 								<ProtectedRoute
@@ -205,6 +233,10 @@ class App extends React.Component {
 						<Route
 							path='/catalogue'
 							element={<CataloguePage user_id={this.state.loggeduser_id} />}
+						/>
+						<Route
+							path='/search'
+							element={<SearchPage user_id={this.state.loggeduser_id} />}
 						/>
 						<Route
 							path='/profile'

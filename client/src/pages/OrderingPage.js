@@ -250,9 +250,15 @@ export class OrderingPage extends Component {
                     classNames='smallalert'
                     unmountOnExit
                   >
-                    <p style={{ color: 'black', marginTop: '20px' }} className='PageCardText'>
-                      Бесплатная доставка при заказе от 7 000 ₽!<br /><br /><p style={{ color: "#B4A39A", fontSize: "16px" }}>(Распространяется только на стандартную доставку)</p>
-                    </p>
+                    <div>
+                      <p style={{ color: 'black', marginTop: '20px' }} className='PageCardText'>
+                        Бесплатная доставка при заказе от 7 000 ₽!
+                      </p>
+
+                      <p style={{ color: '#B4A39A', marginTop: '10px', fontSize: "16px" }} className='PageCardText'>
+                        Распространяется только на стандартную доставку
+                      </p>
+                    </div>
                   </CSSTransition>
                 </div>
               }
@@ -282,10 +288,14 @@ export class OrderingPage extends Component {
     if (this.CheckPhone() && this.CheckAddress()) {
       this.updateProfileAddress();
       this.updateProfilePhone();
-      this.postOrder(price, date, deliverydate, deliprice)
+      this.postOrder(price, date, deliverydate, deliprice);
 
       this.state.cart_products.forEach(CurrentP => {
         this.postOrderProducts(CurrentP.productd_id, CurrentP.cart_count, CurrentP.product_disc_price);
+      });
+
+      this.state.cart_products.forEach(CurrentP => {
+        this.waitingForReview(CurrentP.productd_id);
       });
 
       this.deleteFromCart();
@@ -305,6 +315,40 @@ export class OrderingPage extends Component {
       this.setState({ ShowError: true })
       this.setState({ ErrorText: 'Произошла непредвиденная ошибка. Повторите позже' })
     }
+  }
+
+  waitingForReview(product) {
+    const qs = require('qs');
+    let data = qs.stringify({
+      'userid': localStorage.getItem("userId"),
+      'productid': product,
+      'rating': 0,
+      'image1': '',
+      'image2': '',
+      'image3': '',
+      'image4': '',
+      'image5': '',
+      'date': '31-05-2023'
+    });
+
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'http://localhost:5000/rating/add',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data: data
+    };
+
+    axios.request(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
   }
 
   postOrder(price, date, deliverydate, deliprice) {

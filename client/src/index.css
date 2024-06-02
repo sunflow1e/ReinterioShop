@@ -51,9 +51,9 @@ body a {
     gap: 10px;
     margin-top: auto;
     margin-bottom: auto;
-} 
+}
 
-.AutorizationTitle{
+.AutorizationTitle {
     width: 100%;
     text-align: center;
 }
@@ -101,7 +101,7 @@ body a {
     outline: none;
 }
 
-.AutorizationPasswordFieldContainer{
+.AutorizationPasswordFieldContainer {
     height: 23px;
     width: 100%;
     resize: none;
@@ -122,7 +122,7 @@ body a {
     box-sizing: border-box;
 }
 
-.RegistrationButton{
+.RegistrationButton {
     width: 100%;
     display: flex;
     background-color: #0A5954;
@@ -139,11 +139,11 @@ body a {
     user-select: none;
 }
 
-.RegistrationButton:hover{
+.RegistrationButton:hover {
     background-color: #12706a;
 }
 
-.ModalBackground{
+.ModalBackground {
     inset: 0;
     margin: 0;
     z-index: 999999;
@@ -154,32 +154,38 @@ body a {
     background-color: rgba(0, 0, 0, 0.2);
 }
 
-.ModalWindow{
+.ModalWindow {
     width: 400px;
     padding: 25px;
     background-color: #F9F9FA;
     border-radius: 15px;
     border: 1px rgba(0, 0, 0, 0.1) solid;
-    
+
     display: flex;
     flex-direction: column;
     align-items: flex-end;
 }
 
-.CloseModal{
+.CloseModal {
     font-size: 20px;
-    cursor: pointer;
     width: fit-content;
     padding: 5px;
+    width: 100%;
+    display: flex;
+    justify-content: end;
 }
 
-.ModalContainer{
+.CloseModal i{
+    cursor: pointer;
+}
+
+.ModalContainer {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-.ModalTitle{
+.ModalTitle {
     font-size: 28px;
     font-family: Raleway;
     font-weight: 600;
@@ -187,14 +193,14 @@ body a {
     width: 100%;
 }
 
-.ModalButtonsContainer{
+.ModalButtonsContainer {
     display: flex;
     flex-direction: row;
     gap: 10px;
     width: 400px;
 }
 
-.ModalSecondaryButton{
+.ModalSecondaryButton {
     width: 100%;
     display: flex;
     background-color: #E1E4E4;
@@ -211,11 +217,11 @@ body a {
     user-select: none;
 }
 
-.ModalSecondaryButton:hover{
+.ModalSecondaryButton:hover {
     background-color: #cbd3d8;
 }
 
-.ModalMainButton{
+.ModalMainButton {
     width: 140%;
     display: flex;
     background-color: #E04E20;
@@ -232,8 +238,29 @@ body a {
     user-select: none;
 }
 
-.ModalMainButton:hover{
+.ModalMainButton:hover {
     background-color: #d13b0e;
+}
+
+.ModalMainButtonGreen {
+    width: 100%;
+    display: flex;
+    background-color: #0A5954;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 0px;
+    margin-top: 10px;
+    border-radius: 10px;
+    font-size: 20px;
+    color: white;
+    font-family: Raleway;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+    user-select: none;
+}
+
+.ModalMainButtonGreen:hover {
+    background-color: #12706a;
 }
 
 @media (width < 900px) {
@@ -246,11 +273,84 @@ body a {
         gap: 5px;
     }
 
-    .AutorizationTitle{
+    .AutorizationTitle {
         font-size: 20px;
     }
 }
 
+.FilterWindow {
+    width: 100%;
+    padding: 10px 25px 15px 25px;
+    background-color: #F9F9FA;
+    border-radius: 15px;
+    border: 1px rgba(0, 0, 0, 0.1) solid;
+
+    display: flex;
+    flex-direction: column;
+
+    box-sizing: border-box;
+}
+
+
+.FilterContainer{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    overflow-y: scroll;
+    height: 76svh;
+    padding: 2px 5px;
+}
+
+.AllFiltersContainer{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.StylesCategoriesContainer{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.StylesContainer{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 5px;
+    overflow-y: scroll;
+}
+
+.Bubble{
+    background-color: white;
+    border-radius: 30px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+    user-select: none;
+}
+
+.Bubble:hover{
+    background-color: #12706a;
+    color: white;
+}
+
+.SelectedBubble{
+    background-color: #0A5954;
+    color: white;
+    border-radius: 30px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+    user-select: none;
+}
+
+.SelectedBubble:hover{
+    background-color: #cbd3d8;
+    color: black;
+}
 
 /* ######################################################################## */
 /* ############################################################################### */
@@ -675,24 +775,24 @@ p {
 
 @media (width < 800px) {
 
-    .ModalWindow{
+    .ModalWindow {
         max-width: 80%;
     }
 
-    .ModalBackground{
+    .ModalBackground {
         min-width: 100;
     }
 
-    .ModalContainer{
+    .ModalContainer {
         width: 100%;
     }
 
-    .ModalButtonsContainer{
+    .ModalButtonsContainer {
         flex-direction: column-reverse;
         width: 100%;
     }
 
-    .ModalMainButton{
+    .ModalMainButton {
         width: 100%;
     }
 
@@ -772,21 +872,21 @@ p {
 
 
 .Footer {
-    background-color: #0C0C0C;
+    background-color: #EBEBEB;
     height: auto;
     position: absolute;
     flex: 0 0 auto;
     width: 100%;
     left: 0;
     bottom: -100;
-    color: white;
+    color: black;
     font-size: 20px;
     margin-top: 10%;
     z-index: 0;
 }
 
 .Footer a {
-    color: white;
+    color: black;
     text-decoration: none;
     line-height: 130%;
     transition: all 0.2s ease-in-out;
@@ -811,7 +911,8 @@ p {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 50px 5%;
+    justify-content: space-between;
+    gap: 30px 0px;
 }
 
 .FooterContainer b {
@@ -899,6 +1000,33 @@ body::-webkit-scrollbar-thumb {
     }
 }
 
+div {
+    --sb-track-color: transparent;
+    --sb-thumb-color: #0a5955;
+    --sb-size: 5px;
+}
+
+div::-webkit-scrollbar {
+    width: var(--sb-size)
+}
+
+div::-webkit-scrollbar-track {
+    background: var(--sb-track-color);
+    border-radius: 4px;
+}
+
+div::-webkit-scrollbar-thumb {
+    background: var(--sb-thumb-color);
+    border-radius: 4px;
+
+}
+
+@supports not selector(::-webkit-scrollbar) {
+    div {
+        scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+    }
+}
+
 
 /* CONTEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEENT */
 /* $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ */
@@ -981,9 +1109,31 @@ body::-webkit-scrollbar-thumb {
     flex-wrap: wrap;
 }
 
+.SmallCategoriesContainer{
+    width: 100%;
+    height: fit-content;
+    gap: 10px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-width: 520px;
+}
+
 .CategoryCard {
     width: 300px;
     height: 300px;
+    background-color: #0A5954;
+    border-radius: 5px;
+    background-size: cover;
+    display: flex;
+    align-items: flex-end;
+    cursor: pointer;
+    position: relative;
+}
+
+.SmallCategoryCard {
+    width: 160px;
+    height: 160px;
     background-color: #0A5954;
     border-radius: 5px;
     background-size: cover;
@@ -1000,8 +1150,17 @@ body::-webkit-scrollbar-thumb {
     transition: cubic-bezier(0.075, 0.82, 0.165, 1) 0.4s all;
 }
 
+.SmallCategoriesContainer .CategoryText{
+    padding: 10px 10px;
+    font-size: 18px;
+}
+
 .CategoryCard:hover>.CategoryText {
     padding: 30px 20px;
+}
+
+.SmallCategoryCard:hover>.CategoryText {
+    padding: 20px 10px;
 }
 
 @media (width < 1320px) {
@@ -1563,6 +1722,21 @@ body::-webkit-scrollbar-thumb {
 
 .PageCardText {
     font-size: 20px;
+    display: flex;
+    flex-direction: row;
+}
+
+.PageCardText i {
+    margin-right: 15px;
+    padding-top: 1px;
+}
+
+#StartSearch{
+    cursor: pointer;
+}
+
+#StartSearch:hover{
+    color:#bb5e07;
 }
 
 .SidePageCard {
@@ -1635,6 +1809,13 @@ body::-webkit-scrollbar-thumb {
     font-size: 24px;
     font-family: Raleway;
     font-weight: 600;
+    font-variant-numeric: lining-nums;
+    -moz-font-feature-settings: "lnum" 1;
+    -moz-font-feature-settings: "lnum=1";
+    -ms-font-feature-settings: "lnum" 1;
+    -o-font-feature-settings: "lnum" 1;
+    -webkit-font-feature-settings: "lnum" 1;
+    font-feature-settings: "lnum" 1;
 }
 
 .PageCardTitleContainer {
@@ -1710,8 +1891,21 @@ body::-webkit-scrollbar-thumb {
     .PageCard {
         min-width: none;
         max-width: none;
-        width: 30%;
+        width: 100%;
         gap: 10px;
+    }
+
+    .DeliveryPriceContainer {
+        font-size: 16px;
+    }
+
+    .DeliveryPriceContainer {
+        flex-direction: column;
+    }
+
+    .DeliveryPrice {
+        white-space: nowrap;
+        font-size: 10px;
     }
 
     .MainTextArea {
@@ -2273,7 +2467,7 @@ body::-webkit-scrollbar-thumb {
     background-color: #ecf3f2;
 }
 
-.ProductPageNoProduct{
+.ProductPageNoProduct {
     border-radius: 5px;
     border: 1px #cbd3d8 solid;
     color: #494949;
@@ -2337,8 +2531,8 @@ body::-webkit-scrollbar-thumb {
     box-shadow: 2px 4px 5px rgba(165, 164, 185, 0.20);
     border-radius: 5px;
     padding: 5px;
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     cursor: pointer;
     transition: all 0.1s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
@@ -2348,8 +2542,8 @@ body::-webkit-scrollbar-thumb {
     box-shadow: 2px 4px 5px rgba(165, 164, 185, 0.20);
     border-radius: 5px;
     padding: 5px;
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     cursor: pointer;
     transition: all 0.1s cubic-bezier(0.075, 0.82, 0.165, 1);
     outline: #0A5954 1px solid;
@@ -2382,7 +2576,9 @@ body::-webkit-scrollbar-thumb {
 .AllColorsContainer {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     gap: 10px;
+    max-width: 630px;
 }
 
 .ProductPageCharacteristicsContainer {
@@ -2551,14 +2747,14 @@ body::-webkit-scrollbar-thumb {
     }
 }
 
-.DeliveryContainer{
+.DeliveryContainer {
     display: flex;
     flex-direction: column;
     gap: 10px;
     width: 100%;
 }
 
-.DeliveryButton{
+.DeliveryButton {
     width: 100%;
     box-sizing: border-box;
     padding: 10px 15px;
@@ -2581,11 +2777,11 @@ body::-webkit-scrollbar-thumb {
     gap: 15px;
 }
 
-.DeliveryButton:hover{
+.DeliveryButton:hover {
     background-color: #F0F5F5;
 }
 
-.CurrentDeliveryButton{
+.CurrentDeliveryButton {
     width: 100%;
     box-sizing: border-box;
     padding: 10px 15px;
@@ -2608,21 +2804,247 @@ body::-webkit-scrollbar-thumb {
     gap: 15px;
 }
 
-.DeliveryPriceContainer{
+.DeliveryPriceContainer {
     display: flex;
     flex-direction: row;
     gap: 10px;
 }
 
 
-.DeliveryPrice{
+.DeliveryPrice {
     background-color: white;
     padding: 5px 15px;
     border-radius: 50px;
-    border:rgba(0, 0, 0, .1) 1px solid;
+    border: rgba(0, 0, 0, .1) 1px solid;
     font-size: 18px;
 }
 
+/* RATINGS ######################################################################## */
+
+.StarsContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.StarButton {
+    color: #EDEDED;
+    font-size: 25px;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.StarButton:hover {
+    color: #E07C20;
+}
+
+.StarButtonActive {
+    color: #E07C20;
+    font-size: 25px;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.StarButtonActive:hover {
+    color: #bb5e07;
+}
+
+.ReviewCard {
+    width: auto;
+    background-color: white;
+    box-shadow: 2px 4px 5px rgba(165, 164, 185, 0.20);
+    border-radius: 5px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.ReviewProduct {
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.RatingBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    background-color: white;
+    border-radius: 5px;
+}
+
+/* ORDERS ######################################################################## */
+
+.LastOrderPic {
+    width: 100%;
+    max-width: 90px;
+    height: 100px;
+    display: block;
+    background-size: cover;
+    border-radius: 2px;
+    background-color: #F9F9FA;
+    transition: all 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.LastOrderPicturesContainer:hover> :not(:hover) {
+    opacity: 0.4;
+}
+
+.LastOrderPicturesContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    transition: all 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.GrayBackground {
+    padding: 20px;
+    gap: 15px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+    background-color: #F9F9FA;
+    box-sizing: border-box;
+    width: 100%;
+    outline: rgba(0, 0, 0, .1) 1px solid;
+    transition: all 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+    max-height: 290px;
+}
+
+.GrayBackground:hover {
+    background-color: #E9E9ED;
+}
+
+.OrderContainer {
+    background-color: white;
+    box-shadow: 2px 4px 5px rgba(165, 164, 185, 0.20);
+    border-radius: 5px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.OrderInfo {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+}
+
+.OrderContainerLilCard {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    width: 100%;
+}
+
+.AllOrdersContainer {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 45px;
+}
+
+.OrderJustifyContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.OrderProductCard {
+    width: 410px;
+    background-color: #F9F9FA;
+    border-radius: 5px;
+    gap: 15px;
+    display: flex;
+    flex-direction: row;
+}
+
+.OrderProductImg {
+    min-height: 100%;
+    width: 100%;
+    object-fit: cover;
+    transition: all 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.OrderProductImg:hover {
+    transform: scale(1.2);
+}
+
+.OrderImgContainer {
+    overflow: hidden;
+    width: 100px;
+    height: 150px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #494949;
+}
+
+.OrderInfoContainer {
+    font-size: 20px;
+    margin: 15px 15px 15px 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.OrderProdContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 25px;
+}
+
+@media (width < 1200px) {
+
+    .OrderInfo :last-child {
+        width: fit-content;
+    }
+
+    .PageCardText {
+        width: fit-content;
+        white-space: nowrap;
+    }
+
+    .OrderJustifyContainer {
+        gap: 20px;
+    }
+
+    .OrderInfo {
+        gap: 10px;
+    }
+}
+
+@media (width < 900px) {
+
+    .OrderInfo {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .GrayBackground {
+        width: 100%;
+        max-width: 1000px;
+        gap: 10px;
+    }
+
+    .OrderInfo :last-child {
+        width: 100%;
+    }
+
+    .OrderProductCard {
+        width: 100%;
+    }
+
+    .OrderProdContainer {
+        gap: 10px;
+    }
+}
 
 /* CART SIDE ######################################################################## */
 
