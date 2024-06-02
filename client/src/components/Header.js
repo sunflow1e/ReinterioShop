@@ -128,6 +128,11 @@ export class Header extends Component {
 
     render() {
 
+        let FilterButton = false;
+        if (localStorage.getItem('price') || localStorage.getItem('colors') || localStorage.getItem('subcategories') || localStorage.getItem('style')) {
+            FilterButton = true;
+        }
+
         document.addEventListener( 'keyup', event => {
             if( event.code === 'Enter' && document.getElementById('SearchString').value != '') this.Search();
           });
@@ -158,10 +163,10 @@ export class Header extends Component {
                                 <div class="Search">
                                     <input id = "SearchString" autocomplete="off"
                                     defaultValue={localStorage.getItem('search').length >= 0 ? localStorage.getItem('search') : null} 
-                                    placeholder={localStorage.getItem('search').length >= 0 ? "Поиск по названию или артикулу" : null} 
+                                    placeholder={localStorage.getItem('search').length >= 0 ? "Поиск в каталоге" : null} 
                                     class="SearchString"/><i id="StartSearch" onClick={() => this.Search()} class="fi fi-rr-search"></i>
                                 </div>
-                                <div onClick={() => this.openModalWindow()} id="MainMenuFilter" class="FirstItem"><i class="fi fi-rr-filter"></i><h>Фильтр</h></div>
+                                <div onClick={() => this.openModalWindow()} id={FilterButton ? "MainMenuFilterActive" : "MainMenuFilter"} className="FirstItem"><i class="fi fi-rr-filter"></i><h>Фильтр</h></div>
                             </div>
 
                             <a href="/favourite"><div id="MainMenuFavourite" class="FirstItem"><i class="fi fi-rr-heart"></i><h>Избранное</h></div></a>

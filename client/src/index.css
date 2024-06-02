@@ -585,6 +585,12 @@ p {
     color: #0A5954;
 }
 
+#MainMenuFilterActive {
+    color: #F9F9FA;
+    background-color: #0A5954;
+}
+
+
 .SearchString:focus {
     border: none;
     outline: none;
@@ -642,6 +648,26 @@ p {
     font-size: 20px;
     margin-top: 5px;
 }
+
+.FirstItemActive {
+    display: flex;
+    padding: 10px;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    transition: all 0.5s ease-out;
+    color: white;
+    background-color: #0A5954;
+}
+
+.FirstItemActive i {
+    font-size: 20px;
+    margin-top: 5px;
+}
+
 
 /* CONTENT ######################################################################## */
 /* ############################################################################### */
