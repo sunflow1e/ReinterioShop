@@ -94,7 +94,7 @@ export class CartCard extends Component {
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
     const urlencoded = new URLSearchParams();
-    urlencoded.append("user", 1);
+    urlencoded.append("user", localStorage.getItem('userId'));
     urlencoded.append("product", prod.productd_id);
 
     const requestOptions = {

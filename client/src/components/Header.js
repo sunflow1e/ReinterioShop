@@ -133,9 +133,9 @@ export class Header extends Component {
             FilterButton = true;
         }
 
-        document.addEventListener( 'keyup', event => {
-            if( event.code === 'Enter' && document.getElementById('SearchString').value != '') this.Search();
-          });
+        document.addEventListener('keyup', event => {
+            if (event.code === 'Enter' && document.getElementById('SearchString').value != '') this.Search();
+        });
 
         const category_index = this.state.categories
             .map(a => a.category_id)
@@ -161,11 +161,16 @@ export class Header extends Component {
 
                             <div class="Explore">
                                 <div class="Search">
-                                    <input id = "SearchString" autocomplete="off"
-                                    defaultValue={localStorage.getItem('search').length >= 0 ? localStorage.getItem('search') : null} 
-                                    placeholder={localStorage.getItem('search').length >= 0 ? "Поиск в каталоге" : null} 
-                                    class="SearchString"/><i id="StartSearch" onClick={() => this.Search()} class="fi fi-rr-search"></i>
+                                    <input id="SearchString" autocomplete="off"
+                                        defaultValue={localStorage.getItem('search') != '' && localStorage.getItem('search') != null != null ? localStorage.getItem('search') : null}
+                                        placeholder={localStorage.getItem('search') != '' && localStorage.getItem('search') != null != null ? "Поиск в каталоге" : null}
+                                        class="SearchString" /><i id="StartSearch" onClick={() => this.Search()} class="fi fi-rr-search"></i>
                                 </div>
+
+                                {(localStorage.getItem('search') != '' && localStorage.getItem('search') != null) &&
+                                    <div onClick={() => this.clearSearch()} id="MainMenuFilter" className="FirstItem"><i class="fi fi-rr-cross-small"></i></div>
+                                }
+
                                 <div onClick={() => this.openModalWindow()} id={FilterButton ? "MainMenuFilterActive" : "MainMenuFilter"} className="FirstItem"><i class="fi fi-rr-filter"></i><h>Фильтр</h></div>
                             </div>
 
@@ -229,7 +234,7 @@ export class Header extends Component {
                                                 <b className='PageCardText'>Цвета</b>
                                                 <div className='AllColorsContainer'>
                                                     {this.state.colors?.map(Color => (
-                                                        <FilterColor changeSelectedColor = {this.changeSelectedColor} key={Color.color_id} color={Color} />
+                                                        <FilterColor changeSelectedColor={this.changeSelectedColor} key={Color.color_id} color={Color} />
                                                     ))}
                                                 </div>
                                             </div>
@@ -237,22 +242,22 @@ export class Header extends Component {
                                             <div className='GrayBackground'>
                                                 <b className='PageCardText'>Стоимость</b>
                                                 <div className='StylesContainer'>
-                                                    <div onClick={() => {this.changePrice(1)}}
+                                                    <div onClick={() => { this.changePrice(1) }}
                                                         className={this.state.priceFilter === 1 ? 'SelectedBubble' : 'Bubble'}>
                                                         До 10 000 ₽
                                                     </div>
 
-                                                    <div onClick={() => {this.changePrice(2)}}
+                                                    <div onClick={() => { this.changePrice(2) }}
                                                         className={this.state.priceFilter === 2 ? 'SelectedBubble' : 'Bubble'}>
                                                         До 50 000 ₽
                                                     </div>
 
-                                                    <div onClick={() => {this.changePrice(3)}}
+                                                    <div onClick={() => { this.changePrice(3) }}
                                                         className={this.state.priceFilter === 3 ? 'SelectedBubble' : 'Bubble'}>
                                                         От 50 000 ₽ до 100 000 ₽
                                                     </div>
 
-                                                    <div onClick={() => {this.changePrice(4)}}
+                                                    <div onClick={() => { this.changePrice(4) }}
                                                         className={this.state.priceFilter === 4 ? 'SelectedBubble' : 'Bubble'}>
                                                         100 000 ₽ и выше
                                                     </div>
@@ -260,8 +265,8 @@ export class Header extends Component {
                                             </div>
 
                                             <div className='PageTitleButtonsContainer'>
-                                                <div onClick={() => {this.clearFilters()}} className='ModalSecondaryButton'>Сбросить фильтры</div>
-                                                <div onClick={() => {this.Search()}} className='ModalMainButtonGreen'>Применить фильтры</div>
+                                                <div onClick={() => { this.clearFilters() }} className='ModalSecondaryButton'>Сбросить фильтры</div>
+                                                <div onClick={() => { this.Filter() }} className='ModalMainButtonGreen'>Применить фильтры</div>
                                             </div>
                                         </div>
                                     </div>
@@ -305,23 +310,30 @@ export class Header extends Component {
     }
 
 
-    Search(){
-        const subcategories = this.state.subcategories.filter(item => item.subcategory_ischecked === true)
-		localStorage.setItem('subcategories', JSON.stringify(subcategories))
+    Search() {
+        if (document.getElementById('SearchString').value != '') {
+            const search = document.getElementById('SearchString').value
+            localStorage.setItem('search', search)
+
+            window.location.href = '/search'
+        }
+    }
+
+    Filter() {
 
         const styles = this.state.styles.filter(item => item.style_ischecked === true)
-		localStorage.setItem('styles', JSON.stringify(styles))
+        localStorage.setItem('styles', JSON.stringify(styles))
 
         const colors = this.state.colors.filter(item => item.color_ischecked === true)
-		localStorage.setItem('colors', JSON.stringify(colors))
-        
+        localStorage.setItem('colors', JSON.stringify(colors))
+
         const price = this.state.priceFilter
-		localStorage.setItem('price', price)
+        localStorage.setItem('price', price)
 
-        const search = document.getElementById('SearchString').value
-        localStorage.setItem('search', search)
+        const subcategories = this.state.subcategories.filter(item => item.subcategory_ischecked === true)
+        localStorage.setItem('subcategories', JSON.stringify(subcategories))
 
-		window.location.href = '/search'
+        window.location.href = '/search'
     }
 
 
@@ -363,14 +375,20 @@ export class Header extends Component {
         this.setState({ colors: originproducts })
     }
 
-    clearFilters(){
+    clearFilters() {
         localStorage.removeItem('price')
         localStorage.removeItem('styles')
         localStorage.removeItem('subcategories')
         localStorage.removeItem('colors')
         this.state.showModal = false;
 
-        window.location.href = '/catalogue'
+        window.location.href = '/search'
+    }
+
+    clearSearch() {
+        localStorage.removeItem('search')
+
+        window.location.href = '/search'
     }
 
     changeCurrentCategory(id) {

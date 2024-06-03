@@ -29,13 +29,29 @@ export class ProductsContainer extends Component {
 	}
 
 	getProductCards() {
+		const subcategories = JSON.parse(localStorage.getItem('subcategories'));
+		let subcategoriesQueryString = ' AND (';
+
+		if (subcategories) {
+			for (let index = 0; index < subcategories.length; index++) {
+				if (index != 0){
+					subcategoriesQueryString += ' OR '
+				}
+				subcategoriesQueryString += `subcategory_name = '` + subcategories[index].subcategory_name + `'`;
+			}
+		}
+
+		subcategoriesQueryString += ')'
+
+		console.log(subcategoriesQueryString);
+
 		const qs = require('qs')
 		let data = qs.stringify({})
 
 		let config = {
 			method: 'get',
 			maxBodyLength: Infinity,
-			url: `${process.env.REACT_APP_API_URL}/product/cards`,
+			url: `${process.env.REACT_APP_API_URL}/product/cards/` + subcategoriesQueryString,
 			headers: {},
 			data: data,
 		}
@@ -51,6 +67,7 @@ export class ProductsContainer extends Component {
 	}
 
 	getCartProductCards() {
+		
 		const qs = require('qs')
 		let data = qs.stringify({})
 
@@ -123,33 +140,30 @@ export class ProductsContainer extends Component {
 	render() {
 		const prods = this.state.filterproducts;
 
-
 		let all_products = this.state.products
 		let filter_products = this.state.filterproducts
 
-		const styles = JSON.parse(localStorage.getItem('styles'));
-
 		//search
 		const search = localStorage.getItem('search');
-		filter_products = filter_products.filter(a => (a.product_name.toLowerCase().includes(search.toLowerCase()) || String(a.product_article).toLowerCase().includes(search.toLowerCase())))
+		if (search) {
+			filter_products = filter_products.filter(a => (a.product_name.toLowerCase().includes(search.toLowerCase()) || String(a.product_article).toLowerCase().includes(search.toLowerCase())))
+		}
 
 		//price
 		const price = localStorage.getItem('price');
 
-		if (Number.parseInt(price) === 1){
+		if (Number.parseInt(price) === 1) {
 			filter_products = filter_products.filter(a => Number.parseInt(a.product_disc_price) < 10000)
 		}
-		if (Number.parseInt(price) === 2){
+		if (Number.parseInt(price) === 2) {
 			filter_products = filter_products.filter(a => Number.parseInt(a.product_disc_price) < 50000 && Number.parseInt(a.product_disc_price) > 10000)
 		}
-		if (Number.parseInt(price) === 3){
+		if (Number.parseInt(price) === 3) {
 			filter_products = filter_products.filter(a => Number.parseInt(a.product_disc_price) < 100000 && Number.parseInt(a.product_disc_price) > 50000)
 		}
-		if (Number.parseInt(price) === 4){
+		if (Number.parseInt(price) === 4) {
 			filter_products = filter_products.filter(a => Number.parseInt(a.product_disc_price) > 100000)
 		}
-		
-		console.log(price)
 
 		return (
 			<div>

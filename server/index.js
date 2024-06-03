@@ -294,27 +294,31 @@ app.put('/user/updatepassword/:id', (req, res) => {
 
 // // // // // // // // // // // // // // // // // // // // // // // // // //
 
-app.get('/product/cards', (req, res) => {
+app.get('/product/cards/:subcategoriesQueryString', (req, res) => {
+
+  const { subcategoriesQueryString } = req.params
+  //const subcategoriesQueryString = `AND subcategory_name = 'Зеркала'`
+
   client
     .query(
-      `SELECT
-  false as product_addedtocart,  
-  false as product_addedtofavourite, 
-  image_path, product_details.productd_id, color_name, color_hex, product_name, product_article, product_price,
-  product_disc_price, product_discount, productd_dailyoffer, category_name, subcategory_name, productd_onstock,
-  style_id, style_name 
+    `SELECT
+    false as product_addedtocart,  
+    false as product_addedtofavourite, 
+    image_path, product_details.productd_id, color_name, color_hex, product_name, product_article, product_price,
+    product_disc_price, product_discount, productd_dailyoffer, category_name, subcategory_name, productd_onstock,
+    style_id, style_name 
    
-  FROM subcategories, categories, images, products
-  INNER JOIN product_details ON productd_product = product_id 
-  INNER JOIN colors ON productd_color = color_id
-  INNER JOIN styles ON style_id = product_id  
+    FROM subcategories, categories, images, products
+    INNER JOIN product_details ON productd_product = product_id 
+    INNER JOIN colors ON productd_color = color_id
+    INNER JOIN styles ON style_id = product_id  
   
-  WHERE subcategory_id = product_subcategory 
-  AND subcategory_category = category_id 
-  AND productd_image = image_id 
-  AND productd_onstock > 1
-  
-  ORDER BY product_article`
+    WHERE subcategory_id = product_subcategory 
+    AND subcategory_category = category_id 
+    AND productd_image = image_id 
+    AND productd_onstock > 1 `
+    + subcategoriesQueryString +
+    ` ORDER BY product_article`
     )
     .then(result => {
       res.status(200).send(result.rows)
