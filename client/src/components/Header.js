@@ -28,10 +28,18 @@ export class Header extends Component {
     componentDidMount() {
         this.getCategories()
         this.getStyles()
-        this.getSubCategories()
         this.getColors();
 
-        if (Number.parseInt(localStorage.getItem('price')) != 0) this.setState({ priceFilter: Number.parseInt(localStorage.getItem('price')) })
+        if (Number.parseInt(localStorage.getItem('price')) != 0) {
+            this.setState({ priceFilter: Number.parseInt(localStorage.getItem('price')) })
+        }
+
+        if (localStorage.getItem('subcategories') != null) {
+            this.setState({ subcategories: JSON.parse(localStorage.getItem('subcategories')) })
+        }
+        else{
+            this.getSubCategories()
+        }
     }
 
     getCategories() {
@@ -66,7 +74,7 @@ export class Header extends Component {
         let config = {
             method: 'get',
             maxBodyLength: Infinity,
-            url: 'http://localhost:5000/style',
+            url: `${process.env.REACT_APP_API_URL}/style`,
             headers: {},
             data: data
         };
@@ -266,7 +274,7 @@ export class Header extends Component {
 
                                             <div className='PageTitleButtonsContainer'>
                                                 <div onClick={() => { this.clearFilters() }} className='ModalSecondaryButton'>Сбросить фильтры</div>
-                                                <div onClick={() => { this.Filter() }} className='ModalMainButtonGreen'>Применить фильтры</div>
+                                                <div onClick={() => { this.Search() }} className='ModalMainButtonGreen'>Применить фильтры</div>
                                             </div>
                                         </div>
                                     </div>
@@ -314,28 +322,32 @@ export class Header extends Component {
         if (document.getElementById('SearchString').value != '') {
             const search = document.getElementById('SearchString').value
             localStorage.setItem('search', search)
-
-            window.location.href = '/search'
         }
-    }
-
-    Filter() {
 
         const styles = this.state.styles.filter(item => item.style_ischecked === true)
-        localStorage.setItem('styles', JSON.stringify(styles))
+        if (styles.length > 0) {
+            //localStorage.setItem('styles', JSON.stringify(styles))
+        }
 
         const colors = this.state.colors.filter(item => item.color_ischecked === true)
-        localStorage.setItem('colors', JSON.stringify(colors))
+        if (colors.length > 0) {
+            //localStorage.setItem('colors', JSON.stringify(colors))
+        }
 
         const price = this.state.priceFilter
-        localStorage.setItem('price', price)
+        if (Number.parseInt(price) > 0) {
+            localStorage.setItem('price', price)
+        }
 
-        const subcategories = this.state.subcategories.filter(item => item.subcategory_ischecked === true)
-        localStorage.setItem('subcategories', JSON.stringify(subcategories))
+        if (this.state.subcategories.filter(item => item.subcategory_ischecked === true).length > 0) {
+            const subcategories = this.state.subcategories
+            localStorage.setItem('subcategories', JSON.stringify(subcategories))
+        }
+
+        console.log(this.state.subcategories)
 
         window.location.href = '/search'
     }
-
 
     closeModalWindow() {
         this.setState({ showModal: false })
@@ -382,7 +394,12 @@ export class Header extends Component {
         localStorage.removeItem('colors')
         this.state.showModal = false;
 
-        window.location.href = '/search'
+        if (document.getElementById('SearchString').value != '') {
+            window.location.href = '/search'
+        }
+        else {
+            window.location.href = '/catalogue'
+        }
     }
 
     clearSearch() {
