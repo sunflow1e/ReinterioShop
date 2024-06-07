@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import ADMINHeader from '../components/ADMINHeader';
 
 export class ReturnProductsPage extends Component {
     render() {
@@ -39,7 +40,8 @@ export class ReturnProductsPage extends Component {
                         Если обнаружены недостатки товара, в отношении которого гарантийные сроки или сроки годности не установлены, потребитель вправе предъявить требования в отношении недостатков товара в разумный срок, но в пределах 2 лет со дня передачи его потребителю, если более длительные сроки не установлены законами или договором.<br />
                         Потребитель также вправе предъявить требования к продавцу в отношении недостатков товара, если они обнаружены в течение гарантийного срока.</p>
                 </div>
-                <Header />
+                {this.props.user?.user_role === 1 && <Header />}
+				{this.props.user?.user_role === 2 && <ADMINHeader />}
                 <Footer />
             </div>
         )

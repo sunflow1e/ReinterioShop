@@ -88,6 +88,20 @@ app.delete('/material/:id', (req, res) => {
     })
 })
 
+app.delete('/product/material/:id', (req, res) => {
+  const { id } = req.params
+
+  client
+    .query('DELETE FROM product_materials WHERE prodmaterial_material_id = $1', [id])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
 //CATEGORIES
 
 app.post('/category', (req, res) => {
@@ -110,7 +124,7 @@ app.post('/category', (req, res) => {
 
 app.get('/category', (req, res) => {
   client
-    .query('SELECT * FROM categories WHERE category_id != 0')
+    .query('SELECT * FROM categories WHERE category_id != 0 ORDER BY category_id')
     .then(result => {
       res.status(200).send(result.rows)
     })
@@ -189,6 +203,18 @@ app.delete('/category/:id', (req, res) => {
 app.get('/user', (req, res) => {
   client
     .query('SELECT * FROM users')
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.get('/user/orders', (req, res) => {
+  client
+    .query('SELECT DISTINCT order_user FROM orders')
     .then(result => {
       res.status(200).send(result.rows)
     })
@@ -288,6 +314,29 @@ app.put('/user/updatepassword/:id', (req, res) => {
     })
 })
 
+app.post('/user', (req, res) => {
+  const { email } = req.body
+  const { password } = req.body
+  const { name } = req.body
+  const { surname } = req.body
+  const { patronymic } = req.body
+  const { role } = req.body
+
+  client
+    .query(
+      'INSERT INTO users (user_email, user_password, user_name, user_surname, user_patronymic, user_role, isactivated) values ($1, $2, $3, $4, $5, $6, $7)',
+      [email, password, name, surname, patronymic, Number.parseInt(role), true]
+    )
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
 // // // // // // // // // // // // // // // // // // // // // // // // // //
 
 //    P R O D U C T S   // // // // // // // // // // // // // // // // // //
@@ -308,13 +357,14 @@ app.get('/product/cards/:subcategoriesQueryString', (req, res) => {
     product_disc_price, product_discount, productd_dailyoffer, category_name, subcategory_name, productd_onstock,
     style_id, style_name 
    
-    FROM subcategories, categories, images, products
-    INNER JOIN product_details ON productd_product = product_id 
+    FROM subcategories, categories, images, styles, products
+    INNER JOIN product_details ON productd_product = product_id
+    INNER JOIN product_styles ON productd_product = prodstyle_prod_id
     INNER JOIN colors ON productd_color = color_id
-    INNER JOIN styles ON style_id = product_id  
   
     WHERE subcategory_id = product_subcategory 
-    AND subcategory_category = category_id 
+    AND subcategory_category = category_id
+    AND style_id = prodstyle_style_id 
     AND productd_image = image_id 
     AND productd_onstock > 1 `
     + subcategoriesQueryString +
@@ -795,7 +845,7 @@ app.get('/orders/:id', (req, res) => {
   client
     .query(
       `SELECT order_id, order_user, order_price, order_delivery_date,
-      order_delivery_price, delivery_name, status_name
+      order_delivery_price, delivery_name, status_name, order_status, order_delivery
     FROM
       orders
     JOIN status ON status_id = order_status
@@ -814,6 +864,44 @@ app.get('/orders/:id', (req, res) => {
     })
 })
 
+app.get('/orders', (req, res) => {
+  client
+    .query(
+      `SELECT order_id, order_user, order_price, order_delivery_date, order_date,
+      order_delivery_price, delivery_name, status_name, order_address, order_status, order_delivery
+    FROM
+      orders
+    JOIN status ON status_id = order_status
+    JOIN delivery ON delivery_id = order_delivery
+    ORDER BY order_id`
+    )
+
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.put('/order/status', (req, res) => {
+  const { status } = req.body
+  const { order } = req.body
+
+  client
+    .query('UPDATE orders SET order_status = $1 WHERE order_id = $2', [
+      status,
+      order,
+    ])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
 
 app.get('/order/info/:id', (req, res) => {
   const { id } = req.params
@@ -821,7 +909,7 @@ app.get('/order/info/:id', (req, res) => {
   client
     .query(
       `SELECT order_id, order_user, order_price, order_delivery_date,
-      order_delivery_price, delivery_name, status_name
+      order_delivery_price, delivery_name, status_name, order_status, order_delivery
     FROM
       orders
     JOIN status ON status_id = order_status
@@ -846,13 +934,14 @@ app.get('/order/all/info/:id', (req, res) => {
   client
     .query(
       `SELECT order_id, order_user, order_price, order_delivery_date,
-      order_delivery_price, delivery_name, status_name, order_address
+      order_delivery_price, delivery_name, status_name, order_address, order_status, order_delivery
     FROM
       orders
     JOIN status ON status_id = order_status
     JOIN delivery ON delivery_id = order_delivery
     
-    WHERE order_user = $1`,
+    WHERE order_user = $1
+    ORDER BY order_id`,
       [Number.parseInt(id)]
     )
 
@@ -907,7 +996,7 @@ app.get('/order/all/products/:id', (req, res) => {
       `SELECT
       orderprod_count as cart_count, true as product_isselected,
       image_path, product_details.productd_id, color_name, product_name, product_article, orderprod_price, orderprod_count,
-      product_length, product_width, product_height, product_weight, orderprod_order, productd_onstock, product_price, product_disc_price, product_discount
+      product_length, product_width, product_height, product_weight, orderprod_order, productd_onstock, product_price, product_disc_price, product_discount 
         
       FROM images, products 
       INNER JOIN product_details ON productd_product = product_id 
@@ -1063,6 +1152,345 @@ app.get('/subcategory', (req, res) => {
       res.status(500).send()
     })
 })
+
+
+
+// // // // // // // // // // // // // // // // // // // // // // // // // //
+
+//      A D M I N       // // // // // // // // // // // // // // // // // //
+
+// // // // // // // // // // // // // // // // // // // // // // // // // //
+
+app.get('/status', (req, res) => {
+  client
+    .query(
+      `SELECT * FROM status ORDER BY status_id`
+    )
+
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.put('/status/:id', (req, res) => {
+  const { name } = req.body
+  const { finish } = req.body
+  const { id } = req.params
+
+  client
+    .query('UPDATE status SET status_name = $1, status_finish = $2 WHERE status_id = $3', [
+      name,
+      finish,
+      Number.parseInt(id),
+    ])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.post('/status', (req, res) => {
+  const { name } = req.body
+  const { finish } = req.body
+
+  client
+    .query('INSERT INTO status (status_name, status_finish) values ($1, $2)', [name, finish])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
+
+app.delete('/status/:id', (req, res) => {
+  const { id } = req.params
+
+  client
+    .query('DELETE FROM status WHERE status_id = $1', [id])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
+
+
+
+
+
+app.put('/delivery/:id', (req, res) => {
+  const { name } = req.body
+  const { minprice } = req.body
+  const { weightprice } = req.body
+  const { days } = req.body
+  const { id } = req.params
+
+  client
+    .query('UPDATE delivery SET delivery_name = $1, delivery_minprice = $2, delivery_weightprice = $3, delivery_days = $4 WHERE delivery_id = $5', [
+      name,
+      Number.parseFloat(minprice),
+      Number.parseFloat(weightprice),
+      Number.parseInt(days),
+      Number.parseInt(id),
+    ])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.post('/delivery', (req, res) => {
+  const { name } = req.body
+  const { minprice } = req.body
+  const { weightprice } = req.body
+  const { days } = req.body
+
+  client
+    .query('INSERT INTO delivery (delivery_name, delivery_minprice, delivery_weightprice, delivery_days) values ($1, $2, $3, $4)', 
+    [name, Number.parseFloat(minprice), Number.parseFloat(weightprice), Number.parseInt(days)])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
+
+app.delete('/delivery/:id', (req, res) => {
+  const { id } = req.params
+
+  client
+    .query('DELETE FROM delivery WHERE delivery_id = $1', [id])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.put('/order/delivery', (req, res) => {
+  const { delivery } = req.body
+  const { order } = req.body
+
+  client
+    .query('UPDATE orders SET order_delivery = $1 WHERE order_id = $2', [
+      delivery,
+      order,
+    ])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
+
+
+app.put('/style/:id', (req, res) => {
+  const { name } = req.body
+  const { id } = req.params
+
+  client
+    .query('UPDATE styles SET style_name = $1 WHERE style_id = $2', [
+      name, Number.parseInt(id)
+    ])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.post('/style', (req, res) => {
+  const { name } = req.body
+
+  client
+    .query('INSERT INTO styles (style_name) values ($1)', 
+    [name])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.delete('/style/:id', (req, res) => {
+  const { id } = req.params
+
+  client
+    .query('DELETE FROM styles WHERE style_id = $1', [id])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.delete('/product/styles/:id', (req, res) => {
+  const { id } = req.params
+
+  client
+    .query('DELETE FROM product_styles WHERE prodstyle_style_id = $1', [id])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
+
+app.get('/products/shape', (req, res) => {
+  client
+    .query(
+      `SELECT * FROM products`
+    )
+
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.put('/updateprod/shape/:id', (req, res) => {
+  const { shape } = req.body
+  const { id } = req.params
+
+  client
+    .query('UPDATE products SET product_shape = $1 WHERE product_id = $2', [
+      Number.parseInt(shape), Number.parseInt(id)
+    ])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
+
+app.get('/shape', (req, res) => {
+  client
+    .query(
+      `SELECT * FROM shapes ORDER BY shape_id`
+    )
+
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
+app.put('/shape/:id', (req, res) => {
+  const { name } = req.body
+  const { id } = req.params
+
+  client
+    .query('UPDATE shapes SET shape_name = $1 WHERE shape_id = $2', [
+      name, Number.parseInt(id)
+    ])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.post('/shape', (req, res) => {
+  const { name } = req.body
+
+  client
+    .query('INSERT INTO shapes (shape_name) values ($1)', 
+    [name])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
+app.delete('/shape/:id', (req, res) => {
+  const { id } = req.params
+
+  client
+    .query('DELETE FROM shapes WHERE shape_id = $1', [id])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.put('/product/shape', (req, res) => {
+  const { shapebefore } = req.body
+  const { shape } = req.body
+
+  client
+    .query('UPDATE products SET product_shape = $1 WHERE product_shape = $2', [
+      shapebefore,
+      shape,
+    ])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
+
 
 
 const PORT = process.env.PORT || 5000

@@ -34,6 +34,8 @@ export class ProductsContainer extends Component {
 	}
 
 	getProductCardsFilter() {
+		//ПОДКАТЕГОРИИ ✅
+
 		let subcategories = JSON.parse(localStorage.getItem('subcategories'));
 		if (subcategories) {
 			subcategories = subcategories.filter(item => item.subcategory_ischecked === true)
@@ -43,7 +45,7 @@ export class ProductsContainer extends Component {
 
 		if (subcategories) {
 			for (let index = 0; index < subcategories.length; index++) {
-				if (index != 0) {
+				if (index !== 0) {
 					subcategoriesQueryString += ' OR '
 				}
 				subcategoriesQueryString += `subcategory_name = '` + subcategories[index].subcategory_name + `'`;
@@ -52,9 +54,61 @@ export class ProductsContainer extends Component {
 
 		subcategoriesQueryString += ')'
 
-		if (!subcategories) {
+		if (!subcategories || subcategories?.length < 1) {
 			subcategoriesQueryString = '';
 		}
+
+		//ЦВЕТА ✅
+
+		let colors = JSON.parse(localStorage.getItem('colors'));
+		if (colors) {
+			colors = colors.filter(item => item.color_ischecked === true)
+		}
+
+		let colorsQueryString = ' AND (';
+
+		if (colors) {
+			for (let index = 0; index < colors.length; index++) {
+				if (index !== 0) {
+					colorsQueryString += ' OR '
+				}
+				colorsQueryString += `color_name = '` + colors[index].color_name + `'`;
+			}
+		}
+
+		colorsQueryString += ')'
+
+		if (!colors || colors?.length < 1) {
+			colorsQueryString = '';
+		}
+
+		//СТИЛИ ✅
+
+		let styles = JSON.parse(localStorage.getItem('styles'));
+		if (styles) {
+			styles = styles.filter(item => item.style_ischecked === true)
+		}
+
+		let stylesQueryString = ' AND (';
+
+		if (styles) {
+			for (let index = 0; index < styles.length; index++) {
+				if (index !== 0) {
+					stylesQueryString += ' OR '
+				}
+				stylesQueryString += `style_name = '` + styles[index].style_name + `'`;
+			}
+		}
+
+		stylesQueryString += ')'
+
+		if (!styles || styles?.length < 1) {
+			stylesQueryString = '';
+		}
+
+		const QueryString = subcategoriesQueryString + colorsQueryString + stylesQueryString;
+
+		console.log(QueryString)
 
 		const qs = require('qs')
 		let data = qs.stringify({})
@@ -62,7 +116,7 @@ export class ProductsContainer extends Component {
 		let config = {
 			method: 'get',
 			maxBodyLength: Infinity,
-			url: `${process.env.REACT_APP_API_URL}/product/cards/` + subcategoriesQueryString,
+			url: `${process.env.REACT_APP_API_URL}/product/cards/` + QueryString,
 			headers: {},
 			data: data,
 		}
@@ -70,7 +124,7 @@ export class ProductsContainer extends Component {
 		axios
 			.request(config)
 			.then(response => {
-				this.setState({ products: response.data }); this.setState({ filterproducts: response.data })
+				this.setState({ products: response.data }); this.setState({ filterproducts: response.data });
 			})
 			.catch(error => {
 				console.log(error)
@@ -177,6 +231,9 @@ export class ProductsContainer extends Component {
 		let all_products = this.state.products
 		let filter_products = this.state.filterproducts
 
+		filter_products = [...new Map(filter_products.map((item) => [item["productd_id"], item])).values(),
+		];
+
 		if (this.props.filter === true) {
 			//search
 			const search = localStorage.getItem('search');
@@ -207,6 +264,7 @@ export class ProductsContainer extends Component {
 					<div class='ProductsContainer'>
 						{filter_products?.map(CurrentProduct => (
 							<ProductCard
+								admin={this.props.admin}
 								key={CurrentProduct.productd_id}
 								user_id={localStorage.getItem('userId')}
 								product={CurrentProduct}

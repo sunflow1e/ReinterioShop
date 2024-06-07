@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import ADMINHeader from '../components/ADMINHeader';
 
 export class ContactsPage extends Component {
   render() {
@@ -20,7 +21,8 @@ export class ContactsPage extends Component {
         <br></br>
         <p style={{ lineHeight: "150%", fontSize: "20px" }}><b>Режим работы:</b> с 09:00 до 22:00, ежедневно</p>
         <br></br>
-        <Header />
+        {this.props.user?.user_role === 1 && <Header />}
+				{this.props.user?.user_role === 2 && <ADMINHeader />}
         <Footer />
       </div>
     )

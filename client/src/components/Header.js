@@ -27,18 +27,30 @@ export class Header extends Component {
 
     componentDidMount() {
         this.getCategories()
-        this.getStyles()
-        this.getColors();
 
-        if (Number.parseInt(localStorage.getItem('price')) != 0) {
+        if (Number.parseInt(localStorage.getItem('price')) !== 0) {
             this.setState({ priceFilter: Number.parseInt(localStorage.getItem('price')) })
         }
 
-        if (localStorage.getItem('subcategories') != null) {
+        if (localStorage.getItem('styles') !== null) {
+            this.setState({ styles: JSON.parse(localStorage.getItem('styles')) })
+        }
+        else{
+            this.getStyles()
+        }
+
+        if (localStorage.getItem('subcategories') !== null) {
             this.setState({ subcategories: JSON.parse(localStorage.getItem('subcategories')) })
         }
         else{
             this.getSubCategories()
+        }
+
+        if (localStorage.getItem('subcategories') !== null) {
+            this.setState({ colors: JSON.parse(localStorage.getItem('colors')) })
+        }
+        else{
+            this.getColors();
         }
     }
 
@@ -142,7 +154,7 @@ export class Header extends Component {
         }
 
         document.addEventListener('keyup', event => {
-            if (event.code === 'Enter' && document.getElementById('SearchString').value != '') this.Search();
+            if (event.code === 'Enter' && document.getElementById('SearchString').value !== '') this.Search();
         });
 
         const category_index = this.state.categories
@@ -157,34 +169,34 @@ export class Header extends Component {
             <header>
 
                 <div class="MainMenu">
-                    <a href="/home"><div class="Logo"><img style={{ maxWidth: "90px" }} src="\img\Logo.png"></img></div></a>
+                    <a onClick={() => this.clearAll()} href="/home"><div class="Logo"><img style={{ maxWidth: "90px" }} src="\img\Logo.png"></img></div></a>
                     <div class="Menu">
                         <div class="MenuItems" id="SecondMenu">
-                            <a href="/contacts"><div class="SecondItem"><i class="fi fi-rr-users"></i>Контакты</div></a>
-                            <a href="/delievery"><div class="SecondItem"><i class="fi fi-rr-truck-side"></i>Доставка</div></a>
-                            <a href="/return"><div class="SecondItem"><i class="fi fi-rr-box"></i>Возврат</div></a>
+                            <a onClick={() => this.clearAll()} href="/contacts"><div class="SecondItem"><i class="fi fi-rr-users"></i>Контакты</div></a>
+                            <a onClick={() => this.clearAll()} href="/delievery"><div class="SecondItem"><i class="fi fi-rr-truck-side"></i>Доставка</div></a>
+                            <a onClick={() => this.clearAll()} href="/return"><div class="SecondItem"><i class="fi fi-rr-box"></i>Возврат</div></a>
                         </div>
                         <div class="MenuItems" id="FirstMenu">
-                            <a href="/catalogue"><div id="MainMenuCategory" class="FirstItem"><i class="fi fi-rr-apps"></i><h>Каталог</h></div></a>
+                            <a onClick={() => this.clearAll()} href="/catalogue"><div id="MainMenuCategory" class="FirstItem"><i class="fi fi-rr-apps"></i><h>Каталог</h></div></a>
 
                             <div class="Explore">
                                 <div class="Search">
                                     <input id="SearchString" autocomplete="off"
-                                        defaultValue={localStorage.getItem('search') != '' && localStorage.getItem('search') != null != null ? localStorage.getItem('search') : null}
-                                        placeholder={localStorage.getItem('search') != '' && localStorage.getItem('search') != null != null ? "Поиск в каталоге" : null}
+                                        defaultValue={localStorage.getItem('search') !== '' && localStorage.getItem('search') !== null !== null ? localStorage.getItem('search') : null}
+                                        placeholder={localStorage.getItem('search') !== '' && localStorage.getItem('search') !== null !== null ? "Поиск в каталоге" : null}
                                         class="SearchString" /><i id="StartSearch" onClick={() => this.Search()} class="fi fi-rr-search"></i>
                                 </div>
 
-                                {(localStorage.getItem('search') != '' && localStorage.getItem('search') != null) &&
+                                {(localStorage.getItem('search') !== '' && localStorage.getItem('search') !== null) &&
                                     <div onClick={() => this.clearSearch()} id="MainMenuFilter" className="FirstItem"><i class="fi fi-rr-cross-small"></i></div>
                                 }
 
                                 <div onClick={() => this.openModalWindow()} id={FilterButton ? "MainMenuFilterActive" : "MainMenuFilter"} className="FirstItem"><i class="fi fi-rr-filter"></i><h>Фильтр</h></div>
                             </div>
 
-                            <a href="/favourite"><div id="MainMenuFavourite" class="FirstItem"><i class="fi fi-rr-heart"></i><h>Избранное</h></div></a>
-                            <a href="/cart"><div id="MainMenuCart" class="FirstItem"><i class="fi fi-rr-shopping-cart"></i><h>Корзина</h></div></a>
-                            <a href="/profile"><div id="MainMenuProfile" class="FirstItem"><i class="fi fi-rr-smile"></i><h>Аккаунт</h></div></a>
+                            <a onClick={() => this.clearAll()} href="/favourite"><div id="MainMenuFavourite" class="FirstItem"><i class="fi fi-rr-heart"></i><h>Избранное</h></div></a>
+                            <a onClick={() => this.clearAll()} href="/cart"><div id="MainMenuCart" class="FirstItem"><i class="fi fi-rr-shopping-cart"></i><h>Корзина</h></div></a>
+                            <a onClick={() => this.clearAll()} href="/profile"><div id="MainMenuProfile" class="FirstItem"><i class="fi fi-rr-smile"></i><h>Аккаунт</h></div></a>
                         </div>
                     </div>
                 </div>
@@ -196,7 +208,7 @@ export class Header extends Component {
                     unmountOnExit
                 >
                     <div style={{ zIndex: "100" }} className='ModalBackground'>
-                        <div className="Content">
+                        <div className="FilterContent">
                             <div className='FilterWindow'>
                                 <div
                                     className='CloseModal'
@@ -209,11 +221,12 @@ export class Header extends Component {
                                 </div>
                                 <div>
                                     <div className='FilterContainer'>
+                                    <b id='CategoryTextTitle' className='PageCardText'>Категории</b>
                                         <CategoriesContainer changeCurrentCategory={this.changeCurrentCategory} small={true} categories={this.state.categories} />
                                         <div className='AllFiltersContainer'>
                                             <div className='StylesCategoriesContainer'>
                                                 <div className='GrayBackground'>
-                                                    <b className='PageCardText'>{Category_name}</b>
+                                                    <b className='PageCardText'>{'Подкатегории (' + Category_name + ')'}</b>
                                                     <div className='StylesContainer'>
                                                         {this.state.subcategories.filter(subc => subc.subcategory_category === this.state.currentCategory).map(subcategory => (
                                                             <BubbleCategory
@@ -272,7 +285,7 @@ export class Header extends Component {
                                                 </div>
                                             </div>
 
-                                            <div className='PageTitleButtonsContainer'>
+                                            <div id = 'FilterButtons' className='PageTitleButtonsContainer'>
                                                 <div onClick={() => { this.clearFilters() }} className='ModalSecondaryButton'>Сбросить фильтры</div>
                                                 <div onClick={() => { this.Search() }} className='ModalMainButtonGreen'>Применить фильтры</div>
                                             </div>
@@ -319,32 +332,34 @@ export class Header extends Component {
 
 
     Search() {
-        if (document.getElementById('SearchString').value != '') {
+        if (document.getElementById('SearchString').value !== '') {
             const search = document.getElementById('SearchString').value
             localStorage.setItem('search', search)
         }
 
-        const styles = this.state.styles.filter(item => item.style_ischecked === true)
-        if (styles.length > 0) {
-            //localStorage.setItem('styles', JSON.stringify(styles))
+        // СТИЛИ
+        if (this.state.styles.filter(item => item.style_ischecked === true).length >= 0) {
+            const styles = this.state.styles
+            localStorage.setItem('styles', JSON.stringify(styles))
         }
 
-        const colors = this.state.colors.filter(item => item.color_ischecked === true)
-        if (colors.length > 0) {
-            //localStorage.setItem('colors', JSON.stringify(colors))
+        //ЦВЕТА ✅
+        if (this.state.colors.filter(item => item.color_ischecked === true).length >= 0) {
+            const colors = this.state.colors
+            localStorage.setItem('colors', JSON.stringify(colors))
         }
 
+        //СТОИМОСТЬ ✅
         const price = this.state.priceFilter
         if (Number.parseInt(price) > 0) {
             localStorage.setItem('price', price)
         }
 
-        if (this.state.subcategories.filter(item => item.subcategory_ischecked === true).length > 0) {
+        //ПОДКАТЕГОРИИ ✅
+        if (this.state.subcategories.filter(item => item.subcategory_ischecked === true).length >= 0) {
             const subcategories = this.state.subcategories
             localStorage.setItem('subcategories', JSON.stringify(subcategories))
-        }
-
-        console.log(this.state.subcategories)
+        } 
 
         window.location.href = '/search'
     }
@@ -394,12 +409,21 @@ export class Header extends Component {
         localStorage.removeItem('colors')
         this.state.showModal = false;
 
-        if (document.getElementById('SearchString').value != '') {
+        if (document.getElementById('SearchString').value !== '') {
             window.location.href = '/search'
         }
         else {
             window.location.href = '/catalogue'
         }
+    }
+
+    clearAll(){
+        localStorage.removeItem('price')
+        localStorage.removeItem('styles')
+        localStorage.removeItem('subcategories')
+        localStorage.removeItem('colors')
+        localStorage.removeItem('search')
+        this.state.showModal = false;
     }
 
     clearSearch() {

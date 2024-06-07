@@ -33,44 +33,53 @@ export class ProductCard extends Component {
 					<div className='PCardImgContainer'>
 						<img
 							class='PCardImg'
-							src={'./img/' + this.props.product.image_path}
+							src={'/img/' + this.props.product.image_path}
 							alt=''
 						></img>
 					</div>
 				</a>
-				<div
-					onClick={() =>
-						localStorage.getItem('userId')
-							? (!this.state.IsAddedToFav
-									? this.addToFavourite(this.props.product)
-									: this.deleteFromFavourite(this.props.product),
-							  this.props.DeleteFromFav
-									? this.props.DeleteFromFav(this.props.product.productd_id)
-									: null)
-							: (window.location.href = '/login')
-					}
-					class='PToFavourite'
-				>
-					{this.state.IsAddedToFav ? (
-						<i style={{ color: 'white' }} class='fi fi-sr-heart'></i>
-					) : (
-						<i class='fi fi-rr-heart'></i>
-					)}
-				</div>
 
-				<div class='PCardInfo'>
+				{!this.props.admin &&
 					<div
 						onClick={() =>
 							localStorage.getItem('userId')
-								? !this.state.IsAddedToCart
-									? this.addToCart(this.props.product)
-									: this.deleteFromCart(this.props.product)
+								? (!this.state.IsAddedToFav
+									? this.addToFavourite(this.props.product)
+									: this.deleteFromFavourite(this.props.product),
+									this.props.DeleteFromFav
+										? this.props.DeleteFromFav(this.props.product.productd_id)
+										: null)
 								: (window.location.href = '/login')
 						}
-						class={this.state.IsAddedToCart ? 'PAddToCartTrue' : 'PAddToCart'}
+						class='PToFavourite'
 					>
-						{this.state.IsAddedToCart ? 'Добавлено' : 'В корзину'}
+						{this.state.IsAddedToFav ? (
+							<i style={{ color: 'white' }} class='fi fi-sr-heart'></i>
+						) : (
+							<i class='fi fi-rr-heart'></i>
+						)}
 					</div>
+				}
+
+				<div class='PCardInfo'>
+					{!this.props.admin &&
+						<div
+							onClick={() =>
+								localStorage.getItem('userId')
+									? !this.state.IsAddedToCart
+										? this.addToCart(this.props.product)
+										: this.deleteFromCart(this.props.product)
+									: (window.location.href = '/login')
+							}
+							class={this.state.IsAddedToCart ? 'PAddToCartTrue' : 'PAddToCart'}
+						>
+							{this.state.IsAddedToCart ? 'Добавлено' : 'В корзину'}
+						</div>
+					}
+
+					{this.props.admin &&
+						<div onClick={() => null} class={'PAddToCartTrue'}>Редактировать</div>
+					}
 
 					<div class='PNamePrice'>
 						<p class='ProductName'>
@@ -95,10 +104,10 @@ export class ProductCard extends Component {
 					</div>
 					{(this.props.product_discount === null ||
 						this.props.product_discount === 0) && (
-						<p class='PRating'>
-							<h class='CardText'>★ {this.props.product.ProductRating}</h>
-						</p>
-					)}
+							<p class='PRating'>
+								<h class='CardText'>★ {this.props.product.ProductRating}</h>
+							</p>
+						)}
 				</div>
 			</div>
 		)

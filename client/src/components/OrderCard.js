@@ -8,7 +8,7 @@ export class OrderCard extends Component {
                     <div className='OrderImgContainer'>
                         <img
                             class='OrderProductImg'
-                            src={'./img/' + this.props.product.image_path}
+                            src={'/img/' + this.props.product.image_path}
                             alt=''
                         ></img>
                     </div>
@@ -17,7 +17,8 @@ export class OrderCard extends Component {
                 <div className='OrderInfoContainer'>
                     <b>{this.props.product.product_name}</b>
                     <p>{'Цвет: '+ this.props.product.color_name}</p>
-                    <p>{this.props.product.orderprod_count + ' шт.'}</p>
+                    {!this.props.stock && <p>{this.props.product.orderprod_count + ' шт.'}</p>}
+                    {this.props.stock && <p style={this.props.product.productd_onstock < 5 ? {color: "#F83D14"} : {color: "#E07C20"}}>{this.props.product.productd_onstock + ' шт.'}</p>}
                 </div>
 
             </div>

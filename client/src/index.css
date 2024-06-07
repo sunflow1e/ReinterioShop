@@ -175,7 +175,7 @@ body a {
     justify-content: end;
 }
 
-.CloseModal i{
+.CloseModal i {
     cursor: pointer;
 }
 
@@ -213,6 +213,7 @@ body a {
     color: black;
     font-family: Raleway;
     cursor: pointer;
+    gap: 25px;
     transition: all 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
     user-select: none;
 }
@@ -292,7 +293,7 @@ body a {
 }
 
 
-.FilterContainer{
+.FilterContainer {
     display: flex;
     flex-direction: row;
     gap: 20px;
@@ -301,21 +302,21 @@ body a {
     padding: 2px 5px;
 }
 
-.AllFiltersContainer{
+.AllFiltersContainer {
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.StylesCategoriesContainer{
+.StylesCategoriesContainer {
     width: 100%;
     display: flex;
     flex-direction: row;
     gap: 10px;
 }
 
-.StylesContainer{
+.StylesContainer {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -323,21 +324,29 @@ body a {
     overflow-y: scroll;
 }
 
-.Bubble{
+.Bubble {
     background-color: white;
     border-radius: 30px;
     padding: 5px 10px;
     cursor: pointer;
     transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
     user-select: none;
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    align-items: center;
 }
 
-.Bubble:hover{
+.Bubble i {
+    margin-top: 2px;
+}
+
+.Bubble:hover {
     background-color: #12706a;
     color: white;
 }
 
-.SelectedBubble{
+.SelectedBubble {
     background-color: #0A5954;
     color: white;
     border-radius: 30px;
@@ -345,9 +354,17 @@ body a {
     cursor: pointer;
     transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
     user-select: none;
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    align-items: center;
 }
 
-.SelectedBubble:hover{
+.SelectedBubble i {
+    margin-top: 2px;
+}
+
+.SelectedBubble:hover {
     background-color: #cbd3d8;
     color: black;
 }
@@ -395,6 +412,10 @@ p {
     border: 1px rgba(0, 0, 0, 0.1) solid;
     border-radius: 5px;
     padding: 5px 10px;
+    min-width: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     font-variant-numeric: lining-nums;
     -moz-font-feature-settings: "lnum" 1;
@@ -403,6 +424,10 @@ p {
     -o-font-feature-settings: "lnum" 1;
     -webkit-font-feature-settings: "lnum" 1;
     font-feature-settings: "lnum" 1;
+}
+
+.MainTextArea i {
+    padding-top: 5px;
 }
 
 .MainTextArea:focus {
@@ -466,6 +491,24 @@ p {
 
 /* BUTTONS ######################################################################## */
 /* ############################################################################### */
+
+.ACTIVEButton {
+    width: 100%;
+    display: flex;
+    background-color: #0A5954;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 0px;
+    margin-top: 10px;
+    border-radius: 10px;
+    font-size: 20px;
+    color: white;
+    font-family: Raleway;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+    user-select: none;
+}
+
 
 .MainButton {
     padding: 20px 25px;
@@ -682,6 +725,28 @@ p {
     margin-bottom: 0px;
 }
 
+.FilterContent {
+    margin-left: auto;
+    margin-right: auto;
+    width: 1320px;
+    border-radius: 15px;
+    margin-top: 150px;
+    height: fit-content;
+    margin-bottom: 0px;
+}
+
+
+@media (width < 800px) {
+    .FilterContent {
+        margin-top: 0px;
+    }
+
+    .FilterWindow {
+        border-radius: 15px 15px 0px 0px;
+    }
+}
+
+
 .ContentTitle {
     text-align: center;
     width: 100%;
@@ -770,7 +835,7 @@ p {
 
     .Explore {
         order: 1;
-        width: 98%;
+        width: 100%;
         max-width: none;
     }
 
@@ -1135,7 +1200,7 @@ div::-webkit-scrollbar-thumb {
     flex-wrap: wrap;
 }
 
-.SmallCategoriesContainer{
+.SmallCategoriesContainer {
     width: 100%;
     height: fit-content;
     gap: 10px;
@@ -1157,16 +1222,53 @@ div::-webkit-scrollbar-thumb {
     position: relative;
 }
 
+
 .SmallCategoryCard {
     width: 160px;
     height: 160px;
-    background-color: #0A5954;
+    background-color: #cbd3d8;
     border-radius: 5px;
     background-size: cover;
     display: flex;
     align-items: flex-end;
     cursor: pointer;
     position: relative;
+}
+
+#CategoryTextTitle {
+    display: none;
+}
+
+@media (width < 1320px) {
+    .SmallCategoryCard {
+        width: 45%;
+        height: 100px;
+    }
+
+    .StylesCategoriesContainer {
+        flex-direction: column;
+    }
+
+    .SmallCategoriesContainer {
+        max-width: none;
+    }
+}
+
+@media (width < 900px) {
+    .FilterContainer {
+        flex-direction: column;
+    }
+
+    .SmallCategoryCard {
+        width: 45%;
+        height: 100px;
+    }
+
+    #CategoryTextTitle {
+        display: unset;
+    }
+
+    .FilterWindow {}
 }
 
 .CategoryText {
@@ -1176,7 +1278,7 @@ div::-webkit-scrollbar-thumb {
     transition: cubic-bezier(0.075, 0.82, 0.165, 1) 0.4s all;
 }
 
-.SmallCategoriesContainer .CategoryText{
+.SmallCategoriesContainer .CategoryText {
     padding: 10px 10px;
     font-size: 18px;
 }
@@ -1701,6 +1803,20 @@ div::-webkit-scrollbar-thumb {
     margin-top: 2px;
 }
 
+.AdminTitleButton {
+    padding: 10px 15px;
+    user-select: none;
+    display: flex;
+    flex-direction: row;
+    background-color: white;
+    gap: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    border: 1px rgba(0, 0, 0, 0.1) solid;
+    border-radius: 5px;
+    transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
 #DeleteSelected:hover {
     background-color: #E04E20;
     color: #F8CEC1;
@@ -1757,12 +1873,12 @@ div::-webkit-scrollbar-thumb {
     padding-top: 1px;
 }
 
-#StartSearch{
+#StartSearch {
     cursor: pointer;
 }
 
-#StartSearch:hover{
-    color:#bb5e07;
+#StartSearch:hover {
+    color: #bb5e07;
 }
 
 .SidePageCard {
@@ -1787,6 +1903,17 @@ div::-webkit-scrollbar-thumb {
     gap: 20px;
     width: 100%;
     max-width: 580px;
+}
+
+.AnalyticsPageCard {
+    background-color: white;
+    box-shadow: 2px 4px 5px rgba(165, 164, 185, 0.20);
+    border-radius: 5px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 930px;
 }
 
 .CardSmallButton {
@@ -2323,9 +2450,67 @@ div::-webkit-scrollbar-thumb {
         flex-direction: row-reverse;
     }
 
+    #FilterButtons {
+        flex-direction: row;
+    }
+
     .PageTitleTextContainer {
         flex-direction: column;
     }
+}
+
+/* EDIT PAGE ##################################################################### */
+
+.EditContainer{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.GrayBlock{
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #F9F9FA;
+    height: 35px;
+    border: 1px rgba(0, 0, 0, 0.1) solid;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    user-select: none;
+    cursor: pointer;
+    min-width: 55px;
+}
+
+.GreenBlock{
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #0A5954;
+    color: white;
+    user-select: none;
+    height: 35px;
+    border: 1px rgba(0, 0, 0, 0.1) solid;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+#StatusFinish{
+    width: 230px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.GrayBlock i {
+    margin-top: 3px;
+}
+
+.GreenBlock i {
+    margin-top: 3px;
 }
 
 /* PRODUCT PAGE ##################################################################### */
@@ -2980,6 +3165,26 @@ div::-webkit-scrollbar-thumb {
     flex-direction: row;
     justify-content: space-between;
     align-items: baseline;
+}
+
+.DropDown {
+    height: 23px;
+    width: 100%;
+    resize: none;
+    font-size: 20px;
+    overflow: hidden;
+    font-family: Raleway;
+    white-space: nowrap;
+    background-color: #FBFBFB;
+    border: 1px rgba(0, 0, 0, 0.1) solid;
+    border-radius: 10px;
+    padding: 5px 10px;
+    min-height: 38px;
+    box-sizing: border-box;
+}
+
+.DropDown:focus {
+    outline: none;
 }
 
 .OrderProductCard {

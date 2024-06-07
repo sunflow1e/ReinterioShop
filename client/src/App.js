@@ -22,6 +22,15 @@ import GratitudePage from './pages/GratitudePage'
 import MyOrdersPage from './pages/MyOrdersPage'
 import ReviewsPage from './pages/ReviewsPage'
 import SearchPage from './pages/SearchPage'
+import ADMINShop from './pages/ADMINShop'
+import ADMINNewUser from './pages/ADMINNewUser'
+import ADMINOrders from './pages/ADMINOrders'
+import ADMIN_EDIT_status from './pages/ADMIN_EDIT_status'
+import ADMIN_EDIT_delivery from './pages/ADMIN_EDIT_delivery'
+import ADMINProducts from './pages/ADMINProducts'
+import ADMIN_EDIT_styles from './pages/ADMIN_EDIT_styles'
+import ADMIN_EDIT_shapes from './pages/ADMIN_EDIT_shapes'
+import ADMIN_EDIT_materials from './pages/ADMIN_EDIT_material'
 
 class App extends React.Component {
 	constructor(props) {
@@ -162,6 +171,110 @@ class App extends React.Component {
 								/>
 							}
 						/>
+
+
+						<Route
+							path='/admin/shop'
+							element={
+								<ProtectedRoute
+									isAuthenticated={!!localStorage.getItem('userId')}
+									component={ADMINShop}
+									user={this.state.current_user[0]}
+								/>
+							}
+						/>
+
+						<Route
+							path='/admin/add_user'
+							element={
+								<ProtectedRoute
+									isAuthenticated={!!localStorage.getItem('userId')}
+									component={ADMINNewUser}
+									user={this.state.current_user[0]}
+								/>
+							}
+						/>
+
+						<Route
+							path='/admin/orders'
+							element={
+								<ProtectedRoute
+									isAuthenticated={!!localStorage.getItem('userId')}
+									component={ADMINOrders}
+									user={this.state.current_user[0]}
+								/>
+							}
+						/>
+
+						<Route
+							path='/admin/products'
+							element={
+								<ProtectedRoute
+									isAuthenticated={!!localStorage.getItem('userId')}
+									component={ADMINProducts}
+									user={this.state.current_user[0]}
+								/>
+							}
+						/>
+
+						<Route
+							path='/admin/edit/status'
+							element={
+								<ProtectedRoute
+									isAuthenticated={!!localStorage.getItem('userId')}
+									component={ADMIN_EDIT_status}
+									user={this.state.current_user[0]}
+								/>
+							}
+						/>
+
+						<Route
+							path='/admin/edit/delivery'
+							element={
+								<ProtectedRoute
+									isAuthenticated={!!localStorage.getItem('userId')}
+									component={ADMIN_EDIT_delivery}
+									user={this.state.current_user[0]}
+								/>
+							}
+						/>
+
+						<Route
+							path='/admin/edit/style'
+							element={
+								<ProtectedRoute
+									isAuthenticated={!!localStorage.getItem('userId')}
+									component={ADMIN_EDIT_styles}
+									user={this.state.current_user[0]}
+								/>
+							}
+						/>
+
+						<Route
+							path='/admin/edit/shape'
+							element={
+								<ProtectedRoute
+									isAuthenticated={!!localStorage.getItem('userId')}
+									component={ADMIN_EDIT_shapes}
+									user={this.state.current_user[0]}
+								/>
+							}
+						/>
+
+						<Route
+							path='/admin/edit/material'
+							element={
+								<ProtectedRoute
+									isAuthenticated={!!localStorage.getItem('userId')}
+									component={ADMIN_EDIT_materials}
+									user={this.state.current_user[0]}
+								/>
+							}
+						/>
+
+
+
+
 						<Route
 							path='/cart'
 							element={
@@ -254,10 +367,10 @@ class App extends React.Component {
 							element={<ProductPage user_id={this.state.loggeduser_id} />}
 						/>
 
-						<Route path='/policy' element={<PolicyPage />} />
-						<Route path='/delievery' element={<DelieveryPage />} />
-						<Route path='/contacts' element={<ContactsPage />} />
-						<Route path='/return' element={<ReturnProductsPage />} />
+						<Route path='/policy' element={<PolicyPage user={this.state.current_user[0]} />} />
+						<Route path='/delievery' element={<DelieveryPage user={this.state.current_user[0]} />} />
+						<Route path='/contacts' element={<ContactsPage user={this.state.current_user[0]} />} />
+						<Route path='/return' element={<ReturnProductsPage user={this.state.current_user[0]} />} />
 
 						<Route path='/registration' element={<RegistrationPage />} />
 						<Route path='/login' element={<LoginPage />} />

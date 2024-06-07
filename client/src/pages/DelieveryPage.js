@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import ADMINHeader from '../components/ADMINHeader';
 
 export class DelieveryPage extends Component {
   render() {
@@ -22,7 +23,8 @@ export class DelieveryPage extends Component {
           <br />
           Доставка мебели осуществляется до подъезда или дома. Услуги подъема и проноса мебели оплачиваются дополнительно.<br />
           Обращаем ваше внимание на то, что у нас нет выделенных доставок ко времени, так как маршрут водителя формируется в день доставки с целью сделать его наиболее эффективным, следовательно более выгодным для вас в экономическом плане. Но это не значит, что необходимо ждать доставку весь день - курьер позвонит вам заранее и сориентирует по времени доставки.</p>
-        <Header />
+          {this.props.user?.user_role === 1 && <Header />}
+				{this.props.user?.user_role === 2 && <ADMINHeader />}
         <Footer />
       </div>
     )

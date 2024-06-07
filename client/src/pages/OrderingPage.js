@@ -140,6 +140,9 @@ export class OrderingPage extends Component {
       DeliDate.setDate(CurrentDate.getDate() + CurrentD.delivery_days);
     });
 
+    DeliDate.setDate(DeliDate.getDate() + 1);
+    CurrentDate.setDate(CurrentDate.getDate() + 1);
+
     CurrentDate = CurrentDate.toISOString().slice(0, 10);
     DeliDate = DeliDate.toISOString().slice(0, 10);
 
@@ -358,7 +361,7 @@ export class OrderingPage extends Component {
       'date': date,
       'delivdate': deliverydate,
       'price': price,
-      'deliid': 0,
+      'deliid': this.state.current_delivery_id,
       'address': document.getElementById('profile_address').value,
       'deliprice': deliprice
     });
