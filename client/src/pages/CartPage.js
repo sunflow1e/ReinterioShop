@@ -267,6 +267,22 @@ export class CartPage extends Component {
 								</div>
 							)}
 						</div>
+
+						<div className='MobilePanelContainer'>
+							{TotalProducts > 0 && (
+								<div class='CartSummaryContainer'>
+									<div class='SideContainerBuyButton' onClick={() => this.ordering()}>
+										<p>К оформлению</p>
+										<p class='SideContainerBuyButtonPrice'>
+											{new Intl.NumberFormat().format(TotalCost) + ' ₽'}
+										</p>
+									</div>
+									<p class='SideContainertDelieveryDate'>
+										Выбрать способ доставки можно при оформлении заказа
+									</p>
+								</div>
+							)}
+						</div>
 					</div>
 				) : (
 					<div class='PageContent'>

@@ -4,7 +4,6 @@ import { Navigate } from 'react-router-dom'
 class ProtectedRoute extends Component {
 	render() {
 		const { isAuthenticated, component: Component, ...routeProps } = this.props
-		console.log('isAuthenticated', isAuthenticated)
 
 		return (
 			<>

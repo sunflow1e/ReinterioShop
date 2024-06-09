@@ -72,20 +72,25 @@ export class OrderContainer extends Component {
                     <p className='PageCardTitle'>{'Заказ №' + this.props.order.order_id}</p>
                     {!this.props.admin && <div onClick={() => this.ordering()} className='CardSmallButton'>Повторить заказ</div>}
                 </div>
+                {this.props.admin &&
+                    <div className='GrayBackground'>
+                        <p style={{ whiteSpace: "nowrap" }} class='PageCardText'>{this.props.order.user_name + ' ' + this.props.order.user_surname + ' ' + this.props.order.user_patronymic + ' (' + this.props.order.user_phone + ')'}</p>
+                    </div>
+                }
                 <div className='OrderInfo'>
                     <div className='GrayBackground'>
                         <p className='PageCardTitle'>Об оплате</p>
 
                         <div class='OrderJustifyContainer'>
-                            <p class='PageCardText'>Стоимость доставки: </p>
-                            <p class='PageCardText'>
+                            <p style={{ whiteSpace: "nowrap" }} class='PageCardText'>Стоимость доставки: </p>
+                            <p style={{ whiteSpace: "nowrap" }} class='PageCardText'>
                                 {new Intl.NumberFormat().format(this.props.order.order_delivery_price) + ' ₽'}
                             </p>
                         </div>
 
                         <div class='OrderJustifyContainer'>
-                            <p class='PageCardText'>Итоговая стоимость: </p>
-                            <p class='PageCardText'>
+                            <p style={{ whiteSpace: "nowrap" }} class='PageCardText'>Итоговая стоимость: </p>
+                            <p style={{ whiteSpace: "nowrap" }} class='PageCardText'>
                                 {new Intl.NumberFormat().format(this.props.order.order_price) + ' ₽'}
                             </p>
                         </div>
@@ -95,12 +100,12 @@ export class OrderContainer extends Component {
                         <p className='PageCardTitle'>{this.props.order.delivery_name}</p>
 
                         <div class='OrderJustifyContainer'>
-                            <p class='PageCardText'>Ожидаемая дата:</p>
-                            <p class='PageCardText'>
+                            <p style={{ whiteSpace: "nowrap" }} class='PageCardText'>Ожидаемая дата:</p>
+                            <p style={{ whiteSpace: "nowrap" }} class='PageCardText'>
                                 {new Date(this.props.order.order_delivery_date).toLocaleDateString()}
                             </p>
                         </div>
-                        <div className='PageCardText'><i className='fi fi-rr-home-location'></i><p>{this.props.order.order_address}</p></div>
+                        <div style={{ gap: "0px", alignItems: "center" }} className='PageCardText'><i className='fi fi-rr-home-location'></i><p>{this.props.order.order_address}</p></div>
                     </div>
 
                     <div className='GrayBackground'>

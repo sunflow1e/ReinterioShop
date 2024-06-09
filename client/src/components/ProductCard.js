@@ -102,12 +102,6 @@ export class ProductCard extends Component {
 							)}
 						</div>
 					</div>
-					{(this.props.product_discount === null ||
-						this.props.product_discount === 0) && (
-							<p class='PRating'>
-								<h class='CardText'>★ {this.props.product.ProductRating}</h>
-							</p>
-						)}
 				</div>
 			</div>
 		)

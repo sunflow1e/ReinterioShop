@@ -187,7 +187,9 @@ export class PPCard extends Component {
 							<h1 className='ProductPageTitle'>
 								{this.props.product.product_name}
 							</h1>
-							<p className='RatingText'>★ 4.8</p>
+							{this.props.rating[0] &&
+								<p className='RatingText'>{new Intl.NumberFormat().format(this.props.rating[0].rating) != 0 ? '★ ' + new Intl.NumberFormat().format(this.props.rating[0].rating) : ''}</p>
+							}
 						</div>
 
 						<div className='ProductPriceContainer'>

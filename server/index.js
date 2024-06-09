@@ -1,8 +1,10 @@
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import express from 'express'
+import fileUpload from 'express-fileupload'
 import client from './auth/db-connection.js'
 import routerUser from './auth/routes/user-router.js'
+
 
 import * as dotenv from 'dotenv'
 dotenv.config()
@@ -350,7 +352,7 @@ app.get('/product/cards/:subcategoriesQueryString', (req, res) => {
 
   client
     .query(
-    `SELECT
+      `SELECT
     false as product_addedtocart,  
     false as product_addedtofavourite, 
     image_path, product_details.productd_id, color_name, color_hex, product_name, product_article, product_price,
@@ -367,8 +369,8 @@ app.get('/product/cards/:subcategoriesQueryString', (req, res) => {
     AND style_id = prodstyle_style_id 
     AND productd_image = image_id 
     AND productd_onstock > 1 `
-    + subcategoriesQueryString +
-    ` ORDER BY product_article`
+      + subcategoriesQueryString +
+      ` ORDER BY product_article`
     )
     .then(result => {
       res.status(200).send(result.rows)
@@ -384,7 +386,7 @@ app.get('/product/cards/', (req, res) => {
 
   client
     .query(
-    `SELECT
+      `SELECT
     false as product_addedtocart,  
     false as product_addedtofavourite, 
     image_path, product_details.productd_id, color_name, color_hex, product_name, product_article, product_price,
@@ -506,6 +508,39 @@ app.get('/pp/files/:id', (req, res) => {
       res.status(500).send()
     })
 })
+
+app.get('/pp/reviews/:id', (req, res) => {
+  //   R E V I E W S
+  const { id } = req.params
+
+  client
+    .query(`SELECT review_id, review_text, review_product, review_user, review_image1, review_image2, review_image3, review_image4, review_image5, review_date, user_name, user_surname, review_rating FROM reviews INNER JOIN users ON review_user = user_id WHERE review_product = $1 AND review_rating > 0 ORDER BY review_id DESC`, [Number.parseInt(id)])
+
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.get('/pp/rating/:id', (req, res) => {
+  //   R E V I E W S
+  const { id } = req.params
+
+  client
+    .query(`SELECT AVG(review_rating) AS rating FROM reviews WHERE review_product = $1 AND review_rating > 0`, [Number.parseInt(id)])
+
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
 
 app.get('/colors', (req, res) => {
   //   C O L O R S
@@ -868,11 +903,12 @@ app.get('/orders', (req, res) => {
   client
     .query(
       `SELECT order_id, order_user, order_price, order_delivery_date, order_date,
-      order_delivery_price, delivery_name, status_name, order_address, order_status, order_delivery
+      order_delivery_price, delivery_name, status_name, order_address, order_status, order_delivery, user_name, user_surname, user_patronymic, user_phone
     FROM
       orders
     JOIN status ON status_id = order_status
     JOIN delivery ON delivery_id = order_delivery
+    JOIN users ON user_id = order_user
     ORDER BY order_id`
     )
 
@@ -1099,7 +1135,7 @@ app.get('/review/all/:id', (req, res) => {
       `SELECT
       image_path, product_details.productd_id, color_name, product_name, product_article,
       product_length, product_width, product_height, product_weight, productd_onstock, product_price, product_disc_price, product_discount,
-      review_rating, review_text
+      review_rating, review_text, review_image1, review_image2, review_image3, review_image4, review_image5, review_id
         
       FROM images, products 
       INNER JOIN product_details ON productd_product = product_id 
@@ -1107,7 +1143,6 @@ app.get('/review/all/:id', (req, res) => {
       INNER JOIN reviews ON review_product = productd_id  
       WHERE
       productd_image = image_id 
-      AND productd_id = review_product 
       AND review_user = $1
       
       ORDER BY review_id`,
@@ -1264,8 +1299,8 @@ app.post('/delivery', (req, res) => {
   const { days } = req.body
 
   client
-    .query('INSERT INTO delivery (delivery_name, delivery_minprice, delivery_weightprice, delivery_days) values ($1, $2, $3, $4)', 
-    [name, Number.parseFloat(minprice), Number.parseFloat(weightprice), Number.parseInt(days)])
+    .query('INSERT INTO delivery (delivery_name, delivery_minprice, delivery_weightprice, delivery_days) values ($1, $2, $3, $4)',
+      [name, Number.parseFloat(minprice), Number.parseFloat(weightprice), Number.parseInt(days)])
     .then(result => {
       res.status(200).send(result.rows)
     })
@@ -1333,8 +1368,8 @@ app.post('/style', (req, res) => {
   const { name } = req.body
 
   client
-    .query('INSERT INTO styles (style_name) values ($1)', 
-    [name])
+    .query('INSERT INTO styles (style_name) values ($1)',
+      [name])
     .then(result => {
       res.status(200).send(result.rows)
     })
@@ -1445,8 +1480,8 @@ app.post('/shape', (req, res) => {
   const { name } = req.body
 
   client
-    .query('INSERT INTO shapes (shape_name) values ($1)', 
-    [name])
+    .query('INSERT INTO shapes (shape_name) values ($1)',
+      [name])
     .then(result => {
       res.status(200).send(result.rows)
     })
@@ -1490,6 +1525,86 @@ app.put('/product/shape', (req, res) => {
 })
 
 
+app.put('/review', (req, res) => {
+  const { review } = req.body
+  const { user } = req.body
+  const { product } = req.body
+
+  const { rating } = req.body
+  const { text } = req.body
+
+  const { image1 } = req.body
+  const { image2 } = req.body
+  const { image3 } = req.body
+  const { image4 } = req.body
+  const { image5 } = req.body
+
+  const { date } = req.body
+
+  client
+    .query(
+      `UPDATE reviews SET review_user = $1, review_product = $2, review_rating = $3, review_text = $4, review_image1 = $5,
+      review_image2 = $6, review_image3 = $7, review_image4 = $8, review_image5 = $9, review_date = $10 WHERE review_id = $11`,
+      [Number.parseInt(user), Number.parseInt(product), Number.parseInt(rating), text, image1, image2, image3, image4, image5, date, review]
+    )
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+app.use(fileUpload({
+  createParentPath: true,
+}));
+
+app.post('/upload', (req, res) => {
+  if (!req.files) {
+    return res.status(400).json({ msg: 'No files' });
+  }
+
+  const file = req.files.file
+
+  if (!file) return res.json({ error: 'Некорректное имя' });
+
+  const newFileName = encodeURI(Date.now() + '-upload.' + file.name.match(/\.([^.]+)$|$/)[1]);
+
+  file.mv(`D:/reinterioshop/client/public/img/${newFileName}`, err => {
+
+    if (err) {
+      console.error(err)
+      return res.status(500).send(err);
+    }
+
+    console.log('Файл загружен')
+
+    res.json({
+      fileName: file.name,
+      filePath: `${newFileName}`,
+    });
+  });
+})
 
 
 

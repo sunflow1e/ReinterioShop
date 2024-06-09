@@ -56,7 +56,7 @@ export class ReviewsPage extends Component {
           <div class="PageTitleLine" />
         </div>
         <div class='PageContent'>
-          <div className='CartCardsContainer'>
+          <div style={{flexDirection: "column-reverse"}} className='CartCardsContainer'>
             {this.state.Products?.map(prod => (
               <ReviewCard
                 key={prod.productd_id}

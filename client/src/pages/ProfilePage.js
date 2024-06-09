@@ -178,11 +178,25 @@ export class ProfilePage extends Component {
 						}
 
 						{this.props.user?.user_role === 1 &&
-							<div className='SidePageCard'>
-								<p className='PageCardTitle'>Ожидают отзыва</p>
-								<p style={{ marginBottom: "auto" }} className='PageCardText'>Ваш отзыв помогает другим клиентам с выбором</p>
-								<LastOrdersPicture review={true} products={this.state.noReviewProducts}></LastOrdersPicture>
-							</div>
+							<>
+								{this.state.noReviewProducts.length > 0 &&
+									<div className='SidePageCard'>
+										<p className='PageCardTitle'>Ожидают отзыва</p>
+										<p style={{ marginBottom: "auto" }} className='PageCardText'>Ваш отзыв помогает другим клиентам с выбором</p>
+										<LastOrdersPicture review={true} products={this.state.noReviewProducts}></LastOrdersPicture>
+									</div>
+								}
+
+								{this.state.noReviewProducts.length <= 0 &&
+									<div className='SidePageCard'>
+										<p className='PageCardTitle'>Ожидают отзыва</p>
+										<div className='GrayBackground'>
+											<b className='PageCardText'>Все товары оценены!</b>
+											<p style={{whiteSpace: "wrap"}} className='PageCardText'>Отзывы могут оставлять только люди, купившие товар. Так мы формируем честный рейтинг</p>
+										</div>
+									</div>
+								}
+							</>
 						}
 
 						<div className='SidePageCard'>

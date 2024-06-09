@@ -4,6 +4,7 @@ import Footer from '../components/Footer'
 import Header from '../components/Header'
 import PPCard from '../components/PPCard'
 import PPFiles from '../components/PPFiles'
+import PPReviews from '../components/PPReviews'
 
 export class ProductPage extends Component {
 	constructor(props) {
@@ -17,6 +18,8 @@ export class ProductPage extends Component {
 			styles: [],
 			materials: [],
 			files: [],
+			reviews: [],
+			rating: [],
 			ProdId: window.location.href.split('/')[4],
 		}
 	}
@@ -30,6 +33,8 @@ export class ProductPage extends Component {
 		this.getStyles()
 		this.getMaterials()
 		this.getFiles()
+		this.getReviews()
+		this.getRating()
 	}
 
 	componentDidUpdate() {
@@ -81,6 +86,55 @@ export class ProductPage extends Component {
 			.catch(error => {
 				console.log(error)
 			})
+	}
+
+	getReviews() {
+		const qs = require('qs')
+		let data = qs.stringify({})
+
+		let config = {
+			method: 'get',
+			maxBodyLength: Infinity,
+			url:
+				`${process.env.REACT_APP_API_URL}/pp/reviews/` +
+				Number.parseInt(this.state.ProdId),
+			headers: {},
+			data: data,
+		}
+
+		axios
+			.request(config)
+			.then(response => {
+				this.setState({ reviews: response.data })
+			})
+			.catch(error => {
+				console.log(error)
+			})
+	}
+
+	getRating() {
+		const qs = require('qs')
+		let data = qs.stringify({})
+
+		let config = {
+			method: 'get',
+			maxBodyLength: Infinity,
+			url:
+				`${process.env.REACT_APP_API_URL}/pp/rating/` +
+				Number.parseInt(this.state.ProdId),
+			headers: {},
+			data: data,
+		}
+
+		axios
+			.request(config)
+			.then(response => {
+				this.setState({ rating: response.data })
+			})
+			.catch(error => {
+				console.log(error)
+			})
+
 	}
 
 	getFavourite() {
@@ -236,6 +290,12 @@ export class ProductPage extends Component {
 	}
 
 	render() {
+		let rating = this.state.rating
+
+		if (rating[0]) {
+			rating = rating[0].rating
+		}
+
 		return (
 			<div class='PPContent'>
 				{this.state.product?.map(CurrentProduct => (
@@ -246,11 +306,12 @@ export class ProductPage extends Component {
 						product={CurrentProduct}
 						allcolors={this.state.colors}
 						images={this.state.images}
+						rating={this.state.rating}
 						user_id={localStorage.getItem('userId')}
 					/>
 				))}
 
-				{this.state.files.length > 0 && (
+				{this.state.files?.length > 0 && (
 					<div className='ProductPageColumnContainer'>
 						<h1 className='ProductPageTitle'>Инструкции и файлы</h1>
 						<div className='AllFilesContainer'>
@@ -258,6 +319,27 @@ export class ProductPage extends Component {
 								<PPFiles key={CurrentFile.file_id} files={CurrentFile} />
 							))}
 						</div>
+					</div>
+				)}
+
+				{this.state.reviews?.length > 0 && (
+					<div className='ProductPageColumnContainer'>
+						<h1 className='ProductPageTitle'>Отзывы о товаре</h1>
+						<p className='PageCardText'>{'★ ' + new Intl.NumberFormat().format(rating) + ' / 5 '}
+							<p style={{ color: "#B4A39A" }}>{this.state.reviews.length + ' отзывов'}</p>
+						</p>
+						<div className='OrderContainerLilCard'>
+							{this.state.reviews?.map(review => (
+								<PPReviews key={review.review_id} review={review} />
+							))}
+						</div>
+					</div>
+				)}
+
+				{!this.state.reviews?.length > 0 && (
+					<div className='ProductPageColumnContainer'>
+						<h1 className='ProductPageTitle'>Отзывы о товаре</h1>
+						<p className='PageCardText'>Этот товар пока никто не купил. Будьте первыми!</p>
 					</div>
 				)}
 

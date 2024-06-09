@@ -140,8 +140,8 @@ export class OrderingPage extends Component {
       DeliDate.setDate(CurrentDate.getDate() + CurrentD.delivery_days);
     });
 
-    DeliDate.setDate(DeliDate.getDate() + 1);
-    CurrentDate.setDate(CurrentDate.getDate() + 1);
+    //DeliDate.setDate(DeliDate.getDate() + 1);
+    //CurrentDate.setDate(CurrentDate.getDate() + 1);
 
     CurrentDate = CurrentDate.toISOString().slice(0, 10);
     DeliDate = DeliDate.toISOString().slice(0, 10);
@@ -266,6 +266,35 @@ export class OrderingPage extends Component {
                 </div>
               }
             </div>
+
+            <div className='MobilePanelContainer'>
+              {TotalProducts > 0 && (
+                <div class="CartSummaryContainer">
+
+                  <div onClick={() => this.getOrder(TotalCost, CurrentDate, DeliDate, DeliveryPrice)} class="SideContainerBuyButton">
+                    <p>К оплате</p>
+                    <p class="SideContainerBuyButtonPrice">{new Intl.NumberFormat().format(TotalCost) + " ₽"}</p>
+                  </div>
+
+                  <CSSTransition
+                    in={FreeDelivery}
+                    timeout={1000}
+                    classNames='smallalert'
+                    unmountOnExit
+                  >
+                    <div style={{width: "100%"}}>
+                      <p style={{ color: 'black', marginTop: '20px', whiteSpace: "wrap" }} className='PageCardText'>
+                        Бесплатная доставка при заказе от 7 000 ₽!
+                      </p>
+
+                      <p style={{ color: '#B4A39A', marginTop: '10px', fontSize: "16px", whiteSpace: "wrap" }} className='PageCardText'>
+                        Распространяется только на стандартную доставку
+                      </p>
+                    </div>
+                  </CSSTransition>
+                </div>
+              )}
+            </div>
           </div>
           :
           <div class="PageContent">
@@ -337,7 +366,7 @@ export class OrderingPage extends Component {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: 'http://localhost:5000/rating/add',
+      url: `${process.env.REACT_APP_API_URL}/rating/add`,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },

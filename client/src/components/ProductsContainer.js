@@ -259,6 +259,7 @@ export class ProductsContainer extends Component {
 		}
 
 		return (
+			
 			<div>
 				{Object.keys(filter_products).length > 0 ? (
 					<div class='ProductsContainer'>
