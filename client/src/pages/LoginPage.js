@@ -26,15 +26,14 @@ export class LoginPage extends Component {
 				password: this.state.password,
 			}),
 		}
-		fetch('http://127.0.0.1:5000/user-auth/login', requestOptions)
+		fetch(`${process.env.REACT_APP_API_URL}/user-auth/login`, requestOptions)
 			.then(response => response.json())
 			.then(result => {
 				console.log(!result.error)
 				if (!result.error) {
 					localStorage.setItem('userId', result)
 					window.location.href = '/'
-				}
-				else{
+				} else {
 					this.setState({ ErrorText: result.error })
 					this.setState({ RegistrationShowError: true })
 				}

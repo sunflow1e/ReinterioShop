@@ -11,6 +11,7 @@ class UserService {
 	//Создание пользователя
 	async createUser(email, password, name, surname, patronymic) {
 		//Проверка на существование пользователя
+		console.log(email, password, name, surname, patronymic)
 		const usersExist = await client.query(
 			`select exists (select * from users where user_email = $1)`,
 			[email]
@@ -27,6 +28,7 @@ class UserService {
 				`${process.env.API_URL}/user-auth/activate/${activationLink}`
 			)
 		} catch (e) {
+			console.log(e)
 			return 'Некорректная почта'
 		}
 

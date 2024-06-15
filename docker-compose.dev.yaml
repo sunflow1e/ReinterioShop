@@ -1,0 +1,62 @@
+name: 'reinterio_shop'
+
+services:
+  server:
+    build: ./server
+    environment:
+      - CLIENT_URL=http://localhost:5523/login
+      - DB_HOST=postgres
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=YSXc7Gco0X
+      - DB_DATABASE=Reinterio_shop
+
+      - PORT=5015
+      - API_URL=http://localhost:5015
+
+    ports:
+      - 5015:5015
+    depends_on:
+      - postgres
+    networks:
+      network:
+        ipv4_address: 5.10.0.20
+
+  client:
+    build: ./client
+    environment:
+      - REACT_APP_API_URL=http://localhost:5015
+    ports:
+      - 5523:5523
+    depends_on:
+      - server
+    networks:
+      network:
+        ipv4_address: 5.10.0.30
+
+  postgres:
+    image: postgres:latest
+    ports:
+      - '5434:5432'
+    restart: unless-stopped
+    volumes:
+      - postgres:/var/lib/postgresql/data/
+      - './postgres/dataset:/docker-entrypoint-initdb.d'
+    environment:
+      - POSTGRES_DB=Reinterio_shop
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=YSXc7Gco0X
+      - MAX_LOGIN_ATTEMPTS=0
+    networks:
+      network:
+        ipv4_address: 5.10.0.50
+
+volumes:
+  postgres:
+
+networks:
+  network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 5.10.0.0/16
+          gateway: 5.10.0.1

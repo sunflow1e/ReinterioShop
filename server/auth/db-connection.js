@@ -3,7 +3,7 @@ import pg from 'pg'
 
 dotenv.config()
 
-const conStringPri = `postgres://${process.env.USERNAME_DB}:${process.env.PASSWORD_DB}@${process.env.HOST_DB}/${process.env.DATABASE_DB}`
+const conStringPri = `postgres://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/${process.env.DB_DATABASE}`
 const { Client } = pg
 const client = new Client({ connectionString: conStringPri })
 client.connect()
