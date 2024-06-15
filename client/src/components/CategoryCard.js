@@ -15,7 +15,7 @@ export class CategoryCard extends Component {
 				style={{
 					backgroundImage:
 						'linear-gradient(rgba(0,0,0,0.1),rgba(0,0,0,0.5)), url(/img/' +
-						capitalizeFirstLetter(this.props.category.category_image),
+						this.capitalizeFirstLetter(this.props.category.category_image),
 				}}
 				className={this.props.small ? 'SmallCategoryCard' : 'CategoryCard'}
 			>
