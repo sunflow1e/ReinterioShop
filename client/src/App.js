@@ -31,6 +31,9 @@ import ADMINProducts from './pages/ADMINProducts'
 import ADMIN_EDIT_styles from './pages/ADMIN_EDIT_styles'
 import ADMIN_EDIT_shapes from './pages/ADMIN_EDIT_shapes'
 import ADMIN_EDIT_materials from './pages/ADMIN_EDIT_material'
+import ADMIN_EDIT_category from './pages/ADMIN_EDIT_category'
+import ADMIN_ADD_product from './pages/ADMIN_ADD_product'
+import ADMIN_ADDNEWPRODUCT from './pages/ADMIN_ADDNEWPRODUCT'
 
 class App extends React.Component {
 	constructor(props) {
@@ -267,6 +270,39 @@ class App extends React.Component {
 								<ProtectedRoute
 									isAuthenticated={!!localStorage.getItem('userId')}
 									component={ADMIN_EDIT_materials}
+									user={this.state.current_user[0]}
+								/>
+							}
+						/>
+
+						<Route
+							path='/admin/edit/category'
+							element={
+								<ProtectedRoute
+									isAuthenticated={!!localStorage.getItem('userId')}
+									component={ADMIN_EDIT_category}
+									user={this.state.current_user[0]}
+								/>
+							}
+						/>
+
+						<Route
+							path='/admin/product/edit/:product_id'
+							element={
+								<ProtectedRoute
+									isAuthenticated={!!localStorage.getItem('userId')}
+									component={ADMIN_ADD_product}
+									user={this.state.current_user[0]}
+								/>
+							}
+						/>
+
+						<Route
+							path='/admin/product/add/'
+							element={
+								<ProtectedRoute
+									isAuthenticated={!!localStorage.getItem('userId')}
+									component={ADMIN_ADDNEWPRODUCT}
 									user={this.state.current_user[0]}
 								/>
 							}

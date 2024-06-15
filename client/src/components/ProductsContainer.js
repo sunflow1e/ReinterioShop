@@ -22,7 +22,10 @@ export class ProductsContainer extends Component {
 		if (this.props.filter) {
 			this.getProductCardsFilter()
 		}
-		else {
+		else if (this.props.admin){
+			this.getProductCardsAdmin()
+		}
+		else{
 			this.getProductCards()
 		}
 		this.getFavouriteProductCards()
@@ -31,6 +34,29 @@ export class ProductsContainer extends Component {
 
 	componentDidUpdate() {
 		this.setFavouiteCartCards()
+	}
+
+	getProductCardsAdmin() {
+
+		const qs = require('qs')
+		let data = qs.stringify({})
+
+		let config = {
+			method: 'get',
+			maxBodyLength: Infinity,
+			url: `${process.env.REACT_APP_API_URL}/admin/product/cards/`,
+			headers: {},
+			data: data,
+		}
+
+		axios
+			.request(config)
+			.then(response => {
+				this.setState({ products: response.data }); this.setState({ filterproducts: response.data })
+			})
+			.catch(error => {
+				console.log(error)
+			})
 	}
 
 	getProductCardsFilter() {

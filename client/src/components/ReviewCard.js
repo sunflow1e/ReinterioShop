@@ -28,7 +28,7 @@ export class ReviewCard extends Component {
 
     render() {
         return (
-            <div id={'review' + this.state.product.productd_id} className='ReviewCard'>
+            <div id={'review' + this.state.product.productd_id + this.state.product.review_id} className='ReviewCard'>
                 <div className='ReviewProduct'>
                     <a href={"/product/" + this.state.product.productd_id}>
                         <div className='CartCardImg'>
@@ -46,11 +46,11 @@ export class ReviewCard extends Component {
                         <div className="CartCardPriceCountContainer">
                             <p className='PageCardText'>Ваша оценка:</p>
                             <div className='StarsContainer'>
-                                <a href={'#review' + this.state.product.productd_id}><div onClick={() => !this.state.isRatingSaved ? this.changeRatingStar(1) : null} className={this.state.rating > 0 ? 'StarButtonActive' : 'StarButton'}><i className='fi fi-sr-star'></i></div></a>
-                                <a href={'#review' + this.state.product.productd_id}><div onClick={() => !this.state.isRatingSaved ? this.changeRatingStar(2) : null} className={this.state.rating > 1 ? 'StarButtonActive' : 'StarButton'}><i className='fi fi-sr-star'></i></div></a>
-                                <a href={'#review' + this.state.product.productd_id}><div onClick={() => !this.state.isRatingSaved ? this.changeRatingStar(3) : null} className={this.state.rating > 2 ? 'StarButtonActive' : 'StarButton'}><i className='fi fi-sr-star'></i></div></a>
-                                <a href={'#review' + this.state.product.productd_id}><div onClick={() => !this.state.isRatingSaved ? this.changeRatingStar(4) : null} className={this.state.rating > 3 ? 'StarButtonActive' : 'StarButton'}><i className='fi fi-sr-star'></i></div></a>
-                                <a href={'#review' + this.state.product.productd_id}><div onClick={() => !this.state.isRatingSaved ? this.changeRatingStar(5) : null} className={this.state.rating > 4 ? 'StarButtonActive' : 'StarButton'}><i className='fi fi-sr-star'></i></div></a>
+                                <a href={'#review' + this.state.product.productd_id + this.state.product.review_id}><div onClick={() => !this.state.isRatingSaved ? this.changeRatingStar(1) : null} className={this.state.rating > 0 ? 'StarButtonActive' : 'StarButton'}><i className='fi fi-sr-star'></i></div></a>
+                                <a href={'#review' + this.state.product.productd_id + this.state.product.review_id}><div onClick={() => !this.state.isRatingSaved ? this.changeRatingStar(2) : null} className={this.state.rating > 1 ? 'StarButtonActive' : 'StarButton'}><i className='fi fi-sr-star'></i></div></a>
+                                <a href={'#review' + this.state.product.productd_id + this.state.product.review_id}><div onClick={() => !this.state.isRatingSaved ? this.changeRatingStar(3) : null} className={this.state.rating > 2 ? 'StarButtonActive' : 'StarButton'}><i className='fi fi-sr-star'></i></div></a>
+                                <a href={'#review' + this.state.product.productd_id + this.state.product.review_id}><div onClick={() => !this.state.isRatingSaved ? this.changeRatingStar(4) : null} className={this.state.rating > 3 ? 'StarButtonActive' : 'StarButton'}><i className='fi fi-sr-star'></i></div></a>
+                                <a href={'#review' + this.state.product.productd_id + this.state.product.review_id}><div onClick={() => !this.state.isRatingSaved ? this.changeRatingStar(5) : null} className={this.state.rating > 4 ? 'StarButtonActive' : 'StarButton'}><i className='fi fi-sr-star'></i></div></a>
                             </div>
                         </div>
                     </div>

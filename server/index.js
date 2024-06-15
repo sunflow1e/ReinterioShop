@@ -126,7 +126,7 @@ app.post('/category', (req, res) => {
 
 app.get('/category', (req, res) => {
   client
-    .query('SELECT * FROM categories WHERE category_id != 0 ORDER BY category_id')
+    .query('SELECT * FROM categories ORDER BY category_id')
     .then(result => {
       res.status(200).send(result.rows)
     })
@@ -168,6 +168,62 @@ app.put('/category/:id', (req, res) => {
     })
 })
 
+// UPLOAD IMAGE CATEGORY
+
+app.put('/category/img/:id', (req, res) => {
+  const { img } = req.body
+  const { id } = req.params
+
+  client
+    .query('UPDATE categories SET category_image = $1 WHERE category_id = $2', [
+      img,
+      Number.parseInt(id),
+    ])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
+
+
+
+app.put('/product/subcategory', (req, res) => {
+  const { subcategorybefore } = req.body
+  const { subcategory } = req.body
+
+  client
+    .query('UPDATE products SET product_subcategory = $1 WHERE product_subcategory = $2', [
+      subcategory,
+      subcategorybefore,
+    ])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.delete('/subcategory/:id', (req, res) => {
+  const { id } = req.params
+
+  client
+    .query('DELETE FROM subcategories WHERE subcategory_id = $1', [id])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
 app.delete('/category/:id', (req, res) => {
   const { id } = req.params
 
@@ -181,6 +237,62 @@ app.delete('/category/:id', (req, res) => {
       res.status(500).send()
     })
 })
+
+
+
+
+
+
+app.delete('/subcategory/category/:id', (req, res) => {
+  const { id } = req.params
+
+  client
+    .query('DELETE FROM subcategories WHERE subcategory_category = $1', [id])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.post('/subcategory', (req, res) => {
+  const { name } = req.body
+  const { category } = req.body
+
+  client
+    .query(
+      'INSERT INTO subcategories (subcategory_name, subcategory_category) values ($1, $2)',
+      [name, category]
+    )
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.put('/subcategory/:id', (req, res) => {
+  const { name } = req.body
+  const { id } = req.params
+
+  client
+    .query('UPDATE subcategories SET subcategory_name = $1 WHERE subcategory_id = $2', [
+      name,
+      id,
+    ])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
 
 //USER
 
@@ -368,7 +480,7 @@ app.get('/product/cards/:subcategoriesQueryString', (req, res) => {
     AND subcategory_category = category_id
     AND style_id = prodstyle_style_id 
     AND productd_image = image_id 
-    AND productd_onstock > 1 `
+    AND productd_onstock > 0 `
       + subcategoriesQueryString +
       ` ORDER BY product_article`
     )
@@ -391,7 +503,38 @@ app.get('/product/cards/', (req, res) => {
     false as product_addedtofavourite, 
     image_path, product_details.productd_id, color_name, color_hex, product_name, product_article, product_price,
     product_disc_price, product_discount, productd_dailyoffer, category_name, subcategory_name, productd_onstock,
-    style_id, style_name 
+    style_id, style_name, products.product_id 
+   
+    FROM subcategories, categories, images, products
+    INNER JOIN product_details ON productd_product = products.product_id 
+    INNER JOIN colors ON productd_color = color_id
+    INNER JOIN styles ON style_id = products.product_id  
+  
+    WHERE subcategory_id = product_subcategory 
+    AND subcategory_category = category_id 
+    AND productd_image = image_id 
+    AND productd_onstock > 0 
+    ORDER BY product_article`
+    )
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.get('/admin/product/cards/', (req, res) => {
+
+  client
+    .query(
+      `SELECT
+    false as product_addedtocart,  
+    false as product_addedtofavourite, 
+    image_path, product_details.productd_id, color_name, color_hex, product_name, product_article, product_price,
+    product_disc_price, product_discount, productd_dailyoffer, category_name, subcategory_name, productd_onstock,
+    style_id, style_name, products.product_id 
    
     FROM subcategories, categories, images, products
     INNER JOIN product_details ON productd_product = product_id 
@@ -401,7 +544,7 @@ app.get('/product/cards/', (req, res) => {
     WHERE subcategory_id = product_subcategory 
     AND subcategory_category = category_id 
     AND productd_image = image_id 
-    AND productd_onstock > 1 
+    AND products.product_id != 0
     ORDER BY product_article`
     )
     .then(result => {
@@ -605,7 +748,7 @@ app.get('/product/favourite/:id', (req, res) => {
   WHERE subcategory_id = product_subcategory 
   AND subcategory_category = category_id 
   AND productd_image = image_id 
-  AND productd_onstock > 1 
+  AND productd_onstock > 0 
   AND productd_id = favourite_product 
   AND favourite_user = $1`,
       [Number.parseInt(id)]
@@ -699,7 +842,7 @@ app.get('/product/cart/:id', (req, res) => {
   WHERE subcategory_id = product_subcategory 
   AND subcategory_category = category_id 
   AND productd_image = image_id 
-  AND productd_onstock > 1 
+  AND productd_onstock > 0 
   AND productd_id = cart_product 
   AND cart_user = $1`,
       [Number.parseInt(id)]
@@ -1056,6 +1199,26 @@ app.get('/order/all/products/:id', (req, res) => {
     })
 })
 
+
+app.put('/order/productcount', (req, res) => {
+  const { product } = req.body
+  const { count } = req.body
+
+  client
+    .query(
+      'UPDATE product_details SET productd_onstock = $2 WHERE productd_id = $1',
+      [Number.parseInt(product), Number.parseInt(count)]
+    )
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
 // // // // // // // // // // // // // // // // // // // // // // // // // //
 
 //     R A T I N G      // // // // // // // // // // // // // // // // // //
@@ -1080,11 +1243,7 @@ app.post('/rating/add', (req, res) => {
     (review_user, review_product, review_rating, review_text, review_image1, review_image2, 
     review_image3, review_image4, review_image5, review_date)
 
-    SELECT $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
-
-    WHERE NOT EXISTS (
-      SELECT * FROM reviews WHERE review_user = $1 AND review_product = $2
-    )`,
+    SELECT $1, $2, $3, $4, $5, $6, $7, $8, $9, $10`,
       [Number.parseInt(userid), Number.parseInt(productid), Number.parseInt(rating), text, image1, image2, image3, image4, image5, date])
     .then(result => {
       res.status(200).send(result.rows)
@@ -1166,7 +1325,7 @@ app.get('/review/all/:id', (req, res) => {
 
 app.get('/style', (req, res) => {
   client
-    .query('SELECT false as style_ischecked, style_id, style_name FROM styles WHERE style_id != 0')
+    .query('SELECT false as style_ischecked, style_id, style_name FROM styles WHERE style_id != 0 ORDER BY style_name')
     .then(result => {
       res.status(200).send(result.rows)
     })
@@ -1176,9 +1335,27 @@ app.get('/style', (req, res) => {
     })
 })
 
+
 app.get('/subcategory', (req, res) => {
   client
-    .query('SELECT false as subcategory_ischecked, subcategory_category, subcategory_id, subcategory_name FROM subcategories WHERE subcategory_id != 0')
+    .query('SELECT false as subcategory_ischecked, subcategory_category, subcategory_id, subcategory_name FROM subcategories')
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.get('/subcategory/:id', (req, res) => {
+  const { id } = req.params
+
+  client
+    .query(`SELECT subcategory_category, subcategory_id, subcategory_name 
+      FROM subcategories WHERE subcategory_category = $1
+      ORDER BY subcategory_id`,
+      [Number.parseInt(id)])
     .then(result => {
       res.status(200).send(result.rows)
     })
@@ -1446,7 +1623,7 @@ app.put('/updateprod/shape/:id', (req, res) => {
 app.get('/shape', (req, res) => {
   client
     .query(
-      `SELECT * FROM shapes ORDER BY shape_id`
+      `SELECT * FROM shapes WHERE shape_id != 0 ORDER BY shape_id`
     )
 
     .then(result => {
@@ -1561,12 +1738,542 @@ app.put('/review', (req, res) => {
 
 
 
+// ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ 
+
+// ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ 
+
+// ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ 
+
+
+app.get('/admin/product/:id', (req, res) => { //ПОЛУЧЕНИЕ ИНФОРМАЦИИ О ПРОДУКТЕ
+  const { id } = req.params
+
+  client
+    .query(
+      `SELECT
+  products.product_id, product_name, product_article, product_price,
+  product_disc_price, product_discount, product_length, product_width, product_height, product_weight,
+  shape_name, category_name, category_id, subcategory_name, shape_id, subcategory_id
+   
+  FROM products
+  INNER JOIN shapes ON product_shape = shape_id
+  INNER JOIN subcategories ON subcategory_id = product_subcategory
+  INNER JOIN categories ON subcategory_category = category_id
+
+  WHERE products.product_id = $1`,
+      [Number.parseInt(id)]
+    )
+
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
+app.get('/admin/material/:id', (req, res) => {
+  const { id } = req.params
+
+  client
+    .query('SELECT EXISTS(SELECT 1 FROM product_materials WHERE prodmaterial_prod_id = $1 AND prodmaterial_material_id = material_id ) as material_ischecked, material_id, material_name FROM materials WHERE material_id != 0 ORDER BY material_name',
+      [Number.parseInt(id)]
+    )
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
+app.get('/admin/material', (req, res) => {
+  client
+    .query('SELECT false as material_ischecked, material_id, material_name FROM materials WHERE material_id != 0 ORDER BY material_name'
+    )
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.get('/admin/style/:id', (req, res) => {
+  const { id } = req.params
+
+  client
+    .query('SELECT EXISTS(SELECT 1 FROM product_styles WHERE prodstyle_prod_id = $1 AND prodstyle_style_id = style_id ) as style_ischecked, style_id, style_name FROM styles WHERE style_id != 0 ORDER BY style_name',
+      [Number.parseInt(id)]
+    )
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.get('/admin/style', (req, res) => {
+
+  client
+    .query('SELECT false as style_ischecked, style_id, style_name FROM styles WHERE style_id != 0 ORDER BY style_name'
+    )
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.get('/admin/color/:id', (req, res) => {
+  const { id } = req.params
+
+  client
+    .query('SELECT (SELECT productd_id FROM product_details WHERE productd_product = $1 AND productd_color = color_id ) as productd_id, EXISTS(SELECT 1 FROM product_details WHERE productd_product = $1 AND productd_color = color_id ) as color_ischecked, EXISTS(SELECT 1 FROM product_details WHERE productd_product = $1 AND productd_color = color_id ) as color_readonly, (SELECT productd_onstock FROM product_details WHERE productd_product = $1 AND productd_color = color_id) AS product_onstock, color_id, color_name, color_hex FROM colors WHERE color_id != 0 ORDER BY color_id',
+      [Number.parseInt(id)]
+    )
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.get('/admin/color', (req, res) => {
+
+  client
+    .query('SELECT null as productd_id, false as color_ischecked, false as color_readonly, 0 AS product_onstock, color_id, color_name, color_hex FROM colors WHERE color_id != 0 ORDER BY color_id'
+    )
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.get('/admin/allimages/:id', (req, res) => {
+  const { id } = req.params
+
+  client
+    .query('SELECT image_path, productd_id, image_id FROM images INNER JOIN product_details ON productd_id = images.product_id INNER JOIN products ON products.product_id = productd_product WHERE products.product_id = $1',
+      [Number.parseInt(id)]
+    )
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.get('/admin/file/:id', (req, res) => {
+  const { id } = req.params
+
+  client
+    .query('SELECT file_path, file_name, file_product, file_id FROM files WHERE file_product = $1',
+      [Number.parseInt(id)]
+    )
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
 
 
 
 
 
 
+
+
+
+
+app.put('/admin/product', (req, res) => {
+  const { name } = req.body
+  const { price } = req.body
+  const { discprice } = req.body
+  const { discount } = req.body
+
+  const { length } = req.body
+  const { width } = req.body
+  const { height } = req.body
+  const { weight } = req.body
+
+  const { shape } = req.body
+  const { subcategory } = req.body
+
+  const { id } = req.body
+
+  client
+    .query(
+      `UPDATE products SET product_name = $1, product_price = $2, product_disc_price = $3, product_discount = $4,
+      product_length = $5, product_width = $6, product_height = $7, product_weight = $8,
+      product_shape = $9, product_subcategory = $10 WHERE product_id = $11`,
+      [name, Number.parseFloat(price), Number.parseFloat(discprice), Number.parseFloat(discount), Number.parseFloat(length),
+        Number.parseFloat(width), Number.parseFloat(height), Number.parseFloat(weight), Number.parseInt(shape),
+        Number.parseInt(subcategory), Number.parseInt(id)
+      ]
+    )
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
+app.delete('/admin/styles/:id', (req, res) => {
+  const { id } = req.params
+
+  client
+    .query('DELETE FROM product_styles WHERE prodstyle_prod_id = $1', [id])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
+app.post('/admin/styles', (req, res) => {
+  const { prod } = req.body
+  const { style } = req.body
+
+  client
+    .query('INSERT INTO product_styles (prodstyle_prod_id, prodstyle_style_id) values ($1, $2)',
+      [Number.parseInt(prod), Number.parseInt(style)])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
+app.post('/admin/styles/addnew', (req, res) => {
+  const { style } = req.body
+
+  client
+    .query('INSERT INTO product_styles (prodstyle_style_id, prodstyle_prod_id) values ($1, (SELECT product_id FROM products ORDER BY product_id DESC LIMIT 1))',
+      [Number.parseInt(style)])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
+
+app.delete('/admin/materials/:id', (req, res) => {
+  const { id } = req.params
+
+  client
+    .query('DELETE FROM product_materials WHERE prodmaterial_prod_id = $1', [id])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.post('/admin/materials', (req, res) => {
+  const { prod } = req.body
+  const { material } = req.body
+
+  client
+    .query('INSERT INTO product_materials (prodmaterial_prod_id, prodmaterial_material_id) values ($1, $2)',
+      [Number.parseInt(prod), Number.parseInt(material)])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.post('/admin/materials/addnew', (req, res) => {
+  const { material } = req.body
+
+  client
+    .query('INSERT INTO product_materials (prodmaterial_material_id, prodmaterial_prod_id) values ($1, (SELECT product_id FROM products ORDER BY product_id DESC LIMIT 1))',
+      [Number.parseInt(material)])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
+
+
+app.delete('/admin/files/:id', (req, res) => {
+  const { id } = req.params
+
+  client
+    .query('DELETE FROM files WHERE file_product = $1', [id])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.post('/admin/files', (req, res) => {
+  const { prod } = req.body
+  const { name } = req.body
+  const { path } = req.body
+
+  client
+    .query('INSERT INTO files (file_product, file_name, file_path) values ($1, $2, $3)',
+      [Number.parseInt(prod), name, path])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.post('/admin/files/addnew', (req, res) => {
+  const { name } = req.body
+  const { path } = req.body
+
+  client
+    .query('INSERT INTO files (file_name, file_path, file_product) values ($1, $2, (SELECT product_id FROM products ORDER BY product_id DESC LIMIT 1))',
+      [name, path])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
+
+
+
+
+app.post('/admin/productdetails', (req, res) => {
+  const { prod } = req.body
+  const { color } = req.body
+  const { onstock } = req.body
+
+  client
+    .query('INSERT INTO product_details (productd_product, productd_color, productd_onstock, productd_dailyoffer) values ($1, $2, $3, false)',
+      [Number.parseInt(prod), Number.parseInt(color), Number.parseInt(onstock)])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.post('/admin/productdetails/addnew', (req, res) => {
+  const { color } = req.body
+  const { onstock } = req.body
+
+  client
+    .query('INSERT INTO product_details (productd_color, productd_onstock, productd_dailyoffer, productd_product) values ($1, $2, false, (SELECT product_id FROM products ORDER BY product_id DESC LIMIT 1))',
+      [Number.parseInt(color), Number.parseInt(onstock)])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
+app.put('/admin/productdetails', (req, res) => {
+  const { id } = req.body
+  const { onstock } = req.body
+
+  client
+    .query('UPDATE product_details SET productd_onstock = $1 WHERE productd_id = $2',
+      [Number.parseInt(onstock), Number.parseInt(id)]
+    )
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
+
+app.post('/admin/product', (req, res) => {
+  const { article } = req.body
+  const { name } = req.body
+  const { price } = req.body
+  const { discprice } = req.body
+  const { discount } = req.body
+  const { length } = req.body
+  const { width } = req.body
+  const { height } = req.body
+  const { weight } = req.body
+  const { shape } = req.body
+  const { subcategory } = req.body
+
+  client
+    .query(`INSERT INTO products 
+      (product_article, product_name, product_price, product_disc_price, product_discount, product_length, product_width, product_height, product_weight, product_shape, product_subcategory) 
+      values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
+      [article, name, Number.parseFloat(price), Number.parseFloat(discprice), Number.parseFloat(discount), Number.parseFloat(length),
+        Number.parseFloat(width), Number.parseFloat(height), Number.parseFloat(weight), Number.parseInt(shape), Number.parseInt(subcategory)
+      ])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
+
+
+
+
+
+
+app.delete('/admin/images/:id', (req, res) => {
+  const { id } = req.params
+
+  client
+    .query('DELETE FROM images WHERE product_id = $1', [id])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.post('/admin/images', (req, res) => {
+  const { path } = req.body
+
+  client
+    .query('INSERT INTO images (image_path, product_id) values ($1, (SELECT productd_id FROM product_details ORDER BY product_details DESC LIMIT 1))',
+      [path])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.post('/admin/updateimages', (req, res) => {
+  const { path } = req.body
+  const { id } = req.body
+
+  client
+    .query('INSERT INTO images (image_path, product_id) values ($1, $2)',
+      [path, Number.parseInt(id)])
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.get('/admin/covers/:id', (req, res) => {
+  const { id } = req.params
+
+  client
+    .query('SELECT * FROM product_details WHERE productd_product = $1',
+      [Number.parseInt(id)]
+    )
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.put('/admin/covers', (req, res) => {
+  const { id } = req.body
+
+  client
+    .query('UPDATE product_details SET productd_image = (SELECT image_id FROM images WHERE product_id = $1 LIMIT 1) WHERE productd_id = $1',
+      [Number.parseInt(id)]
+    )
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+app.put('/admin/covers/addnew', (req, res) => {
+  client
+    .query('UPDATE product_details SET productd_image = (SELECT image_id FROM images WHERE product_id = (SELECT productd_id FROM product_details ORDER BY product_details DESC LIMIT 1) LIMIT 1) WHERE productd_id = (SELECT productd_id FROM product_details ORDER BY product_details DESC LIMIT 1)')
+    .then(result => {
+      res.status(200).send(result.rows)
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send()
+    })
+})
+
+
+// ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ 
+
+// ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ 
+
+// ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ ❇️ 
 
 
 
@@ -1606,6 +2313,30 @@ app.post('/upload', (req, res) => {
   });
 })
 
+app.post('/uploadfile', (req, res) => {
+  if (!req.files) {
+    return res.status(400).json({ msg: 'No files' });
+  }
+
+  const file = req.files.file
+
+  if (!file) return res.json({ error: 'Некорректное имя' });
+
+  const newFileName = encodeURI(Date.now() + '-reinterio-product-file.' + file.name.match(/\.([^.]+)$|$/)[1]);
+
+  file.mv(`D:/reinterioshop/client/public/files/${newFileName}`, err => {
+
+    if (err) {
+      console.error(err)
+      return res.status(500).send(err);
+    }
+
+    res.json({
+      fileName: file.name,
+      filePath: `${newFileName}`,
+    });
+  });
+})
 
 
 const PORT = process.env.PORT || 5000

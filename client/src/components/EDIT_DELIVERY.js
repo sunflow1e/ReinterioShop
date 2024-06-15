@@ -159,7 +159,6 @@ export class EDIT_DELIVERY extends Component {
             .catch((error) => {
                 console.log(error);
             });
-
     }
 
     AddNew() {

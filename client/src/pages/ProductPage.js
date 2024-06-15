@@ -325,7 +325,7 @@ export class ProductPage extends Component {
 				{this.state.reviews?.length > 0 && (
 					<div className='ProductPageColumnContainer'>
 						<h1 className='ProductPageTitle'>Отзывы о товаре</h1>
-						<p className='PageCardText'>{'★ ' + new Intl.NumberFormat().format(rating) + ' / 5 '}
+						<p className='PageCardText'>{'★ ' + Number.parseFloat(rating).toFixed(1) + ' / 5 '}
 							<p style={{ color: "#B4A39A" }}>{this.state.reviews.length + ' отзывов'}</p>
 						</p>
 						<div className='OrderContainerLilCard'>

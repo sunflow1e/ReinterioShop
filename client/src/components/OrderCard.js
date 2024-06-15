@@ -4,7 +4,7 @@ export class OrderCard extends Component {
     render() {
         return (
             <div className='OrderProductCard'>
-                <a href={'/product/' + this.props.product.productd_id}>
+                <a href= {this.props.stock ? '/admin/product/edit/' + this.props.product.product_id : '/product/' + this.props.product.productd_id}>
                     <div className='OrderImgContainer'>
                         <img
                             class='OrderProductImg'

@@ -13,7 +13,6 @@ export const UploadImage = (props) => {
         setSelectedFile(event.currentTarget.files[0])
 
         if (!event.currentTarget.files[0]) {
-            alert("Пожалуйста, выберите файл");
             return;
         }
 
@@ -29,29 +28,36 @@ export const UploadImage = (props) => {
 
         setUploaded(data);
 
-        props.uploadImage(props.imgnum, data.filePath)
+        if (!props.small) {
+            props.uploadImage(props.imgnum, data.filePath)
+        }
+        else {
+            props.uploadImage(props.productd_id, data.filePath)
+
+            console.log(props.productd_id)
+        }
     }
 
     return (
         <>
             {(props.image) &&
                 <div
-                    className='ReviewPicture'
+                    className={props.small ? 'AddProductPicture' : 'ReviewPicture'}
                     style={{
                         backgroundImage:
                             'url(/img/' + props.image,
                     }}
                 >
                     {!props.isRated &&
-                        <div onClick={() => props.removeImage(props.imgnum)} className='RemoveReviewPicture'><i class='fi fi-rr-cross-small' /></div>
+                        <div onClick={() => props.small ? props.removeImage(props.image) : props.removeImage(props.imgnum)} className='RemoveReviewPicture'><i class='fi fi-rr-cross-small' /></div>
                     }
                 </div >
             }
             {
                 (!props.isRated && !props.image) &&
                 <div>
-                    <button className='InpuImgButtonContainer'><label for={'file' + props.imgnum}><div className='InputImgButton'><i class='fi fi-rr-plus' /></div></label></button>
-                    <input id={'file' + props.imgnum} type='file' className='hidden' onChange={handleUpload} accept='image/*, .png, .jpg, .jpeg' />
+                    <button className={props.small ? 'AdminInpuImgButtonContainer' : 'InpuImgButtonContainer'}><label htmlFor={'file' + props.imgnum + props.productd_id}><div className='InputImgButton'><i class='fi fi-rr-plus' /></div></label></button>
+                    <input id={'file' + props.imgnum + props.productd_id} type='file' className='hidden' onChange={handleUpload} accept='image/*, .png, .jpg, .jpeg' />
                 </div>
             }
         </>

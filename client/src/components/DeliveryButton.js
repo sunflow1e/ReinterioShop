@@ -31,7 +31,7 @@ export class DeliveryButton extends Component {
                                 <div className='DeliveryPrice'>{this.props.delivery.delivery_minprice + " ₽"}</div>
                             }
                             {this.props.FullWeight >= MaxWeight &&
-                                <div className='DeliveryPrice'>{Intl.NumberFormat().format(this.props.delivery.delivery_weightprice * this.props.FullWeight) + " ₽ за " + this.props.FullWeight + " кг."}</div>
+                                <div className='DeliveryPrice'>{Intl.NumberFormat().format(this.props.delivery.delivery_weightprice * this.props.FullWeight) + " ₽ за " +this.props.FullWeight.toFixed(2) + " кг."}</div>
                             }
                             <div className='DeliveryPrice'>{"Доставим " + DeliveryDate}</div>
                         </div>
@@ -48,7 +48,7 @@ export class DeliveryButton extends Component {
                                 <div className='DeliveryPrice'>{this.props.delivery.delivery_minprice + " ₽"}</div>
                             }
                             {this.props.FullWeight >= MaxWeight &&
-                                <div className='DeliveryPrice'>{Intl.NumberFormat().format(this.props.delivery.delivery_weightprice * this.props.FullWeight) + " ₽ за " + this.props.FullWeight + " кг."}</div>
+                                <div className='DeliveryPrice'>{Intl.NumberFormat().format(this.props.delivery.delivery_weightprice * this.props.FullWeight) + " ₽ за " + this.props.FullWeight.toFixed(2) + " кг."}</div>
                             }
                             <div className='DeliveryPrice'>{"Доставим " + DeliveryDate}</div>
                         </div>

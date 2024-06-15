@@ -187,7 +187,7 @@ export class CartPage extends Component {
 							</div>
 							<div className='ModalContainer'>
 								<p className='ModalTitle'>Удаление выбранного</p>
-								<p style={{ lineHeight: '150%', fontSize: '18px' }}>
+								<p className='PageCardText'>
 									Вы уверены, что хотите удалить выбранные товары из корзины?
 									Отменить это действие будет невозможно
 								</p>

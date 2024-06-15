@@ -43,7 +43,7 @@ export class EDIT_STYLE extends Component {
                                 ></i>
                             </div>
                             <div className='ModalContainer'>
-                                <p className='ModalTitle'>Удаление характристики</p>
+                                <p className='ModalTitle'>Удаление характеристики</p>
                                 <p style={{ lineHeight: '150%', fontSize: '18px' }}>
                                     Вы уверены, что хотите удалить характеристику?
                                     Отменить это действие будет невозможно

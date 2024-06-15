@@ -5,7 +5,7 @@ export class CategoriesContainer extends Component {
   render() {
     return (
         <div className = {this.props.small ? "SmallCategoriesContainer" : "CategoriesContainer"}>
-            {this.props.categories?.map(CurrentCategory => (
+            {this.props.categories?.filter(el => el.category_id !== 0).map(CurrentCategory => (
             <CategoryCard changeCurrentCategory = {this.props.changeCurrentCategory} small = {this.props.small} key = {CurrentCategory.category_id} category = {CurrentCategory} />
         ))}
         </div>

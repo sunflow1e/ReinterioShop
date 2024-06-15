@@ -188,14 +188,14 @@ export class PPCard extends Component {
 								{this.props.product.product_name}
 							</h1>
 							{this.props.rating[0] &&
-								<p className='RatingText'>{new Intl.NumberFormat().format(this.props.rating[0].rating) != 0 ? '★ ' + new Intl.NumberFormat().format(this.props.rating[0].rating) : ''}</p>
+								<p className='RatingText'>{new Intl.NumberFormat().format(this.props.rating[0].rating) != 0 ? '★ ' + Number.parseFloat(this.props.rating[0].rating).toFixed(1) : ''}</p>
 							}
 						</div>
 
 						<div className='ProductPriceContainer'>
 							<h1 className='ProductPageTitle'>
 								{new Intl.NumberFormat().format(
-									this.props.product.product_price
+									this.props.product.product_disc_price
 								) + ' ₽'}
 							</h1>
 							<div className='ProductPageDicountContainer'>
@@ -205,7 +205,7 @@ export class PPCard extends Component {
 										className='ProductsPriceBefore'
 									>
 										{new Intl.NumberFormat().format(
-											this.props.product.product_disc_price
+											this.props.product.product_price
 										) + ' ₽'}
 									</p>
 								)}
@@ -216,7 +216,7 @@ export class PPCard extends Component {
 								)}
 							</div>
 							{
-								this.props.product.productd_onstock > 1 && <div
+								this.props.product.productd_onstock > 0 && <div
 									onClick={() =>
 										localStorage.getItem('userId')
 											? !this.state.IsAddedToCart

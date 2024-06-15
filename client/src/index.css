@@ -1885,7 +1885,7 @@ div::-webkit-scrollbar-thumb {
     transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
-.AdminTitleButton:hover{
+.AdminTitleButton:hover {
     background-color: #E1E4E4;
 }
 
@@ -1941,6 +1941,7 @@ div::-webkit-scrollbar-thumb {
     overflow: hidden;
     padding: 0;
     margin: 0;
+    position: absolute;
 }
 
 .PageCardText {
@@ -2574,6 +2575,15 @@ div::-webkit-scrollbar-thumb {
     gap: 10px;
 }
 
+.EmptyButton {
+    width: fit-content;
+    padding: 0px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    margin: 0px;
+}
+
 .GrayBlock {
     padding: 15px;
     border-radius: 5px;
@@ -2588,6 +2598,7 @@ div::-webkit-scrollbar-thumb {
     user-select: none;
     cursor: pointer;
     min-width: 55px;
+    transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 .GreenBlock {
@@ -2604,6 +2615,7 @@ div::-webkit-scrollbar-thumb {
     align-items: center;
     font-size: 18px;
     cursor: pointer;
+    min-width: 55px;
 }
 
 #StatusFinish {
@@ -2816,7 +2828,20 @@ div::-webkit-scrollbar-thumb {
     width: 175px;
     height: 230px;
     background-size: cover;
-    transition: all 0.1s cubic-bezier(0.075, 0.82, 0.165, 1);
+    transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+    border-radius: 5px;
+    display: flex;
+    padding: 10px;
+    box-sizing: border-box;
+    justify-content: right;
+    background-position: center;
+}
+
+.SmallImg {
+    width: 75px;
+    height: 75px;
+    background-size: cover;
+    transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
     border-radius: 5px;
     display: flex;
     padding: 10px;
@@ -3360,7 +3385,7 @@ div::-webkit-scrollbar-thumb {
     white-space: nowrap;
     background-color: #FBFBFB;
     border: 1px rgba(0, 0, 0, 0.1) solid;
-    border-radius: 10px;
+    border-radius: 5px;
     padding: 5px 10px;
     min-height: 38px;
     box-sizing: border-box;
@@ -3636,7 +3661,7 @@ div::-webkit-scrollbar-thumb {
 .smallalert-enter-active {
     opacity: 1;
     transform: translateX(0);
-    transition: all 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+    transition: all 1.3s cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 .smallalert-exit {
@@ -3646,5 +3671,75 @@ div::-webkit-scrollbar-thumb {
 .smallalert-exit-active {
     opacity: 0;
     transform: translateY(-20px);
-    transition: all 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+    transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+
+/* ADD EDIT PRODUCT */
+
+.AdminCard {
+    width: auto;
+    background-color: white;
+    box-shadow: 2px 4px 5px rgba(165, 164, 185, 0.20);
+    border-radius: 5px;
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.AdminInfoContainer{
+    width: 48%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.AdminGrayBackground {
+    padding: 20px;
+    gap: 15px;
+    display: flex;
+    flex-direction: row;
+    border-radius: 5px;
+    background-color: white;
+    box-sizing: border-box;
+    width: 100%;
+    outline: rgba(0, 0, 0, .1) 1px solid;
+    transition: all 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+    justify-content: space-between;
+}
+
+.AddProductPicture {
+    width: 115px;
+    height: 150px;
+    background-size: cover;
+    transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+    border-radius: 5px;
+    display: flex;
+    padding: 10px;
+    box-sizing: border-box;
+    justify-content: right;
+    background-position: center;
+}
+
+.AdminInpuImgButtonContainer {
+    width: 115px;
+    height: 150px;
+    border: 1px #DBDBDB dashed;
+    border-radius: 5px;
+    color: #0A5954;
+    outline: none;
+    padding: 0;
+}
+
+#Delete:hover{
+    background-color: #d13b0e;
+    color: white;
+}
+
+#Upload:hover{
+    background-color: #0A5954;
+    color: white;
 }

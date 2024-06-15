@@ -81,7 +81,7 @@ export class ADMINProducts extends Component {
 
 
                 <div class='PageTitleButtonsContainer'>
-                  <a href='/admin/edit/status'>
+                  <a href='/admin/product/add'>
                     <div className='AdminTitleButton'>Добавить товар</div>
                   </a>
                 </div>
@@ -97,7 +97,7 @@ export class ADMINProducts extends Component {
                   <a href='/admin/edit/style'><div className='ModalSecondaryButton'>Управление стилями</div></a>
                   <a href='/admin/edit/shape'><div className='ModalSecondaryButton'>Управление формами</div></a>
                   <a href='/admin/edit/material'><div className='ModalSecondaryButton'>Управление материалами</div></a>
-                  <a href='/admin/edit/shape'><div className='ModalSecondaryButton'>Управление категориями</div></a>
+                  <a href='/admin/edit/category'><div className='ModalSecondaryButton'>Управление категориями</div></a>
                 </div>
 
                 <div className='AnalyticsPageCard'>

@@ -78,7 +78,7 @@ export class ProductCard extends Component {
 					}
 
 					{this.props.admin &&
-						<div onClick={() => null} class={'PAddToCartTrue'}>Редактировать</div>
+						<div onClick={() => this.openEditPage()} class={'PAddToCartTrue'}>Редактировать</div>
 					}
 
 					<div class='PNamePrice'>
@@ -86,19 +86,19 @@ export class ProductCard extends Component {
 							<h class='CardText'>{this.props.product.product_name}</h>
 						</p>
 						<div class='PPrice'>
-							<a class='ProductPrice'>
-								<h class='CardText'>
+							<p class='ProductPrice'>
+								<p class='CardText'>
 									{new Intl.NumberFormat().format(
 										this.props.product.product_disc_price
 									) + ' ₽'}
-								</h>
-							</a>
+								</p>
+							</p>
 							{this.props.product.product_discount > 0 && (
-								<a class='ProductsPriceBefore'>
+								<p class='ProductsPriceBefore'>
 									{new Intl.NumberFormat().format(
 										this.props.product.product_price
 									) + ' ₽'}
-								</a>
+								</p>
 							)}
 						</div>
 					</div>
@@ -107,12 +107,16 @@ export class ProductCard extends Component {
 		)
 	}
 
+	openEditPage() {
+		window.location.href = '/admin/product/edit/' + this.props.product.product_id
+	}
+
 	addToFavourite(prod) {
 		const myHeaders = new Headers()
 		myHeaders.append('Content-Type', 'application/x-www-form-urlencoded')
 
 		const urlencoded = new URLSearchParams()
-		urlencoded.append('user', this.props.user_id)
+		urlencoded.append('user', localStorage.getItem('userId'))
 		urlencoded.append('product', prod.productd_id)
 
 		const requestOptions = {
@@ -158,7 +162,7 @@ export class ProductCard extends Component {
 	addToCart(prod) {
 		const qs = require('qs')
 		let data = qs.stringify({
-			user: this.props.user_id,
+			user: localStorage.getItem('userId'),
 			product: prod.productd_id,
 			count: 1,
 		})
@@ -190,7 +194,7 @@ export class ProductCard extends Component {
 		myHeaders.append('Content-Type', 'application/x-www-form-urlencoded')
 
 		const urlencoded = new URLSearchParams()
-		urlencoded.append('user', this.props.user_id)
+		urlencoded.append('user', localStorage.getItem('userId'))
 		urlencoded.append('product', prod.productd_id)
 
 		const requestOptions = {

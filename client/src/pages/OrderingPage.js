@@ -282,7 +282,7 @@ export class OrderingPage extends Component {
                     classNames='smallalert'
                     unmountOnExit
                   >
-                    <div style={{width: "100%"}}>
+                    <div style={{ width: "100%" }}>
                       <p style={{ color: 'black', marginTop: '20px', whiteSpace: "wrap" }} className='PageCardText'>
                         Бесплатная доставка при заказе от 7 000 ₽!
                       </p>
@@ -328,6 +328,10 @@ export class OrderingPage extends Component {
 
       this.state.cart_products.forEach(CurrentP => {
         this.waitingForReview(CurrentP.productd_id);
+      });
+
+      this.state.cart_products.forEach(CurrentP => {
+        this.updateCount(CurrentP.productd_id, CurrentP.productd_onstock - CurrentP.cart_count);
       });
 
       this.deleteFromCart();
@@ -464,6 +468,27 @@ export class OrderingPage extends Component {
     }
 
     fetch(`${process.env.REACT_APP_API_URL}/cart/`, requestOptions)
+      .then(response => response.text())
+      .then(result => console.log(result))
+      .catch(error => console.error(error))
+  }
+
+  updateCount(productid, count) {
+    const myHeaders = new Headers()
+    myHeaders.append('Content-Type', 'application/x-www-form-urlencoded')
+
+    const urlencoded = new URLSearchParams()
+    urlencoded.append('product', productid)
+    urlencoded.append('count', count)
+
+    const requestOptions = {
+      method: 'PUT',
+      headers: myHeaders,
+      body: urlencoded,
+      redirect: 'follow',
+    }
+
+    fetch(`${process.env.REACT_APP_API_URL}/order/productcount`, requestOptions)
       .then(response => response.text())
       .then(result => console.log(result))
       .catch(error => console.error(error))
