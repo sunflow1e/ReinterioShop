@@ -21,17 +21,14 @@ export class ProductsContainer extends Component {
 	componentDidMount() {
 		if (this.props.filter) {
 			this.getProductCardsFilter()
-		}
-		else if (this.props.admin){
+		} else if (this.props.admin) {
 			this.getProductCardsAdmin()
-		}
-		else{
+		} else {
 			this.getProductCards()
 		}
-		if (this.props.user){
-			this.getFavouriteProductCards()
-			this.getCartProductCards()
-		}
+
+		this.getFavouriteProductCards()
+		this.getCartProductCards()
 	}
 
 	componentDidUpdate() {
@@ -39,7 +36,6 @@ export class ProductsContainer extends Component {
 	}
 
 	getProductCardsAdmin() {
-
 		const qs = require('qs')
 		let data = qs.stringify({})
 
@@ -54,7 +50,8 @@ export class ProductsContainer extends Component {
 		axios
 			.request(config)
 			.then(response => {
-				this.setState({ products: response.data }); this.setState({ filterproducts: response.data })
+				this.setState({ products: response.data })
+				this.setState({ filterproducts: response.data })
 			})
 			.catch(error => {
 				console.log(error)
@@ -64,77 +61,81 @@ export class ProductsContainer extends Component {
 	getProductCardsFilter() {
 		//ПОДКАТЕГОРИИ ✅
 
-		let subcategories = JSON.parse(localStorage.getItem('subcategories'));
+		let subcategories = JSON.parse(localStorage.getItem('subcategories'))
 		if (subcategories) {
-			subcategories = subcategories.filter(item => item.subcategory_ischecked === true)
+			subcategories = subcategories.filter(
+				item => item.subcategory_ischecked === true
+			)
 		}
 
-		let subcategoriesQueryString = ' AND (';
+		let subcategoriesQueryString = ' AND ('
 
 		if (subcategories) {
 			for (let index = 0; index < subcategories.length; index++) {
 				if (index !== 0) {
 					subcategoriesQueryString += ' OR '
 				}
-				subcategoriesQueryString += `subcategory_name = '` + subcategories[index].subcategory_name + `'`;
+				subcategoriesQueryString +=
+					`subcategory_name = '` + subcategories[index].subcategory_name + `'`
 			}
 		}
 
 		subcategoriesQueryString += ')'
 
 		if (!subcategories || subcategories?.length < 1) {
-			subcategoriesQueryString = '';
+			subcategoriesQueryString = ''
 		}
 
 		//ЦВЕТА ✅
 
-		let colors = JSON.parse(localStorage.getItem('colors'));
+		let colors = JSON.parse(localStorage.getItem('colors'))
 		if (colors) {
 			colors = colors.filter(item => item.color_ischecked === true)
 		}
 
-		let colorsQueryString = ' AND (';
+		let colorsQueryString = ' AND ('
 
 		if (colors) {
 			for (let index = 0; index < colors.length; index++) {
 				if (index !== 0) {
 					colorsQueryString += ' OR '
 				}
-				colorsQueryString += `color_name = '` + colors[index].color_name + `'`;
+				colorsQueryString += `color_name = '` + colors[index].color_name + `'`
 			}
 		}
 
 		colorsQueryString += ')'
 
 		if (!colors || colors?.length < 1) {
-			colorsQueryString = '';
+			colorsQueryString = ''
 		}
 
 		//СТИЛИ ✅
 
-		let styles = JSON.parse(localStorage.getItem('styles'));
+		let styles = JSON.parse(localStorage.getItem('styles'))
 		if (styles) {
 			styles = styles.filter(item => item.style_ischecked === true)
 		}
 
-		let stylesQueryString = ' AND (';
+		let stylesQueryString = ' AND ('
 
 		if (styles) {
 			for (let index = 0; index < styles.length; index++) {
 				if (index !== 0) {
 					stylesQueryString += ' OR '
 				}
-				stylesQueryString += `style_name = '` + styles[index].style_name + `'`;
+				stylesQueryString += `style_name = '` + styles[index].style_name + `'`
 			}
 		}
 
 		stylesQueryString += ')'
 
 		if (!styles || styles?.length < 1) {
-			stylesQueryString = '';
+			stylesQueryString = ''
 		}
 
-		const QueryString = subcategoriesQueryString + colorsQueryString + stylesQueryString;
+		const QueryString =
+			subcategoriesQueryString + colorsQueryString + stylesQueryString
 
 		console.log(QueryString)
 
@@ -152,7 +153,8 @@ export class ProductsContainer extends Component {
 		axios
 			.request(config)
 			.then(response => {
-				this.setState({ products: response.data }); this.setState({ filterproducts: response.data });
+				this.setState({ products: response.data })
+				this.setState({ filterproducts: response.data })
 			})
 			.catch(error => {
 				console.log(error)
@@ -160,7 +162,6 @@ export class ProductsContainer extends Component {
 	}
 
 	getProductCards() {
-
 		const qs = require('qs')
 		let data = qs.stringify({})
 
@@ -175,7 +176,8 @@ export class ProductsContainer extends Component {
 		axios
 			.request(config)
 			.then(response => {
-				this.setState({ products: response.data }); this.setState({ filterproducts: response.data })
+				this.setState({ products: response.data })
+				this.setState({ filterproducts: response.data })
 			})
 			.catch(error => {
 				console.log(error)
@@ -183,7 +185,6 @@ export class ProductsContainer extends Component {
 	}
 
 	getCartProductCards() {
-
 		const qs = require('qs')
 		let data = qs.stringify({})
 
@@ -254,43 +255,62 @@ export class ProductsContainer extends Component {
 	}
 
 	render() {
-
 		console.log(this.state.filterproducts)
 
-		const prods = this.state.filterproducts;
+		const prods = this.state.filterproducts
 
 		let all_products = this.state.products
 		let filter_products = this.state.filterproducts
 
-		filter_products = [...new Map(filter_products.map((item) => [item["productd_id"], item])).values(),
-		];
+		filter_products = [
+			...new Map(
+				filter_products.map(item => [item['productd_id'], item])
+			).values(),
+		]
 
 		if (this.props.filter === true) {
 			//search
-			const search = localStorage.getItem('search');
+			const search = localStorage.getItem('search')
 			if (search) {
-				filter_products = filter_products.filter(a => (a.product_name.toLowerCase().includes(search.toLowerCase()) || String(a.product_article).toLowerCase().includes(search.toLowerCase())))
+				filter_products = filter_products.filter(
+					a =>
+						a.product_name.toLowerCase().includes(search.toLowerCase()) ||
+						String(a.product_article)
+							.toLowerCase()
+							.includes(search.toLowerCase())
+				)
 			}
 
 			//price
-			const price = localStorage.getItem('price');
+			const price = localStorage.getItem('price')
 
 			if (Number.parseInt(price) === 1) {
-				filter_products = filter_products.filter(a => Number.parseInt(a.product_disc_price) < 10000)
+				filter_products = filter_products.filter(
+					a => Number.parseInt(a.product_disc_price) < 10000
+				)
 			}
 			if (Number.parseInt(price) === 2) {
-				filter_products = filter_products.filter(a => Number.parseInt(a.product_disc_price) < 50000 && Number.parseInt(a.product_disc_price) > 10000)
+				filter_products = filter_products.filter(
+					a =>
+						Number.parseInt(a.product_disc_price) < 50000 &&
+						Number.parseInt(a.product_disc_price) > 10000
+				)
 			}
 			if (Number.parseInt(price) === 3) {
-				filter_products = filter_products.filter(a => Number.parseInt(a.product_disc_price) < 100000 && Number.parseInt(a.product_disc_price) > 50000)
+				filter_products = filter_products.filter(
+					a =>
+						Number.parseInt(a.product_disc_price) < 100000 &&
+						Number.parseInt(a.product_disc_price) > 50000
+				)
 			}
 			if (Number.parseInt(price) === 4) {
-				filter_products = filter_products.filter(a => Number.parseInt(a.product_disc_price) > 100000)
+				filter_products = filter_products.filter(
+					a => Number.parseInt(a.product_disc_price) > 100000
+				)
 			}
 		}
 
 		return (
-			
 			<div>
 				{Object.keys(filter_products).length > 0 ? (
 					<div class='ProductsContainer'>

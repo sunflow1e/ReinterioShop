@@ -17,23 +17,23 @@ import ReturnProductsPage from './pages/ReturnProductsPage'
 
 //Авторизованные роутинги
 import ProtectedRoute from './components/ProtectedRoute'
-import OrderingPage from './pages/OrderingPage'
-import GratitudePage from './pages/GratitudePage'
-import MyOrdersPage from './pages/MyOrdersPage'
-import ReviewsPage from './pages/ReviewsPage'
-import SearchPage from './pages/SearchPage'
-import ADMINShop from './pages/ADMINShop'
 import ADMINNewUser from './pages/ADMINNewUser'
 import ADMINOrders from './pages/ADMINOrders'
-import ADMIN_EDIT_status from './pages/ADMIN_EDIT_status'
-import ADMIN_EDIT_delivery from './pages/ADMIN_EDIT_delivery'
 import ADMINProducts from './pages/ADMINProducts'
-import ADMIN_EDIT_styles from './pages/ADMIN_EDIT_styles'
-import ADMIN_EDIT_shapes from './pages/ADMIN_EDIT_shapes'
-import ADMIN_EDIT_materials from './pages/ADMIN_EDIT_material'
-import ADMIN_EDIT_category from './pages/ADMIN_EDIT_category'
-import ADMIN_ADD_product from './pages/ADMIN_ADD_product'
+import ADMINShop from './pages/ADMINShop'
 import ADMIN_ADDNEWPRODUCT from './pages/ADMIN_ADDNEWPRODUCT'
+import ADMIN_ADD_product from './pages/ADMIN_ADD_product'
+import ADMIN_EDIT_category from './pages/ADMIN_EDIT_category'
+import ADMIN_EDIT_delivery from './pages/ADMIN_EDIT_delivery'
+import ADMIN_EDIT_materials from './pages/ADMIN_EDIT_material'
+import ADMIN_EDIT_shapes from './pages/ADMIN_EDIT_shapes'
+import ADMIN_EDIT_status from './pages/ADMIN_EDIT_status'
+import ADMIN_EDIT_styles from './pages/ADMIN_EDIT_styles'
+import GratitudePage from './pages/GratitudePage'
+import MyOrdersPage from './pages/MyOrdersPage'
+import OrderingPage from './pages/OrderingPage'
+import ReviewsPage from './pages/ReviewsPage'
+import SearchPage from './pages/SearchPage'
 
 class App extends React.Component {
 	constructor(props) {
@@ -177,7 +177,6 @@ class App extends React.Component {
 							}
 						/>
 
-
 						<Route
 							path='/admin/shop'
 							element={
@@ -310,9 +309,6 @@ class App extends React.Component {
 							}
 						/>
 
-
-
-
 						<Route
 							path='/cart'
 							element={
@@ -321,7 +317,6 @@ class App extends React.Component {
 									component={CartPage}
 									user_id={this.state.loggeduser_id}
 									onDelete={this.deleteFromCart}
-
 									user={this.state.current_user[0]}
 								/>
 							}
@@ -334,7 +329,7 @@ class App extends React.Component {
 									isAuthenticated={!!localStorage.getItem('userId')}
 									component={OrderingPage}
 									user_id={localStorage.getItem('userId')}
-									user={this.state.current_user[0]}
+									user={this.state.current_user}
 								/>
 							}
 						/>
@@ -387,11 +382,21 @@ class App extends React.Component {
 						/>
 						<Route
 							path='/catalogue'
-							element={<CataloguePage user_id={this.state.loggeduser_id} user={this.state.current_user[0]} />}
+							element={
+								<CataloguePage
+									user_id={this.state.loggeduser_id}
+									user={this.state.current_user[0]}
+								/>
+							}
 						/>
 						<Route
 							path='/search'
-							element={<SearchPage user_id={this.state.loggeduser_id} user={this.state.current_user[0]}/>}
+							element={
+								<SearchPage
+									user_id={this.state.loggeduser_id}
+									user={this.state.current_user[0]}
+								/>
+							}
 						/>
 						<Route
 							path='/profile'
@@ -406,22 +411,41 @@ class App extends React.Component {
 
 						<Route
 							path='/product/:product_id'
-							element={<ProductPage user_id={this.state.loggeduser_id} user={this.state.current_user[0]} />}
+							element={
+								<ProductPage
+									user_id={this.state.loggeduser_id}
+									user={this.state.current_user[0]}
+								/>
+							}
 						/>
 
-						<Route path='/policy' element={<PolicyPage user={this.state.current_user[0]} />} />
-						<Route path='/delievery' element={<DelieveryPage user={this.state.current_user[0]} />} />
-						<Route path='/contacts' element={<ContactsPage user={this.state.current_user[0]} />} />
-						<Route path='/return' element={<ReturnProductsPage user={this.state.current_user[0]} />} />
+						<Route
+							path='/policy'
+							element={<PolicyPage user={this.state.current_user[0]} />}
+						/>
+						<Route
+							path='/delievery'
+							element={<DelieveryPage user={this.state.current_user[0]} />}
+						/>
+						<Route
+							path='/contacts'
+							element={<ContactsPage user={this.state.current_user[0]} />}
+						/>
+						<Route
+							path='/return'
+							element={<ReturnProductsPage user={this.state.current_user[0]} />}
+						/>
 
 						<Route path='/registration' element={<RegistrationPage />} />
 						<Route path='/login' element={<LoginPage />} />
 
-						<Route path='*' element={<NoPage user={this.state.current_user[0]} />} />
+						<Route
+							path='*'
+							element={<NoPage user={this.state.current_user[0]} />}
+						/>
 					</Routes>
 				</BrowserRouter>
 			</div>
-			
 		)
 	}
 }
