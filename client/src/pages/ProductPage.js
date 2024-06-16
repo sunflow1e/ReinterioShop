@@ -1,11 +1,11 @@
 import axios from 'axios'
 import React, { Component } from 'react'
+import ADMINHeader from '../components/ADMINHeader'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import PPCard from '../components/PPCard'
 import PPFiles from '../components/PPFiles'
 import PPReviews from '../components/PPReviews'
-import ADMINHeader from '../components/ADMINHeader'
 
 export class ProductPage extends Component {
 	constructor(props) {
@@ -27,10 +27,8 @@ export class ProductPage extends Component {
 
 	componentDidMount() {
 		this.getProduct()
-		if (this.state.user) {
-			this.getFavourite()
-			this.getCart()
-		}
+		this.getFavourite()
+		this.getCart()
 		this.getImages()
 		this.getColors()
 		this.getStyles()
@@ -52,7 +50,8 @@ export class ProductPage extends Component {
 			method: 'get',
 			maxBodyLength: Infinity,
 			url:
-				`${process.env.REACT_APP_API_URL}/product/` + Number.parseInt(this.state.ProdId),
+				`${process.env.REACT_APP_API_URL}/product/` +
+				Number.parseInt(this.state.ProdId),
 			headers: {},
 			data: data,
 		}
@@ -137,7 +136,6 @@ export class ProductPage extends Component {
 			.catch(error => {
 				console.log(error)
 			})
-
 	}
 
 	getFavourite() {
@@ -215,7 +213,8 @@ export class ProductPage extends Component {
 			method: 'get',
 			maxBodyLength: Infinity,
 			url:
-				`${process.env.REACT_APP_API_URL}/pp/styles/` + Number.parseInt(this.state.ProdId),
+				`${process.env.REACT_APP_API_URL}/pp/styles/` +
+				Number.parseInt(this.state.ProdId),
 			headers: {},
 		}
 
@@ -254,7 +253,8 @@ export class ProductPage extends Component {
 			method: 'get',
 			maxBodyLength: Infinity,
 			url:
-				`${process.env.REACT_APP_API_URL}/pp/files/` + Number.parseInt(this.state.ProdId),
+				`${process.env.REACT_APP_API_URL}/pp/files/` +
+				Number.parseInt(this.state.ProdId),
 			headers: {},
 		}
 
@@ -329,8 +329,11 @@ export class ProductPage extends Component {
 				{this.state.reviews?.length > 0 && (
 					<div className='ProductPageColumnContainer'>
 						<h1 className='ProductPageTitle'>Отзывы о товаре</h1>
-						<p className='PageCardText'>{'★ ' + Number.parseFloat(rating).toFixed(1) + ' / 5 '}
-							<p style={{ color: "#B4A39A" }}>{this.state.reviews.length + ' отзывов'}</p>
+						<p className='PageCardText'>
+							{'★ ' + Number.parseFloat(rating).toFixed(1) + ' / 5 '}
+							<p style={{ color: '#B4A39A' }}>
+								{this.state.reviews.length + ' отзывов'}
+							</p>
 						</p>
 						<div className='OrderContainerLilCard'>
 							{this.state.reviews?.map(review => (
@@ -343,16 +346,15 @@ export class ProductPage extends Component {
 				{!this.state.reviews?.length > 0 && (
 					<div className='ProductPageColumnContainer'>
 						<h1 className='ProductPageTitle'>Отзывы о товаре</h1>
-						<p className='PageCardText'>Этот товар пока никто не купил. Будьте первыми!</p>
+						<p className='PageCardText'>
+							Этот товар пока никто не купил. Будьте первыми!
+						</p>
 					</div>
 				)}
 
 				<div></div>
 				<div></div>
-				{this.props.user?.user_role === 2 ?
-					<ADMINHeader /> :
-					<Header />
-				}
+				{this.props.user?.user_role === 2 ? <ADMINHeader /> : <Header />}
 				<Footer />
 			</div>
 		)
