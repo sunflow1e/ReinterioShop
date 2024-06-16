@@ -483,25 +483,26 @@ app.get('/product/cards/:subcategoriesQueryString', (req, res) => {
 		})
 })
 
-app.get('/admin/product/cards/', (req, res) => {
+app.get('/product/cards/', (req, res) => {
 	client
 		.query(
 			`SELECT
-  false as product_addedtocart,
-  false as product_addedtofavourite,
-  image_path, product_details.productd_id, color_name, color_hex, product_name, product_article, product_price,
-  product_disc_price, product_discount, productd_dailyoffer, category_name, subcategory_name, productd_onstock,
-  style_id, style_name, products.product_id
-  
-  FROM subcategories, categories, images, products
-  INNER JOIN product_details ON productd_product = product_id
-  INNER JOIN colors ON productd_color = color_id
-  INNER JOIN styles ON style_id = product_id
-  
-  WHERE subcategory_id = product_subcategory
-  AND subcategory_category = category_id
-  AND productd_image = image_id
-  ORDER BY product_article`
+	false as product_addedtocart,
+	false as product_addedtofavourite,
+	image_path, product_details.productd_id, color_name, color_hex, product_name, product_article, product_price,
+	product_disc_price, product_discount, productd_dailyoffer, category_name, subcategory_name, productd_onstock,
+	style_id, style_name, products.product_id
+	
+	FROM subcategories, categories, images, styles, products
+	INNER JOIN product_details ON productd_product = products.product_id
+	INNER JOIN colors ON productd_color = color_id
+	INNER JOIN product_styles ON productd_product = prodstyle_prod_id
+	
+	WHERE subcategory_id = product_subcategory
+	AND subcategory_category = category_id
+	AND productd_image = image_id
+	AND productd_onstock > 0
+	ORDER BY product_article`
 		)
 		.then(result => {
 			res.status(200).send(result.rows)
@@ -511,26 +512,27 @@ app.get('/admin/product/cards/', (req, res) => {
 			res.status(500).send()
 		})
 })
-app.get('/product/cards/', (req, res) => {
+
+app.get('/admin/product/cards/', (req, res) => {
 	client
 		.query(
 			`SELECT
-  false as product_addedtocart,
-  false as product_addedtofavourite,
-  image_path, product_details.productd_id, color_name, color_hex, product_name, product_article, product_price,
-  product_disc_price, product_discount, productd_dailyoffer, category_name, subcategory_name, productd_onstock,
-  style_id, style_name, products.product_id
-  
-  FROM subcategories, categories, images, products
-  INNER JOIN product_details ON productd_product = products.product_id
-  INNER JOIN colors ON productd_color = color_id
-  INNER JOIN styles ON style_id = products.product_id
-  
-  WHERE subcategory_id = product_subcategory
-  AND subcategory_category = category_id
-  AND productd_image = image_id
-  AND productd_onstock > 0
-  ORDER BY product_article`
+	false as product_addedtocart,
+	false as product_addedtofavourite,
+	image_path, product_details.productd_id, color_name, color_hex, product_name, product_article, product_price,
+	product_disc_price, product_discount, productd_dailyoffer, category_name, subcategory_name, productd_onstock,
+	style_id, style_name, products.product_id
+	
+	FROM subcategories, categories, images, styles, products
+	INNER JOIN product_details ON productd_product = product_id
+	INNER JOIN colors ON productd_color = color_id
+	INNER JOIN product_styles ON productd_product = prodstyle_prod_id
+	
+	WHERE subcategory_id = product_subcategory
+	AND subcategory_category = category_id
+	AND productd_image = image_id
+	AND products.product_id != 0
+	ORDER BY product_article`
 		)
 		.then(result => {
 			res.status(200).send(result.rows)
