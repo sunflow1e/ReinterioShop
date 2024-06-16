@@ -156,6 +156,7 @@ class App extends React.Component {
 									cartproducts={this.state.cartproducts}
 									onAdd={this.addToCart}
 									onDelete={this.deleteFromCart}
+									user={this.state.current_user[0]}
 								/>
 							}
 						></Route>
@@ -171,6 +172,7 @@ class App extends React.Component {
 									cartproducts={this.state.cartproducts}
 									onAdd={this.addToCart}
 									onDelete={this.deleteFromCart}
+									user={this.state.current_user[0]}
 								/>
 							}
 						/>
@@ -319,6 +321,8 @@ class App extends React.Component {
 									component={CartPage}
 									user_id={this.state.loggeduser_id}
 									onDelete={this.deleteFromCart}
+
+									user={this.state.current_user[0]}
 								/>
 							}
 						/>
@@ -330,7 +334,7 @@ class App extends React.Component {
 									isAuthenticated={!!localStorage.getItem('userId')}
 									component={OrderingPage}
 									user_id={localStorage.getItem('userId')}
-									user={this.state.current_user}
+									user={this.state.current_user[0]}
 								/>
 							}
 						/>
@@ -342,7 +346,7 @@ class App extends React.Component {
 									isAuthenticated={!!localStorage.getItem('userId')}
 									component={ReviewsPage}
 									user_id={localStorage.getItem('userId')}
-									user={this.state.current_user}
+									user={this.state.current_user[0]}
 								/>
 							}
 						/>
@@ -354,7 +358,7 @@ class App extends React.Component {
 									isAuthenticated={!!localStorage.getItem('userId')}
 									component={MyOrdersPage}
 									user_id={localStorage.getItem('userId')}
-									user={this.state.current_user}
+									user={this.state.current_user[0]}
 								/>
 							}
 						/>
@@ -365,6 +369,7 @@ class App extends React.Component {
 								<ProtectedRoute
 									isAuthenticated={!!localStorage.getItem('userId')}
 									component={GratitudePage}
+									user={this.state.current_user[0]}
 								/>
 							}
 						/>
@@ -376,16 +381,17 @@ class App extends React.Component {
 									isAuthenticated={!!localStorage.getItem('userId')}
 									component={FavouritePage}
 									user_id={this.state.loggeduser_id}
+									user={this.state.current_user[0]}
 								/>
 							}
 						/>
 						<Route
 							path='/catalogue'
-							element={<CataloguePage user_id={this.state.loggeduser_id} />}
+							element={<CataloguePage user_id={this.state.loggeduser_id} user={this.state.current_user[0]} />}
 						/>
 						<Route
 							path='/search'
-							element={<SearchPage user_id={this.state.loggeduser_id} />}
+							element={<SearchPage user_id={this.state.loggeduser_id} user={this.state.current_user[0]}/>}
 						/>
 						<Route
 							path='/profile'
@@ -400,7 +406,7 @@ class App extends React.Component {
 
 						<Route
 							path='/product/:product_id'
-							element={<ProductPage user_id={this.state.loggeduser_id} />}
+							element={<ProductPage user_id={this.state.loggeduser_id} user={this.state.current_user[0]} />}
 						/>
 
 						<Route path='/policy' element={<PolicyPage user={this.state.current_user[0]} />} />
@@ -411,10 +417,11 @@ class App extends React.Component {
 						<Route path='/registration' element={<RegistrationPage />} />
 						<Route path='/login' element={<LoginPage />} />
 
-						<Route path='*' element={<NoPage />} />
+						<Route path='*' element={<NoPage user={this.state.current_user[0]} />} />
 					</Routes>
 				</BrowserRouter>
 			</div>
+			
 		)
 	}
 }

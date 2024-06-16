@@ -48,8 +48,34 @@ export class ADMIN_ADDP_INFO extends Component {
     }
 
     render() {
+        let current_subcategories
+        let current_categories
 
-        let current_subcategories = this.state.subcategories.filter(el => el.subcategory_category === Number.parseInt(this.props.categoryid))
+        if (this.props.addnew){
+            current_subcategories = this.state.subcategories.filter(el => el.subcategory_category === Number.parseInt(this.props.categoryid))
+        }
+        else{
+            let onetime = true;
+
+            current_categories = this.props.categories
+            current_subcategories = this.state.subcategories.filter(el => el.subcategory_category === Number.parseInt(this.props.categoryid))
+    
+            if (onetime) {
+    
+                let productindex = current_categories
+                    .map(a => a.category_name)
+                    .indexOf(this.props.product.category_name)
+    
+                current_categories.splice(0, 0, current_categories.splice(productindex, 1)[0]);
+    
+    
+                productindex = current_subcategories
+                    .map(a => a.subcategory_name)
+                    .indexOf(this.props.product.subcategory_name)
+    
+                current_subcategories.splice(0, 0, current_subcategories.splice(productindex, 1)[0]);
+            }
+        }
 
         return (
             <div className='AdminCard'>

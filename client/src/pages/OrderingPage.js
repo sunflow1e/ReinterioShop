@@ -5,6 +5,7 @@ import axios from "axios";
 import CartProductContainer from '../components/CartProductContainer';
 import DeliveryContainer from '../components/DeliveryContainer';
 import { CSSTransition } from 'react-transition-group';
+import ADMINHeader from '../components/ADMINHeader';
 
 export class OrderingPage extends Component {
 
@@ -147,22 +148,22 @@ export class OrderingPage extends Component {
     DeliDate = DeliDate.toISOString().slice(0, 10);
 
     return (
-      <div class="PPContent">
-        <div class="PageTitleContainer">
+      <div className="PPContent">
+        <div className="PageTitleContainer">
 
-          <div class="PageTitle">
-            <div class="PageTitleTextContainer">
-              <h1 class="PageTitleText">Оформление заказа</h1>
+          <div className="PageTitle">
+            <div className="PageTitleTextContainer">
+              <h1 className="PageTitleText">Оформление заказа</h1>
             </div>
 
-            <div class="PageTitleLine" />
+            <div className="PageTitleLine" />
           </div>
 
-          <div class="PageSideContainer" />
+          <div className="PageSideContainer" />
         </div>
 
         {Object.keys(this.state.cart_products).length > 0 ?
-          <div class="PageContent">
+          <div className="PageContent">
             <div className='CartCardsContainer'>
               <div className='PageCards'>
                 <div className='PageCard'>
@@ -209,42 +210,42 @@ export class OrderingPage extends Component {
                   <DeliveryContainer onChangeSelected={this.changeCurrentDelivery} FullWeight={FullWeight} currentdelivery={this.state.current_delivery_id} delivery={this.state.delivery} />
                 </div>
               </div>
-              <h1 class="PageTitleText">Состав заказа</h1>
+              <h1 className="PageTitleText">Состав заказа</h1>
               <CartProductContainer ShowSmallButtons={false} cartproducts={this.state.cart_products} onCountChange={this.changeCountCart} />
             </div>
-            <div class="PageSideContainer">
+            <div className="PageSideContainer">
               {TotalProducts > 0 &&
-                <div class="CartSummaryContainer">
-                  <div class="CartSummaryInfoContainer">
-                    <p class="BlockContainerTitle">Оформление</p>
+                <div className="CartSummaryContainer">
+                  <div className="CartSummaryInfoContainer">
+                    <p className="BlockContainerTitle">Оформление</p>
                   </div>
 
-                  <div class="CartSummaryInfoContainer">
-                    <p class="SideContainerText">{"Товары (" + TotalProducts + ")"}</p>
-                    <p class="SideContainerText">{new Intl.NumberFormat().format(ProductsCost) + " ₽"}</p>
+                  <div className="CartSummaryInfoContainer">
+                    <p className="SideContainerText">{"Товары (" + TotalProducts + ")"}</p>
+                    <p className="SideContainerText">{new Intl.NumberFormat().format(ProductsCost) + " ₽"}</p>
                   </div>
 
                   {TotalDiscount > 0 &&
-                    <div class="CartSummaryInfoContainer">
-                      <p class="SideContainerText">Скидка</p>
-                      <p class="SideContainerText">{"-" + new Intl.NumberFormat().format(TotalDiscount) + " ₽"}</p>
+                    <div className="CartSummaryInfoContainer">
+                      <p className="SideContainerText">Скидка</p>
+                      <p className="SideContainerText">{"-" + new Intl.NumberFormat().format(TotalDiscount) + " ₽"}</p>
                     </div>
                   }
 
-                  <div class="CartSummaryInfoContainer">
-                    <p class="SideContainerText">Доставка</p>
-                    <p class="SideContainerText">{new Intl.NumberFormat().format(DeliveryPrice) + " ₽"}</p>
+                  <div className="CartSummaryInfoContainer">
+                    <p className="SideContainerText">Доставка</p>
+                    <p className="SideContainerText">{new Intl.NumberFormat().format(DeliveryPrice) + " ₽"}</p>
                   </div>
 
 
-                  <div class="CartSummaryInfoContainer">
-                    <p class="SideContainerText"><b>Итого</b></p>
-                    <p class="SideContainerText"><b>{new Intl.NumberFormat().format(TotalCost) + " ₽"}</b></p>
+                  <div className="CartSummaryInfoContainer">
+                    <p className="SideContainerText"><b>Итого</b></p>
+                    <p className="SideContainerText"><b>{new Intl.NumberFormat().format(TotalCost) + " ₽"}</b></p>
                   </div>
 
-                  <div onClick={() => this.getOrder(TotalCost, CurrentDate, DeliDate, DeliveryPrice)} class="SideContainerBuyButton">
+                  <div onClick={() => this.getOrder(TotalCost, CurrentDate, DeliDate, DeliveryPrice)} className="SideContainerBuyButton">
                     <p>К оплате</p>
-                    <p class="SideContainerBuyButtonPrice">{new Intl.NumberFormat().format(TotalCost) + " ₽"}</p>
+                    <p className="SideContainerBuyButtonPrice">{new Intl.NumberFormat().format(TotalCost) + " ₽"}</p>
                   </div>
 
                   <CSSTransition
@@ -269,11 +270,11 @@ export class OrderingPage extends Component {
 
             <div className='MobilePanelContainer'>
               {TotalProducts > 0 && (
-                <div class="CartSummaryContainer">
+                <div className="CartSummaryContainer">
 
-                  <div onClick={() => this.getOrder(TotalCost, CurrentDate, DeliDate, DeliveryPrice)} class="SideContainerBuyButton">
+                  <div onClick={() => this.getOrder(TotalCost, CurrentDate, DeliDate, DeliveryPrice)} className="SideContainerBuyButton">
                     <p>К оплате</p>
-                    <p class="SideContainerBuyButtonPrice">{new Intl.NumberFormat().format(TotalCost) + " ₽"}</p>
+                    <p className="SideContainerBuyButtonPrice">{new Intl.NumberFormat().format(TotalCost) + " ₽"}</p>
                   </div>
 
                   <CSSTransition
@@ -297,18 +298,21 @@ export class OrderingPage extends Component {
             </div>
           </div>
           :
-          <div class="PageContent">
-            <div class="CartCardsContainer">
-              <div style={{ flexDirection: "column", gap: "5px" }} class="CartCard">
-                <p style={{ fontSize: "32px" }} class="AlertContainerTitle">Пока тут ничего нет</p>
-                <p style={{ marginBottom: "20px" }} class="AlertContainerText">Подберите лучшую мебель для вашего дома с нашим каталогом товаров </p>
-                <a href="../catalogue"><div class="MainButton">Каталог товаров</div></a>
+          <div className="PageContent">
+            <div className="CartCardsContainer">
+              <div style={{ flexDirection: "column", gap: "5px" }} className="CartCard">
+                <p style={{ fontSize: "32px" }} className="AlertContainerTitle">Пока тут ничего нет</p>
+                <p style={{ marginBottom: "20px" }} className="AlertContainerText">Подберите лучшую мебель для вашего дома с нашим каталогом товаров </p>
+                <a href="../catalogue"><div className="MainButton">Каталог товаров</div></a>
               </div>
             </div>
-            <div class="PageSideContainer" />
+            <div className="PageSideContainer" />
           </div>
         }
-        <Header />
+				{this.props.user?.user_role === 2 ?
+				<ADMINHeader /> :
+				<Header/> 
+				}
         <Footer />
       </div >
     )
@@ -582,8 +586,6 @@ export class OrderingPage extends Component {
       .then(result => console.log(result))
       .catch(error => console.error(error))
   }
-
-
 
   changeCountCart(productid, newcount) {
     const productindex = this.state.cart_products.map(a => a.productd_id).indexOf(productid);

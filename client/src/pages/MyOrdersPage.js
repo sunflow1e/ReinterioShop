@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import OrderContainer from '../components/OrderContainer';
 import axios from "axios";
+import ADMINHeader from '../components/ADMINHeader';
 
 
 export class MyOrdersPage extends Component {
@@ -54,16 +55,19 @@ export class MyOrdersPage extends Component {
         </div>
 
         <div className='AllOrdersContainer'>
-        {this.state.Orders?.map(order => (
-          <OrderContainer
-            key={order.order_id}
-            user_id={localStorage.getItem('userId')}
-            order={order}
-          />
-        ))}
+          {this.state.Orders?.map(order => (
+            <OrderContainer
+              key={order.order_id}
+              user_id={localStorage.getItem('userId')}
+              order={order}
+            />
+          ))}
         </div>
 
-        <Header />
+				{this.props.user?.user_role === 2 ?
+				<ADMINHeader /> :
+				<Header/> 
+				}
         <Footer />
       </div>
     )

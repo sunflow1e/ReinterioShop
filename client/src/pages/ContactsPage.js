@@ -21,8 +21,10 @@ export class ContactsPage extends Component {
         <br></br>
         <p style={{ lineHeight: "150%", fontSize: "20px" }}><b>Режим работы:</b> с 09:00 до 22:00, ежедневно</p>
         <br></br>
-        {this.props.user?.user_role === 1 && <Header />}
-				{this.props.user?.user_role === 2 && <ADMINHeader />}
+				{this.props.user?.user_role === 2 ?
+				<ADMINHeader /> :
+				<Header/> 
+				}
         <Footer />
       </div>
     )

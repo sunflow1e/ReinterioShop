@@ -95,27 +95,27 @@ export class PPCard extends Component {
 							></div>
 						)}
 					</div>
-
-					<div
-						onClick={() => (
-							localStorage.getItem("userId") ?
-								(!this.state.IsAddedToFav
-									? this.addToFavourite(this.props.product)
-									: this.deleteFromFavourite(this.props.product),
-									this.props.DeleteFromFav
-										? this.props.DeleteFromFav(this.props.product.productd_id)
-										: null)
-								:
-								(window.location.href = '/login')
-						)}
-						class='ProductPageToFavourite'
-					>
-						{this.state.IsAddedToFav ? (
-							<i style={{ color: 'white' }} class='fi fi-sr-heart'></i>
-						) : (
-							<i class='fi fi-rr-heart'></i>
-						)}
-					</div>
+					{!this.props.admin &&
+						<div
+							onClick={() => (
+								localStorage.getItem("userId") ?
+									(!this.state.IsAddedToFav
+										? this.addToFavourite(this.props.product)
+										: this.deleteFromFavourite(this.props.product),
+										this.props.DeleteFromFav
+											? this.props.DeleteFromFav(this.props.product.productd_id)
+											: null)
+									:
+									(window.location.href = '/login')
+							)}
+							class='ProductPageToFavourite'
+						>
+							{this.state.IsAddedToFav ? (
+								<i style={{ color: 'white' }} class='fi fi-sr-heart'></i>
+							) : (
+								<i class='fi fi-rr-heart'></i>
+							)}
+						</div>}
 
 					<img
 						className='ProductPageMainImage'
@@ -216,7 +216,7 @@ export class PPCard extends Component {
 								)}
 							</div>
 							{
-								this.props.product.productd_onstock > 0 && <div
+								(this.props.product.productd_onstock > 0 && !this.props.admin) && <div
 									onClick={() =>
 										localStorage.getItem('userId')
 											? !this.state.IsAddedToCart
@@ -231,6 +231,15 @@ export class PPCard extends Component {
 									}
 								>
 									{this.state.IsAddedToCart ? 'В корзине!' : 'Добавить в корзину'}
+								</div>
+
+							}
+							{
+								this.props.admin && <div
+									onClick={() => this.openEditPage()}
+									class='ProductPageAddedToCart'
+								>
+									Редактировать
 								</div>
 
 							}
@@ -320,6 +329,10 @@ export class PPCard extends Component {
 				</div>
 			</div>
 		)
+	}
+
+	openEditPage() {
+		window.location.href = '/admin/product/edit/' + this.props.product.product_id
 	}
 
 	addToFavourite(prod) {

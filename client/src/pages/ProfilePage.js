@@ -192,7 +192,7 @@ export class ProfilePage extends Component {
 										<p className='PageCardTitle'>Ожидают отзыва</p>
 										<div className='GrayBackground'>
 											<b className='PageCardText'>Все товары оценены!</b>
-											<p style={{whiteSpace: "wrap"}} className='PageCardText'>Отзывы могут оставлять только люди, купившие товар. Так мы формируем честный рейтинг</p>
+											<p style={{ whiteSpace: "wrap" }} className='PageCardText'>Отзывы могут оставлять только люди, купившие товар. Так мы формируем честный рейтинг</p>
 										</div>
 									</div>
 								}
@@ -565,8 +565,10 @@ export class ProfilePage extends Component {
 						</div>
 					</CSSTransition>
 				</div>
-				{this.props.user?.user_role === 1 && <Header />}
-				{this.props.user?.user_role === 2 && <ADMINHeader />}
+				{this.props.user?.user_role === 2 ?
+				<ADMINHeader /> :
+				<Header/> 
+				}
 				<Footer />
 			</div>
 		)

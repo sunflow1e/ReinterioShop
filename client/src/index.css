@@ -1586,6 +1586,25 @@ div::-webkit-scrollbar-thumb {
     box-shadow: 2px 4px 10px 0px rgba(208, 208, 214, 0.4);
 }
 
+@keyframes appear {
+    from {
+      opacity: 0;
+      transform: translateY(70px);
+      filter: blur(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0px);
+      filter: blur(0px);
+    }
+  }
+
+  .ProductsCard {
+    animation: appear ease-in-out;
+    animation-timeline: view();
+    animation-range: entry 0% cover 20%;
+  }
+
 .PCardImgContainer {
     overflow: hidden;
     width: 185px;

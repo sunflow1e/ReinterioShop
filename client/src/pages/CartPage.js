@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import CartProductContainer from '../components/CartProductContainer'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
+import ADMINHeader from '../components/ADMINHeader'
 
 export class CartPage extends Component {
 	constructor(props) {
@@ -306,7 +307,10 @@ export class CartPage extends Component {
 						<div class='PageSideContainer' />
 					</div>
 				)}
-				<Header />
+				{this.props.user?.user_role === 2 ?
+				<ADMINHeader /> :
+				<Header/> 
+				}
 				<Footer />
 			</div>
 		)

@@ -5,6 +5,7 @@ import OrderContainer from '../components/OrderContainer';
 import axios from "axios";
 import CartProductContainer from '../components/CartProductContainer';
 import ReviewCard from '../components/ReviewCard';
+import ADMINHeader from '../components/ADMINHeader';
 
 
 
@@ -56,7 +57,7 @@ export class ReviewsPage extends Component {
           <div class="PageTitleLine" />
         </div>
         <div class='PageContent'>
-          <div style={{flexDirection: "column-reverse"}} className='CartCardsContainer'>
+          <div style={{ flexDirection: "column-reverse" }} className='CartCardsContainer'>
             {this.state.Products?.map(prod => (
               <ReviewCard
                 key={prod.productd_id}
@@ -71,13 +72,15 @@ export class ReviewsPage extends Component {
               <div class='CartSummaryInfoContainer'>
                 <p class='PageCardText'>Ваш отзыв помогает другим клиентам с выбором</p>
               </div>
-              <b style={{marginTop: "15px"}} class='PageCardText'>{this.state.Products.filter(prd => prd.review_rating > 0).length + ' / ' + this.state.Products.length + ' товаров оценено'}</b>
+              <b style={{ marginTop: "15px" }} class='PageCardText'>{this.state.Products.filter(prd => prd.review_rating > 0).length + ' / ' + this.state.Products.length + ' товаров оценено'}</b>
             </div>
           </div>
         </div>
 
-        <Header />
-        <Footer />
+				{this.props.user?.user_role === 2 ?
+				<ADMINHeader /> :
+				<Header/> 
+				}
       </div>
     )
   }

@@ -22,28 +22,28 @@ export class ADMINProducts extends Component {
     this.getAllOrders();
     this.getProductCards();
   }
-	getProductCards() {
+  getProductCards() {
 
-		const qs = require('qs')
-		let data = qs.stringify({})
+    const qs = require('qs')
+    let data = qs.stringify({})
 
-		let config = {
-			method: 'get',
-			maxBodyLength: Infinity,
-			url: `${process.env.REACT_APP_API_URL}/product/cards/`,
-			headers: {},
-			data: data,
-		}
+    let config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: `${process.env.REACT_APP_API_URL}/product/cards/`,
+      headers: {},
+      data: data,
+    }
 
-		axios
-			.request(config)
-			.then(response => {
-				this.setState({ products: response.data })
-			})
-			.catch(error => {
-				console.log(error)
-			})
-	}
+    axios
+      .request(config)
+      .then(response => {
+        this.setState({ products: response.data })
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
 
   getAllOrders() {
     const qs = require('qs');
@@ -71,9 +71,13 @@ export class ADMINProducts extends Component {
 
   render() {
 
+    let filter_products = this.state.products
+    filter_products = [...new Map(filter_products.map((item) => [item["product_id"], item])).values(),
+    ];
+
     return (
       <>
-        {this.props.user?.user_role === 1 &&
+        {this.props.user?.user_role === 2 &&
           <div class="Content">
             <div class="PageTitle">
               <div class="PageTitleTextContainer">
@@ -103,7 +107,7 @@ export class ADMINProducts extends Component {
                 <div className='AnalyticsPageCard'>
                   <p className='PageCardTitle'>Эти товары скоро закончатся</p>
                   <div className='OrderProdContainer'>
-                    {this.state.products?.filter(el => el.productd_onstock < 15).map(product => (
+                    {filter_products?.filter(el => el.productd_onstock < 15).map(product => (
                       <OrderCard
                         stock={true}
                         key={product.productd_id}
@@ -117,14 +121,14 @@ export class ADMINProducts extends Component {
               </div>
             </div>
             <div class="PageTitleTextContainer">
-                <h1 class="PageTitleText">Каталог</h1>
-              </div>
+              <h1 class="PageTitleText">Каталог</h1>
+            </div>
             <ProductsContainer user_id={this.props.user_id} admin={true} />
             <ADMINHeader />
             <Footer />
           </div>
         }
-        {this.props.user?.user_role === 2 &&
+        {this.props.user?.user_role === 1 &&
           <div class="Content">
             <div class="PageTitle">
               <div class="PageTitleTextContainer">

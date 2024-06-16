@@ -2,7 +2,7 @@ import axios from 'axios'
 import React, { Component } from 'react'
 import ProductCard from './ProductCard'
 
-export class ProductsContainer extends Component {
+export class FavProductsContainer extends Component {
 	constructor(props) {
 		super(props)
 		this.DeleteFromFav = this.DeleteFromFav.bind(this)
@@ -131,4 +131,4 @@ export class ProductsContainer extends Component {
 	}
 }
 
-export default ProductsContainer
+export default FavProductsContainer

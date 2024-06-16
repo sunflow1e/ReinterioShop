@@ -49,7 +49,7 @@ export class ADMIN_EDIT_styles extends Component {
 
         return (
             <>
-                {this.props.user?.user_role === 1 &&
+                {this.props.user?.user_role === 2 &&
                     <div class="Content">
                         <div class="PageTitle">
                             <div class="PageTitleTextContainer">
@@ -79,7 +79,7 @@ export class ADMIN_EDIT_styles extends Component {
                         <Footer />
                     </div>
                 }
-                {this.props.user?.user_role === 2 &&
+                {this.props.user?.user_role === 1 &&
                     <div class="Content">
                         <div class="PageTitle">
                             <div class="PageTitleTextContainer">

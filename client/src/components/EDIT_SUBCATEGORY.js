@@ -35,7 +35,13 @@ export class EDIT_SUBCATEGORY extends Component {
 
                 <div onClick={() => { this.state.Editable ? this.saveSubcategory() : this.startEdit() }} className={this.state.Editable ? 'GreenBlock' : 'GrayBlock'}>{this.state.Editable ? <i className='fi fi-rr-check'></i> : <i className='fi fi-rr-edit'></i>}</div>
 
-                <div onClick={() => this.openModalWindow()} className='GrayBlock'><i className='fi fi-rr-trash'></i></div>
+
+                {this.props.subcategory.subcategory_id !== 0 ?
+                    <div onClick={() => this.openModalWindow()} className='GrayBlock'><i className='fi fi-rr-trash'></i></div>
+                    :
+                    <div style={{ color: "#BBBBBB", pointerEvents: "none" }} className='GrayBlock'><i className='fi fi-rr-trash'></i></div>
+                }
+
 
                 {this.state.IsModalShown && (
                     <div className='ModalBackground'>

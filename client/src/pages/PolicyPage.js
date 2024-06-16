@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import ADMINHeader from '../components/ADMINHeader';
 
 export class PolicyPage extends Component {
   render() {
@@ -113,7 +114,10 @@ export class PolicyPage extends Component {
           12.1. Пользователь может получить любые разъяснения по интересующим вопросам, касающимся обработки его персональных данных, обратившись к Оператору с помощью электронной почты reinterio.shop@mail.ru.<br />
           12.2. В данном документе будут отражены любые изменения политики обработки персональных данных Оператором. Политика действует бессрочно до замены ее новой версией.<br />
           12.3. Актуальная версия Политики в свободном доступе расположена в сети Интернет по адресу https:// reinterio.com.</p></div>
-        <Header />
+        {this.props.user?.user_role === 2 ?
+          <ADMINHeader /> :
+          <Header />
+        }
         <Footer />
       </div>
     )

@@ -27,7 +27,8 @@ export class ADMIN_ADD_product extends Component {
             ShowError: false,
 
             IsModalShown: false,
-            SuccessModalShown: false
+            SuccessModalShown: false,
+            DeleteModalShown: false
         }
 
         this.changeCurrentCategory = this.changeCurrentCategory.bind(this)
@@ -251,7 +252,7 @@ export class ADMIN_ADD_product extends Component {
 
         return (
             <>
-                {this.props.user?.user_role === 1 &&
+                {this.props.user?.user_role === 2 &&
                     <div style={{ display: "flex", flexDirection: "column" }} class="Content">
                         <div class="PageTitle">
                             <div class="PageTitleTextContainer">
@@ -318,7 +319,8 @@ export class ADMIN_ADD_product extends Component {
                                     <div onClick={() => this.addNewFile()} style={{ width: "60px" }} className='ModalMainButtonGreen'><i class='fi fi-rr-plus' /></div>
                                 </div>
 
-                                <div style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "flex-end", alignItems: "center", gap: "25px" }}>
+                                <div style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", gap: "25px" }}>
+                                    <div onClick={() => this.setState({ DeleteModalShown: true })} style={{ width: "300px" }} className='ModalMainButton'>Удалить из каталога</div>
                                     <CSSTransition
                                         in={this.state.ShowError}
                                         timeout={1000}
@@ -333,11 +335,50 @@ export class ADMIN_ADD_product extends Component {
                                 </div>
                             </div>}
 
+                            {this.state.DeleteModalShown && (
+                            <div className='ModalBackground'>
+                                <div className='ModalWindow'>
+                                    <div
+                                        onClick={() => this.setState({DeleteModalShown: false})}
+                                        className='CloseModal'
+                                    >
+                                        <i
+                                            style={{ color: '#636363' }}
+                                            class='fi fi-rr-cross-small'
+                                        ></i>
+                                    </div>
+                                    <div className='ModalContainer'>
+                                        <p className='ModalTitle'>Удаление товара из каталога</p>
+                                        <p style={{ lineHeight: '150%', fontSize: '18px' }}>
+                                            Удалить товар полностью невозможно. Однако товар, который закончился на складе, не будет отображаться в каталоге
+                                            <br/><br/>
+                                            Нажатие на кнопку "Удалить" установит О в поля "В наличии", которые вы всегда сможете изменить.
+                                        </p>
+                                        <div className='ModalButtonsContainer'>
+                                            <div
+                                                onClick={() => this.setState({ DeleteModalShown: false })}
+                                                className='ModalSecondaryButton'
+                                                style={{ width: "600px", alignItems: "center", textAlign: "center" }}
+                                            >
+                                                Отмена
+                                            </div>
+                                            <div
+                                                onClick={() => this.DeteleProduct()}
+                                                className='ModalMainButton'
+                                            >
+                                                Удалить
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
                         {this.state.SuccessModalShown && (
                             <div className='ModalBackground'>
                                 <div className='ModalWindow'>
                                     <div
-                                        onClick={() => this.closeModalWindow()}
+                                        onClick={() => this.setState({SuccessModalShown: false})}
                                         className='CloseModal'
                                     >
                                         <i
@@ -349,9 +390,9 @@ export class ADMIN_ADD_product extends Component {
                                         <p className='ModalTitle'>Товар успешно сохранен!</p>
                                         <div className='ModalButtonsContainer'>
                                             <div
-                                                onClick={() => this.setState({SuccessModalShown: false})}
+                                                onClick={() => this.setState({ SuccessModalShown: false })}
                                                 className='ModalSecondaryButton'
-                                                style={{width: "600px", alignItems: "center", textAlign: "center"}}
+                                                style={{ width: "600px", alignItems: "center", textAlign: "center" }}
                                             >
                                                 Продолжить редактирование
                                             </div>
@@ -425,7 +466,7 @@ export class ADMIN_ADD_product extends Component {
                         <Footer />
                     </div>
                 }
-                {this.props.user?.user_role === 2 &&
+                {this.props.user?.user_role === 1 &&
                     <div class="Content">
                         <div class="PageTitle">
                             <div class="PageTitleTextContainer">
@@ -459,6 +500,14 @@ export class ADMIN_ADD_product extends Component {
         )
     }
 
+    DeteleProduct(){
+        this.state.colors.filter(el => el.color_ischecked === true && el.color_readonly === true).map(el => document.getElementById('product_onstock' + el.color_id).value = 0)
+        this.state.colors.filter(el => el.color_ischecked === true && el.color_readonly === true).map(el => this.updateDetails(el))
+
+        this.setState({ DeleteModalShown: false });
+        this.setState({ SuccessModalShown: true });
+    }
+
     savePRODUCT() {
         this.setState({ ShowError: false })
 
@@ -483,7 +532,7 @@ export class ADMIN_ADD_product extends Component {
         this.getProductsForCovers()
 
         this.closeModalWindow()
-        this.setState({SuccessModalShown: true});
+        this.setState({ SuccessModalShown: true });
     }
 
     updateProduct() {
@@ -491,7 +540,7 @@ export class ADMIN_ADD_product extends Component {
         let disountcprice = Number.parseFloat(document.getElementById('product_price' + this.state.ProdId).value)
         let discount = Number.parseFloat(document.getElementById('product_discount' + this.state.ProdId).value)
 
-        if (discount != 0){
+        if (discount != 0) {
             disountcprice = disountcprice - disountcprice * (discount / 100)
         }
 

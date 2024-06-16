@@ -22,9 +22,9 @@ export class ProductCard extends Component {
 
 	render() {
 		return (
-			<div class='ProductsCard'>
+			<div className='ProductsCard'>
 				{this.props.product.product_discount !== 0 && (
-					<div class='Pdiscount'>
+					<div className='Pdiscount'>
 						{' '}
 						{'-' + this.props.product.product_discount + '%'}{' '}
 					</div>
@@ -32,7 +32,7 @@ export class ProductCard extends Component {
 				<a href={'/product/' + this.props.product.productd_id}>
 					<div className='PCardImgContainer'>
 						<img
-							class='PCardImg'
+							className='PCardImg'
 							src={'/img/' + this.props.product.image_path}
 							alt=''
 						></img>
@@ -51,17 +51,17 @@ export class ProductCard extends Component {
 										: null)
 								: (window.location.href = '/login')
 						}
-						class='PToFavourite'
+						className='PToFavourite'
 					>
 						{this.state.IsAddedToFav ? (
-							<i style={{ color: 'white' }} class='fi fi-sr-heart'></i>
+							<i style={{ color: 'white' }} className='fi fi-sr-heart'></i>
 						) : (
-							<i class='fi fi-rr-heart'></i>
+							<i className='fi fi-rr-heart'></i>
 						)}
 					</div>
 				}
 
-				<div class='PCardInfo'>
+				<div className='PCardInfo'>
 					{!this.props.admin &&
 						<div
 							onClick={() =>
@@ -71,30 +71,30 @@ export class ProductCard extends Component {
 										: this.deleteFromCart(this.props.product)
 									: (window.location.href = '/login')
 							}
-							class={this.state.IsAddedToCart ? 'PAddToCartTrue' : 'PAddToCart'}
+							className={this.state.IsAddedToCart ? 'PAddToCartTrue' : 'PAddToCart'}
 						>
 							{this.state.IsAddedToCart ? 'Добавлено' : 'В корзину'}
 						</div>
 					}
 
 					{this.props.admin &&
-						<div onClick={() => this.openEditPage()} class={'PAddToCartTrue'}>Редактировать</div>
+						<div onClick={() => this.openEditPage()} className={'PAddToCartTrue'}>Редактировать</div>
 					}
 
-					<div class='PNamePrice'>
-						<p class='ProductName'>
-							<h class='CardText'>{this.props.product.product_name}</h>
+					<div className='PNamePrice'>
+						<p className='ProductName'>
+							<h className='CardText'>{this.props.product.product_name}</h>
 						</p>
-						<div class='PPrice'>
-							<p class='ProductPrice'>
-								<p class='CardText'>
+						<div className='PPrice'>
+							<p className='ProductPrice'>
+								<p className='CardText' style={{whiteSpace: "nowrap"}}>
 									{new Intl.NumberFormat().format(
 										this.props.product.product_disc_price
 									) + ' ₽'}
 								</p>
 							</p>
 							{this.props.product.product_discount > 0 && (
-								<p class='ProductsPriceBefore'>
+								<p className='ProductsPriceBefore' style={{whiteSpace: "nowrap"}}>
 									{new Intl.NumberFormat().format(
 										this.props.product.product_price
 									) + ' ₽'}

@@ -5,6 +5,7 @@ import Header from '../components/Header'
 import PPCard from '../components/PPCard'
 import PPFiles from '../components/PPFiles'
 import PPReviews from '../components/PPReviews'
+import ADMINHeader from '../components/ADMINHeader'
 
 export class ProductPage extends Component {
 	constructor(props) {
@@ -26,8 +27,10 @@ export class ProductPage extends Component {
 
 	componentDidMount() {
 		this.getProduct()
-		this.getFavourite()
-		this.getCart()
+		if (this.state.user) {
+			this.getFavourite()
+			this.getCart()
+		}
 		this.getImages()
 		this.getColors()
 		this.getStyles()
@@ -300,6 +303,7 @@ export class ProductPage extends Component {
 			<div class='PPContent'>
 				{this.state.product?.map(CurrentProduct => (
 					<PPCard
+						admin={this.props.user?.user_role === 2 ? true : false}
 						key={CurrentProduct.productd_id}
 						materials={this.state.materials}
 						styles={this.state.styles}
@@ -345,7 +349,10 @@ export class ProductPage extends Component {
 
 				<div></div>
 				<div></div>
-				<Header />
+				{this.props.user?.user_role === 2 ?
+					<ADMINHeader /> :
+					<Header />
+				}
 				<Footer />
 			</div>
 		)
